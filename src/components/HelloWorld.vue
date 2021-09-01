@@ -61,23 +61,25 @@
             :href="eco.href"
             class="subheading mx-3"
             target="_blank"
-          >
-            {{ eco.text }}
-          </a>
+            v-text="eco.text"
+          />
         </v-row>
       </v-col>
+      <button @click="clickHandler">FUCK</button>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { ref } from "vue";
+
 import logo from "../assets/logo.svg";
 
 export default {
   name: "HelloWorld",
 
-  data: () => ({
-    ecosystem: [
+  setup() {
+    const ecosystem = ref([
       {
         text: "vuetify-loader",
         href: "https://github.com/vuetifyjs/vuetify-loader",
@@ -90,40 +92,49 @@ export default {
         text: "awesome-vuetify",
         href: "https://github.com/vuetifyjs/awesome-vuetify",
       },
-    ],
-    importantLinks: [
-      {
-        text: "Chat",
-        href: "https://community.vuetifyjs.com",
-      },
-      {
-        text: "Made with Vuetify",
-        href: "https://madewithvuejs.com/vuetify",
-      },
-      {
-        text: "Twitter",
-        href: "https://twitter.com/vuetifyjs",
-      },
-      {
-        text: "Articles",
-        href: "https://medium.com/vuetify",
-      },
-    ],
-    logo,
-    whatsNext: [
-      {
-        text: "Explore components",
-        href: "https://vuetifyjs.com",
-      },
-      {
-        text: "Roadmap",
-        href: "https://vuetifyjs.com/introduction/roadmap/",
-      },
-      {
-        text: "Frequently Asked Questions",
-        href: "https://vuetifyjs.com/getting-started/frequently-asked-questions",
-      },
-    ],
-  }),
+    ]);
+
+    const clickHandler = () => {
+      ecosystem.value = [];
+    };
+
+    return {
+      clickHandler,
+      logo,
+      ecosystem,
+      importantLinks: [
+        {
+          text: "Chat",
+          href: "https://community.vuetifyjs.com",
+        },
+        {
+          text: "Made with Vuetify",
+          href: "https://madewithvuejs.com/vuetify",
+        },
+        {
+          text: "Twitter",
+          href: "https://twitter.com/vuetifyjs",
+        },
+        {
+          text: "Articles",
+          href: "https://medium.com/vuetify",
+        },
+      ],
+      whatsNext: [
+        {
+          text: "Explore components",
+          href: "https://vuetifyjs.com",
+        },
+        {
+          text: "Roadmap",
+          href: "https://vuetifyjs.com/introduction/roadmap/",
+        },
+        {
+          text: "Frequently Asked Questions",
+          href: "https://vuetifyjs.com/getting-started/frequently-asked-questions",
+        },
+      ],
+    };
+  },
 };
 </script>
