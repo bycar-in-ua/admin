@@ -1,34 +1,21 @@
 <template>
-  <v-app theme="dark">
-    <v-navigation-drawer app>
-      <!-- -->
-    </v-navigation-drawer>
-
-    <v-app-bar app>
-      <!-- -->
-    </v-app-bar>
-
-    <!-- Sizes your content based upon application components -->
-    <v-main>
-      <!-- Provides the application the proper gutter -->
-      <v-container fluid>
-        <!-- If using vue-router -->
-        <router-view></router-view>
-      </v-container>
-    </v-main>
-
-    <v-footer app>
-      <!-- -->
-    </v-footer>
-  </v-app>
+  <n-config-provider :locale="ruRU" :date-locale="dateRuRU">
+    <app-layout>
+      <router-view />
+    </app-layout>
+  </n-config-provider>
 </template>
 
 <script>
+import { NConfigProvider, ruRU, dateRuRU } from "naive-ui";
+
+import AppLayout from "./layouts/AppLayout.vue";
+
 export default {
   name: "App",
-
-  data: () => ({
-    //
-  }),
+  setup() {
+    return { ruRU, dateRuRU };
+  },
+  components: { AppLayout, NConfigProvider },
 };
 </script>
