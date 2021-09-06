@@ -1,8 +1,20 @@
-<template>Login</template>
+<template>
+  <div class="h-screen grid grid-cols-3 md:grid-cols-3">
+    <div class="login-bg hidden md:block" />
+    <div class="col-span-2 flex justify-center items-center">
+      <Login />
+    </div>
+  </div>
+</template>
 
 <script>
+import Login from "@/components/Login";
+
 export default {
   name: "LoginView",
+  components: {
+    Login,
+  },
 };
 </script>
 
