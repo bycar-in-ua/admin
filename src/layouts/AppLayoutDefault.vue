@@ -11,19 +11,16 @@
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
-      <n-menu
-        :collapsed="collapsed"
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :options="menuOptions"
-        :render-label="renderMenuLabel"
-        :render-icon="renderMenuIcon"
-        :expand-icon="expandIcon"
-      />
+      <div class="h-12 flex justify-center items-center">
+        <router-link :to="{ name: 'Dashboard' }">
+          <a href="/" class="font-bold text-primary text-2xl">bycar.in.ua</a>
+        </router-link>
+      </div>
+      <side-nav />
     </n-layout-sider>
     <n-layout class="h-full main-content" :native-scrollbar="false">
       <n-layout-header class="z-10 h-12" position="absolute" bordered>
-        test
+        <top-nav />
       </n-layout-header>
       <n-layout-content class="pt-12">
         <slot />
@@ -36,62 +33,18 @@
 </template>
 
 <script>
-import { h } from "vue";
-import { RouterLink } from "vue-router";
 import {
   NLayout,
   NLayoutContent,
   NLayoutHeader,
   NLayoutFooter,
   NLayoutSider,
-  NMenu,
-  NIcon,
 } from "naive-ui";
-import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
-
-const menuOptions = [
-  {
-    label: "Дашборд",
-    route: {
-      name: "Dashboard",
-      exact: true,
-    },
-  },
-  {
-    label: "Автомобили",
-    route: {
-      name: "Vehicles",
-    },
-  },
-];
+import TopNav from "../components/Nav/TopNav.vue";
+import SideNav from "../components/Nav/SideNav.vue";
 
 export default {
   name: "DefaltLayout",
-  setup() {
-    const renderMenuLabel = (option) => {
-      return h(
-        RouterLink,
-        { to: option.route, exacr: option.route?.exact },
-        option.label
-      );
-    };
-    const renderMenuIcon = (option) => {
-      // return render placeholder for indent
-      if (option.key === "sheep-man") return true;
-      // return falsy, don't render icon placeholder
-      if (option.key === "food") return null;
-      return h(NIcon, null, { default: () => h(BookmarkOutline) });
-    };
-    const expandIcon = () => {
-      return h(NIcon, null, { default: () => h(CaretDownOutline) });
-    };
-    return {
-      menuOptions,
-      renderMenuLabel,
-      renderMenuIcon,
-      expandIcon,
-    };
-  },
   data: () => ({
     collapsed: false,
   }),
@@ -101,7 +54,8 @@ export default {
     NLayoutHeader,
     NLayoutFooter,
     NLayoutSider,
-    NMenu,
+    TopNav,
+    SideNav,
   },
 };
 </script>

@@ -1,5 +1,5 @@
 import apiClient from "../../../helpers/apiClient";
-import { FETCH_USER, LOGIN_USER } from "./actionTypes";
+import { FETCH_USER, LOGIN_USER, LOGOUT_USER } from "./actionTypes";
 import { UPDATE_USER } from "./mutationTypes";
 
 export const auth = {
@@ -14,7 +14,16 @@ export const auth = {
         password: payload.password,
       });
       commit(UPDATE_USER, user);
-      commit("updateFetching", true);
+      commit("updateFetched", true);
+    },
+    async [LOGOUT_USER]({ commit }) {
+      try {
+        commit("updateFetched", false);
+        await apiClient.post("/auth/logout");
+        commit(UPDATE_USER, null);
+      } catch (error) {
+        commit("updateFetched", true);
+      }
     },
     async [FETCH_USER]({ commit }) {
       let user = null;
@@ -23,7 +32,7 @@ export const auth = {
       } catch (error) {
         user = await apiClient.get("/auth/refresh");
       } finally {
-        commit("updateFetching", true);
+        commit("updateFetched", true);
       }
       commit(UPDATE_USER, user);
     },
@@ -32,7 +41,7 @@ export const auth = {
     [UPDATE_USER](state, user) {
       state.user = user;
     },
-    updateFetching(state, status) {
+    updateFetched(state, status) {
       state.isFetched = status;
     },
   },
