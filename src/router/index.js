@@ -26,6 +26,17 @@ const routes = [
     path: "/vehicles",
     name: "Vehicles",
     component: () => import("../views/Vehicles.vue"),
+    meta: {
+      title: "Автомобили",
+    },
+  },
+  {
+    path: "/brands",
+    name: "Brands",
+    component: () => import("../views/Brands.vue"),
+    meta: {
+      title: "Бренды",
+    },
   },
 ];
 
@@ -35,7 +46,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log(store, "store");
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   if (!store.getters.isLogedIn) {

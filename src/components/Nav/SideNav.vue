@@ -5,7 +5,6 @@
     :collapsed-icon-size="22"
     :options="menuOptions"
     :render-label="renderMenuLabel"
-    :render-icon="renderMenuIcon"
     :expand-icon="expandIcon"
     :value="$route.name"
   />
@@ -15,22 +14,44 @@
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import { NMenu, NIcon } from "naive-ui";
-import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
+import { PodiumSharp, CaretDownOutline, CarSport } from "@vicons/ionicons5";
+
+function renderMenuIcon(icon) {
+  if (icon)
+    return () => h(NIcon, null, { default: () => h(icon) });
+
+  return null;
+}
 
 const menuOptions = [
   {
     label: "Дашборд",
     key: "Dashboard",
     exact: true,
+    icon: renderMenuIcon(PodiumSharp),
   },
   {
     label: "Автомобили",
     key: "Vehicles",
+    icon: renderMenuIcon(CarSport),
+    children: [
+      {
+        label: "Все автомобили",
+        key: "Vehicles",
+      },
+      {
+        label: "Бренды",
+        key: "Brands",
+      },
+    ],
   },
 ];
 
 export default {
   name: "SideNav",
+  props: {
+    collapsed: Boolean,
+  },
   setup() {
     const renderMenuLabel = (option) => {
       return h(
@@ -40,27 +61,15 @@ export default {
       );
     };
 
-    const renderMenuIcon = (option) => {
-      // return render placeholder for indent
-      if (option.key === "sheep-man") return true;
-      // return falsy, don't render icon placeholder
-      if (option.key === "food") return null;
-      return h(NIcon, null, { default: () => h(BookmarkOutline) });
-    };
-
     const expandIcon = () => {
       return h(NIcon, null, { default: () => h(CaretDownOutline) });
     };
     return {
       menuOptions,
       renderMenuLabel,
-      renderMenuIcon,
       expandIcon,
     };
   },
-  data: () => ({
-    collapsed: false,
-  }),
   components: {
     NMenu,
   },

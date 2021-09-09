@@ -13,16 +13,20 @@
     >
       <div class="h-12 flex justify-center items-center">
         <router-link :to="{ name: 'Dashboard' }">
-          <a href="/" class="font-bold text-primary text-2xl">bycar.in.ua</a>
+          <a href="/" class="font-bold text-primary text-2xl">
+            <template v-if="collapsed"> b </template>
+            <template v-else> bycar.in.ua </template>
+          </a>
         </router-link>
       </div>
-      <side-nav />
+      <side-nav :collapsed="collapsed" />
     </n-layout-sider>
     <n-layout class="h-full main-content" :native-scrollbar="false">
       <n-layout-header class="z-10 h-12" position="absolute" bordered>
         <top-nav />
       </n-layout-header>
-      <n-layout-content class="pt-12">
+      <n-layout-content class="pt-16 p-8 container mx-auto">
+        <n-h2 v-if="$route.meta.title" v-text="$route.meta.title" strong />
         <slot />
       </n-layout-content>
       <n-layout-footer class="text-center p-2">
@@ -39,6 +43,7 @@ import {
   NLayoutHeader,
   NLayoutFooter,
   NLayoutSider,
+  NH2,
 } from "naive-ui";
 import TopNav from "../components/Nav/TopNav.vue";
 import SideNav from "../components/Nav/SideNav.vue";
@@ -56,6 +61,7 @@ export default {
     NLayoutSider,
     TopNav,
     SideNav,
+    NH2,
   },
 };
 </script>

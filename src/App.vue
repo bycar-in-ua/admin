@@ -20,7 +20,6 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-// import { useRouter } from "vue-router";
 import {
   NConfigProvider,
   ruRU,
@@ -32,7 +31,6 @@ import {
 } from "naive-ui";
 import colors from "./colors";
 import AppLayout from "./layouts/AppLayout.vue";
-// import { FETCH_USER } from "./store/modules/auth/actionTypes";
 
 export default {
   name: "App",
@@ -52,7 +50,6 @@ export default {
     };
 
     const store = useStore();
-    // const router = useRouter();
 
     const isUserFetched = computed(() => store.state.auth.isFetched);
 
