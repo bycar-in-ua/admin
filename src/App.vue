@@ -50,7 +50,7 @@ export default {
     };
 
     const store = useStore();
-
+    console.log(store);
     const isUserFetched = computed(() => store.state.auth.isFetched);
 
     return {

@@ -2,7 +2,7 @@ import apiClient from "../../../helpers/apiClient";
 import { FETCH_USER, LOGIN_USER, LOGOUT_USER } from "./actionTypes";
 import { UPDATE_USER } from "./mutationTypes";
 
-export const auth = {
+export default {
   state: () => ({
     user: null,
     isFetched: false,

@@ -32,7 +32,25 @@ export const post = async (path, body) => {
   }
 };
 
+export const put = async (path, body) => {
+  try {
+    const response = await fetch(API_URL + path, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      credentials: "include",
+      body: JSON.stringify(body),
+    });
+    await validateResponse(response);
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export default {
   get,
   post,
+  put,
 };
