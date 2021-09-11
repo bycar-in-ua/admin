@@ -1,4 +1,5 @@
 import apiClient from "@/helpers/apiClient";
+import { FETCH_BRANDS } from "../actionTypes";
 import {
   CREATE_NEW_BRAND,
   OPEN_BRAND_MODAL,
@@ -39,10 +40,11 @@ export default {
         commit("updateFetching", false);
       }
     },
-    async [CREATE_NEW_BRAND]({ commit, state }) {
+    async [CREATE_NEW_BRAND]({ commit, state, dispatch }) {
       try {
         commit("updateFetching", true);
         await apiClient.post("/brands", state.brand);
+        await dispatch(FETCH_BRANDS);
         commit("updateFetching", false);
         commit(UPDATE_BRAND_MODAL_OPEN, false);
       } catch (error) {
