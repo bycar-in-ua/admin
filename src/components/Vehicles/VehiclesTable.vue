@@ -4,9 +4,10 @@
 
 <script>
 import { h } from "vue";
+import { useRouter } from "vue-router";
 import { NDataTable, NButton, NTag } from "naive-ui";
 
-const createColumns = ({ sendMail }) => {
+const createColumns = ({ editCallback }) => {
   return [
     {
       type: "selection",
@@ -43,7 +44,7 @@ const createColumns = ({ sendMail }) => {
           NButton,
           {
             size: "small",
-            onClick: () => sendMail(row),
+            onClick: () => editCallback(row),
           },
           { default: () => "Редактировать" }
         );
@@ -59,8 +60,8 @@ const createData = () => [
     status: "published",
   },
   {
-    key: 1,
-    name: "BMW 520d",
+    key: 44,
+    name: "Skoda Fabia",
     status: "published",
   },
   {
@@ -73,11 +74,12 @@ const createData = () => [
 export default {
   name: "VehiclesTable",
   setup() {
+    const router = useRouter();
     return {
       data: createData(),
       columns: createColumns({
-        sendMail(rowData) {
-          console.log("send mail to " + rowData.name);
+        editCallback(rowData) {
+          router.push({ name: "EditVehicle", params: { id: rowData.key } });
         },
       }),
       pagination: {

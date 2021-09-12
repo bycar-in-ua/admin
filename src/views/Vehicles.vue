@@ -1,19 +1,17 @@
 <template>
-  <div class="mb-6">
-    <n-button type="primary">Создать</n-button>
-  </div>
+  <create-vehicle-button />
   <vehicles-table />
 </template>
 
 <script>
-import { NButton } from "naive-ui";
 import VehiclesTable from "@/components/Vehicles/VehiclesTable.vue";
+import CreateVehicleButton from "@/components/Vehicles/CreateVehicleButton.vue";
 
 export default {
   name: "VehiclesView",
   components: {
-    NButton,
     VehiclesTable,
+    CreateVehicleButton,
   },
 };
 </script>

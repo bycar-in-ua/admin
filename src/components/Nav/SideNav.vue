@@ -14,11 +14,15 @@
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import { NMenu, NIcon } from "naive-ui";
-import { PodiumSharp, CaretDownOutline, CarSport } from "@vicons/ionicons5";
+import {
+  PodiumSharp,
+  CaretDownOutline,
+  CarSport,
+  Albums,
+} from "@vicons/ionicons5";
 
 function renderMenuIcon(icon) {
-  if (icon)
-    return () => h(NIcon, null, { default: () => h(icon) });
+  if (icon) return () => h(NIcon, null, { default: () => h(icon) });
 
   return null;
 }
@@ -34,16 +38,11 @@ const menuOptions = [
     label: "Автомобили",
     key: "Vehicles",
     icon: renderMenuIcon(CarSport),
-    children: [
-      {
-        label: "Все автомобили",
-        key: "Vehicles",
-      },
-      {
-        label: "Бренды",
-        key: "Brands",
-      },
-    ],
+  },
+  {
+    label: "Бренды",
+    key: "Brands",
+    icon: renderMenuIcon(Albums),
   },
 ];
 

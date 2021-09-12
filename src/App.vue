@@ -31,6 +31,7 @@ import {
 } from "naive-ui";
 import colors from "./colors";
 import AppLayout from "./layouts/AppLayout.vue";
+import { FETCH_VEHICLE_TYPES } from "./store/modules/library/actionTypes";
 
 export default {
   name: "App",
@@ -50,6 +51,7 @@ export default {
     };
 
     const store = useStore();
+    store.dispatch(FETCH_VEHICLE_TYPES);
     console.log(store);
     const isUserFetched = computed(() => store.state.auth.isFetched);
 
