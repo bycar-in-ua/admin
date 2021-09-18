@@ -28,7 +28,7 @@
           <n-input
             v-model:value="formModel.model"
             type="text"
-            placeholder="Введите мназвание модели"
+            placeholder="Введите название модели"
           />
         </n-form-item>
         <n-form-item label="Модельный год" path="year">
@@ -52,10 +52,13 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+
+import apiClient from "@/helpers/apiClient";
+import { yearValidator } from "@/helpers/validators";
 import { brandNamespace } from "@/store/modules/brands";
 import { FETCH_BRANDS } from "@/store/modules/brands/actionTypes";
+
 import { NButton, NModal, NForm, NFormItem, NSelect, NInput } from "naive-ui";
-import apiClient from "@/helpers/apiClient";
 
 const rules = {
   type: {
@@ -72,13 +75,7 @@ const rules = {
   },
   year: {
     required: true,
-    validator: (rule, value) => {
-      if (!value) {
-        return new Error("Поле Год не может быть пустым");
-      } else if (!/\d{4}/g.test(value) || value.length !== 4) {
-        return new Error("Введите год в фомате ХХХХ");
-      }
-    },
+    validator: yearValidator,
   },
 };
 

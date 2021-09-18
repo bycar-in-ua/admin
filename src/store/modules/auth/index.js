@@ -14,15 +14,15 @@ export default {
         password: payload.password,
       });
       commit(UPDATE_USER, user);
-      commit("updateFetched", true);
+      commit("updateUserFetched", true);
     },
     async [LOGOUT_USER]({ commit }) {
       try {
-        commit("updateFetched", false);
+        commit("updateUserFetched", false);
         await apiClient.post("/auth/logout");
         commit(UPDATE_USER, null);
       } catch (error) {
-        commit("updateFetched", true);
+        commit("updateUserFetched", true);
       }
     },
     async [FETCH_USER]({ commit }) {
@@ -32,7 +32,7 @@ export default {
       } catch (error) {
         user = await apiClient.get("/auth/refresh");
       } finally {
-        commit("updateFetched", true);
+        commit("updateUserFetched", true);
       }
       commit(UPDATE_USER, user);
     },
@@ -41,7 +41,7 @@ export default {
     [UPDATE_USER](state, user) {
       state.user = user;
     },
-    updateFetched(state, status) {
+    updateUserFetched(state, status) {
       state.isFetched = status;
     },
   },

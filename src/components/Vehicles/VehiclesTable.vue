@@ -1,17 +1,23 @@
 <template>
-  <n-data-table :columns="columns" :data="data" :pagination="pagination" />
+  <n-data-table
+    :columns="columns"
+    :data="createData(cars)"
+    :pagination="pagination"
+  />
 </template>
 
 <script>
-import { h } from "vue";
+import { computed, h } from "vue";
 import { useRouter } from "vue-router";
 import { NDataTable, NButton, NTag } from "naive-ui";
+import { useStore } from "vuex";
+import { FETCH_CARS } from "@/store/modules/cars/actionTypes";
 
 const createColumns = ({ editCallback }) => {
   return [
-    {
-      type: "selection",
-    },
+    // {
+    //   type: "selection",
+    // },
     {
       title: "Название",
       key: "name",
@@ -53,30 +59,26 @@ const createColumns = ({ editCallback }) => {
   ];
 };
 
-const createData = () => [
-  {
-    key: 0,
-    name: "Audi A4",
-    status: "published",
-  },
-  {
-    key: 44,
-    name: "Skoda Fabia",
-    status: "published",
-  },
-  {
-    key: 2,
-    name: "Mazda 6",
-    status: "published",
-  },
-];
+const createData = (cars) =>
+  cars.map((car) => ({
+    key: car.id,
+    name: car.displayName,
+    status: car.status,
+  }));
 
 export default {
   name: "VehiclesTable",
   setup() {
+    const store = useStore();
     const router = useRouter();
+
+    store.dispatch(FETCH_CARS);
+
+    const cars = computed(() => store.state.cars.all);
+
     return {
-      data: createData(),
+      createData,
+      cars,
       columns: createColumns({
         editCallback(rowData) {
           router.push({ name: "EditVehicle", params: { id: rowData.key } });

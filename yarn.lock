@@ -1182,6 +1182,11 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@tinymce/tinymce-vue@^4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-4.0.4.tgz#b47934f2d1e106ac9af7fa9ba0316a8c96ed314c"
+  integrity sha512-nLd96QK8P53dCm+oF6j2D5AXoZ9MCZyjybt7B98wXo2csfKd2Ozbjv9dlnRKCdEe/JZBG4KbwBEjXlwsaAGEvg==
+
 "@types/babel__core@^7.1.0":
   version "7.1.15"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.15.tgz#2ccfb1ad55a02c83f8e0ad327cbc332f55eb1024"

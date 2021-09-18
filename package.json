@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "@tinymce/tinymce-vue": "^4",
     "@vicons/ionicons5": "^0.11.0",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.21",
     "naive-ui": "^2.16.7",
     "roboto-fontface": "*",
     "vfonts": "^0.1.0",
