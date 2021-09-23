@@ -39,12 +39,13 @@ import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
 
 import { NButton, NForm, NFormItem, NSelect, NInput, NImage } from "naive-ui";
+import { cdnLink } from "@/helpers/cdn";
 
 const renderBrandLabel = (option) => {
   try {
     return h("div", { className: "flex items-center" }, [
       h(NImage, {
-        src: option.value.logo,
+        src: cdnLink(option.value.logo, 100),
         objectFit: "contain",
         height: 30,
         width: 30,

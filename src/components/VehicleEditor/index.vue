@@ -5,7 +5,7 @@
       <description-editor />
       <Complectations />
       <Engines />
-      <Gearboxes />
+      <Transmissions />
     </div>
     <div style="flex: 0 0 25%">
       <side-column />
@@ -27,7 +27,7 @@ import VehicleTitle from "./VehicleTitle";
 import DescriptionEditor from "./DescriptionEditor";
 import Complectations from "./Complectations";
 import Engines from "./Engines";
-import Gearboxes from "./Gearboxes";
+import Transmissions from "./Transmissions";
 import VahicleEditorSkeleton from "./Skeleton";
 
 export default {
@@ -48,7 +48,7 @@ export default {
     DescriptionEditor,
     Complectations,
     Engines,
-    Gearboxes,
+    Transmissions,
     SideColumn,
     VahicleEditorSkeleton,
   },

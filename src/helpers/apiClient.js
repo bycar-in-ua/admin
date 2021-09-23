@@ -49,8 +49,26 @@ export const put = async (path, body) => {
   }
 };
 
+export const uploadFiles = async (path, files) => {
+  try {
+    const formData = new FormData();
+    for (let index = 0; index < files.length; index++) {
+      formData.append(files[index].name, files[index]);
+    }
+    const response = await fetch("http://localhost:3020" + path, {
+      method: "POST",
+      body: formData,
+    });
+    await validateResponse(response);
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export default {
   get,
   post,
   put,
+  uploadFiles,
 };

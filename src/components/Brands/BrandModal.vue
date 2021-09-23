@@ -18,13 +18,30 @@
       :disablad="isFetching"
     >
       <n-upload
-        action="http://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+        :on-change="uploadHandler"
+        :show-file-list="false"
         list-type="image-card"
+        class="mb-4"
       >
-        <n-upload-dragger>
+        <n-upload-dragger class="relative">
+          <div
+            v-if="isImageLoading"
+            class="
+              absolute
+              left-0
+              right-0
+              top-0
+              bottom-0
+              flex
+              justify-center
+              items-center
+            "
+          >
+            <n-spin size="medium" />
+          </div>
           <img
             v-if="brand.logo"
-            :src="brand.logo"
+            :src="cdnLink(brand.logo, 300)"
             :alt="brand.name"
             class="h-28 object-contain mx-auto"
           />
@@ -86,9 +103,12 @@ import {
   NFormItem,
   NInput,
   NButton,
+  NSpin,
 } from "naive-ui";
 import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
 import { brandNamespace } from "@/store/modules/brands";
+import apiClient from "@/helpers/apiClient";
+import { cdnLink } from "@/helpers/cdn";
 
 export default {
   name: "BrandModal",
@@ -99,6 +119,8 @@ export default {
     const brand = computed(() => store.state.brands.modal.brand);
     const showModal = computed(() => store.state.brands.modal.isOpen);
     const isFetching = computed(() => store.state.brands.modal.isFetching);
+
+    const isImageLoading = ref(false);
 
     const onUpdate = (val) => {
       store.commit(brandNamespace(UPDATE_BRAND_MODAL_OPEN), val);
@@ -140,6 +162,18 @@ export default {
       },
     };
 
+    const uploadHandler = async (options) => {
+      isImageLoading.value = true;
+      const response = await apiClient.uploadFiles(
+        "/upload-brand-logo",
+        options.fileList.map((fileInfo) => fileInfo.file)
+      );
+      setTimeout(() => {
+        updateFieldAction("logo", response[0]);
+        isImageLoading.value = false;
+      }, 2000);
+    };
+
     return {
       brandForm,
       brandModel,
@@ -151,6 +185,9 @@ export default {
       saveAction,
       createAction,
       rules,
+      uploadHandler,
+      cdnLink,
+      isImageLoading,
     };
   },
   components: {
@@ -163,6 +200,7 @@ export default {
     NFormItem,
     NInput,
     NButton,
+    NSpin,
   },
 };
 </script>

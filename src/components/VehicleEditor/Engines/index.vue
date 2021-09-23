@@ -30,11 +30,13 @@
         </div>
       </template>
     </n-card>
+    <plus-button />
   </div>
 </template>
 
 <script>
 import { NH3, NCard, NTable } from "naive-ui";
+import PlusButton from "@/components/VehicleEditor/PlusButton";
 
 export default {
   name: "Engines",
@@ -42,6 +44,7 @@ export default {
     NH3,
     NCard,
     NTable,
+    PlusButton,
   },
 };
 </script>
