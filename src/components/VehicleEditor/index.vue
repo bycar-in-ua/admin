@@ -15,6 +15,12 @@
 </template>
 
 <script>
+export default {
+  name: "VehicleEditor",
+};
+</script>
+
+<script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -30,29 +36,11 @@ import Engines from "./Engines";
 import Transmissions from "./Transmissions";
 import VahicleEditorSkeleton from "./Skeleton";
 
-export default {
-  name: "VehicleEditor",
-  setup() {
-    const store = useStore();
-    const route = useRoute();
-    store.dispatch(carEditorNamespace(FETCH_CAR), route.params.id);
+const store = useStore();
+const route = useRoute();
+store.dispatch(carEditorNamespace(FETCH_CAR), route.params.id);
 
-    const isFetched = computed(() => store.state.carEditor.isFetched);
-
-    return {
-      isFetched,
-    };
-  },
-  components: {
-    VehicleTitle,
-    DescriptionEditor,
-    Complectations,
-    Engines,
-    Transmissions,
-    SideColumn,
-    VahicleEditorSkeleton,
-  },
-};
+const isFetched = computed(() => store.state.carEditor.isFetched);
 </script>
 
 <style>

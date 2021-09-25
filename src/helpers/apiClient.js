@@ -49,6 +49,22 @@ export const put = async (path, body) => {
   }
 };
 
+export const remove = async (path) => {
+  try {
+    const response = await fetch(API_URL + path, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      credentials: "include",
+    });
+    await validateResponse(response);
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const uploadFiles = async (path, files) => {
   try {
     const formData = new FormData();
@@ -71,4 +87,5 @@ export default {
   post,
   put,
   uploadFiles,
+  delete: remove,
 };

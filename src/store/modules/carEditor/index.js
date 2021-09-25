@@ -1,3 +1,5 @@
+import engine from "./engine";
+
 import apiClient from "@/helpers/apiClient";
 import { FETCH_CAR } from "./actionTypes";
 import { UPDATE_CAR, UPDATE_CAR_FIELD } from "./mutationTypes";
@@ -9,12 +11,17 @@ export const carEditorNamespace = (action) => `carEditor/${action}`;
 export const carEditor = {
   namespaced: true,
   state: () => ({
-    car: {},
+    car: {
+      engines: [],
+      transmissions: [],
+      complectations: [],
+    },
     isFetched: false,
   }),
+  modules: { engine },
   actions: {
     async [FETCH_CAR]({ commit }, carId) {
-      const car = await apiClient.get(`/vehicles/${carId}`);
+      const car = await apiClient.get(`/vehicles/edit/${carId}`);
       commit("updateFetched", true);
       commit(UPDATE_CAR, car);
     },
