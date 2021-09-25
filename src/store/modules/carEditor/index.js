@@ -1,4 +1,5 @@
 import engine from "./engine";
+import transmission from "./transmission";
 
 import apiClient from "@/helpers/apiClient";
 import { FETCH_CAR } from "./actionTypes";
@@ -18,7 +19,7 @@ export const carEditor = {
     },
     isFetched: false,
   }),
-  modules: { engine },
+  modules: { engine, transmission },
   actions: {
     async [FETCH_CAR]({ commit }, carId) {
       const car = await apiClient.get(`/vehicles/edit/${carId}`);

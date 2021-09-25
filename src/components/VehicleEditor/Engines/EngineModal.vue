@@ -148,7 +148,9 @@ const store = useStore();
 const isModalShowing = computed(
   () => store.state.carEditor.engine.isEngineModalOpen
 );
-const isEdit = computed(() => store.getters[carEditorNamespace("isEdit")]);
+const isEdit = computed(
+  () => store.getters[carEditorNamespace("isEngineEdit")]
+);
 
 const closeModal = (val) => {
   store.commit(carEditorNamespace(UPDATE_ENGINE_MODAL_OPEN), val);

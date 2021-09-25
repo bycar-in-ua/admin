@@ -86,7 +86,7 @@ export const engine = {
     },
   },
   getters: {
-    isEdit(state) {
+    isEngineEdit(state) {
       return !!state.engine.id;
     },
   },

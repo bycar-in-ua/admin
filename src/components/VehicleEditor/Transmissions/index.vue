@@ -1,40 +1,87 @@
 <template>
   <n-h3>Трансимиссии</n-h3>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <n-card v-for="i in 5" :key="i" title="5 АКПП" hoverable class="shadow-lg">
+    <n-card
+      v-for="transmission in transmissions"
+      :key="transmission.id"
+      :title="`${transmission.drive} ${transmission.driveName} - ${transmission.gearbox.numberOfGears} ${transmission.gearbox.type}`"
+      hoverable
+      class="shadow-lg"
+    >
       <n-table :bordered="false" :single-line="false" size="small">
         <tbody>
           <tr>
-            <td>Кол-во передач</td>
-            <td>...</td>
-          </tr>
-          <tr>
-            <td>Тип</td>
-            <td>...</td>
-          </tr>
-          <tr>
             <td>Привод</td>
-            <td>...</td>
+            <td>{{ transmission.drive }}, {{ transmission.driveName }}</td>
+          </tr>
+          <tr>
+            <td>КПП</td>
+            <td>
+              {{ transmission.gearbox.numberOfGears }}
+              {{ transmission.gearbox.type }}
+            </td>
           </tr>
         </tbody>
       </n-table>
       <template #action>
-        <div class="text-right">
-          <a href="#" class="text-primary">Редактировать</a>
+        <div class="flex flex-wrap justify-between">
+          <a
+            href="#"
+            class="text-red-500"
+            @click.prevent="deleteEngine(transmission.id)"
+          >
+            Удалить
+          </a>
+          <a
+            href="#"
+            class="text-primary"
+            @click.prevent="openEditModal(transmission)"
+          >
+            Редактировать
+          </a>
         </div>
       </template>
     </n-card>
-    <plus-button />
+    <plus-button :callback="openCreateModal" />
   </div>
+  <transmission-modal />
 </template>
-
-<script setup>
-import { NH3, NCard, NTable } from "naive-ui";
-import PlusButton from "@/components/VehicleEditor/PlusButton";
-</script>
 
 <script>
 export default {
   name: "Transmissions",
+};
+</script>
+
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { NH3, NCard, NTable } from "naive-ui";
+import PlusButton from "@/components/VehicleEditor/PlusButton";
+import TransmissionModal from "./TransmissionModal";
+import { carEditorNamespace } from "@/store/modules/carEditor";
+import {
+  DELETE_TRANSMISSION,
+  OPEN_CREATE_TRANSMISSION_MODAL,
+  OPEN_EDIT_TRANSMISSION_MODAL,
+} from "@/store/modules/carEditor/transmission/actionTypes";
+
+const store = useStore();
+
+const transmissions = computed(() => store.state.carEditor.car.transmissions);
+
+const openCreateModal = () => {
+  store.dispatch(carEditorNamespace(OPEN_CREATE_TRANSMISSION_MODAL));
+};
+
+const openEditModal = (transmission) => {
+  store.dispatch(
+    carEditorNamespace(OPEN_EDIT_TRANSMISSION_MODAL),
+    transmission
+  );
+};
+
+const deleteEngine = (transmissionId) => {
+  store.dispatch(carEditorNamespace(DELETE_TRANSMISSION), transmissionId);
 };
 </script>
