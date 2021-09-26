@@ -3,6 +3,7 @@
     <div class="pr-6" style="flex: 0 0 75%" :nativeScrollbar="false">
       <vehicle-title />
       <description-editor />
+      <general-options />
       <Complectations />
       <Engines />
       <Transmissions />
@@ -31,6 +32,7 @@ import { FETCH_CAR } from "@/store/modules/carEditor/actionTypes";
 import SideColumn from "./SideColumn";
 import VehicleTitle from "./VehicleTitle";
 import DescriptionEditor from "./DescriptionEditor";
+import GeneralOptions from "./GeneralOptions";
 import Complectations from "./Complectations";
 import Engines from "./Engines";
 import Transmissions from "./Transmissions";
