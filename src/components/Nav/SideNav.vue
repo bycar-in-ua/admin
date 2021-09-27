@@ -3,10 +3,11 @@
     :collapsed="collapsed"
     :collapsed-width="64"
     :collapsed-icon-size="22"
-    :options="menuOptions"
+    :options="createMenuOptions()"
     :render-label="renderMenuLabel"
     :expand-icon="expandIcon"
     :value="$route.name"
+    inverted
   />
 </template>
 
@@ -32,19 +33,25 @@ const menuOptions = [
     label: "Дашборд",
     key: "Dashboard",
     exact: true,
-    icon: renderMenuIcon(PodiumSharp),
+    icon: PodiumSharp,
   },
   {
     label: "Автомобили",
     key: "Vehicles",
-    icon: renderMenuIcon(CarSport),
+    icon: CarSport,
   },
   {
     label: "Бренды",
     key: "Brands",
-    icon: renderMenuIcon(Albums),
+    icon: Albums,
   },
 ];
+
+const createMenuOptions = () =>
+  menuOptions.map((item) => ({
+    ...item,
+    icon: renderMenuIcon(item.icon),
+  }));
 
 export default {
   name: "SideNav",
@@ -64,9 +71,9 @@ export default {
       return h(NIcon, null, { default: () => h(CaretDownOutline) });
     };
     return {
-      menuOptions,
       renderMenuLabel,
       expandIcon,
+      createMenuOptions,
     };
   },
   components: {

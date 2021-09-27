@@ -10,10 +10,11 @@
       show-trigger
       @collapse="collapsed = true"
       @expand="collapsed = false"
+      class="main-nav-sidebar"
     >
       <div class="h-12 flex justify-center items-center">
         <router-link :to="{ name: 'Dashboard' }">
-          <a href="/" class="font-bold text-primary text-2xl">
+          <a href="/" class="font-bold text-white text-2xl">
             <template v-if="collapsed"> b </template>
             <template v-else> bycar.in.ua </template>
           </a>
@@ -76,5 +77,16 @@ export default {
       flex: 1 1 auto;
     }
   }
+}
+.main-nav-sidebar {
+  background: linear-gradient(
+      0deg,
+      rgba(3, 1, 40, 0.5) 0%,
+      rgba(14, 15, 114, 0.5) 47%,
+      rgba(28, 10, 134, 0.4)
+    ),
+    url(https://images.drive.ru/i/0/5e95a4eeec05c42d5e000028.jpg);
+  background-size: cover;
+  background-position-x: -38%;
 }
 </style>

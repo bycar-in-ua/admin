@@ -1,6 +1,6 @@
-export const createFetchingMutation = (fieldName) => {
+export const createFetchingMutation = (mutationName, fieldName) => {
   return {
-    updateFetched(state, status) {
+    [mutationName](state, status) {
       state[fieldName] = status;
     },
   };

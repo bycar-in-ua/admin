@@ -12,6 +12,7 @@ import { useRouter } from "vue-router";
 import { NDataTable, NButton, NTag } from "naive-ui";
 import { useStore } from "vuex";
 import { FETCH_CARS } from "@/store/modules/cars/actionTypes";
+import { getStatusTag, getStatusLabel } from "@/helpers/postStatuses";
 
 const createColumns = ({ editCallback }) => {
   return [
@@ -26,18 +27,13 @@ const createColumns = ({ editCallback }) => {
       title: "Статус",
       key: "status",
       render(row) {
-        const statusTagsMap = {
-          published: "success",
-          draft: "warning",
-        };
-
         return h(
           NTag,
           {
-            type: statusTagsMap[row.status],
+            type: getStatusTag(row.status),
           },
           {
-            default: () => row.status,
+            default: getStatusLabel(row.status),
           }
         );
       },

@@ -33,10 +33,16 @@
           :on-update:value="inputHandler('suspensionTypeRear')"
         />
       </n-form-item>
-      <n-form-item label="Тормозная система">
+      <n-form-item label="Тормозная система, передняя ось">
         <n-input
-          :value="transmission.brakingSystemType"
-          :on-update:value="inputHandler('brakingSystemType')"
+          :value="transmission.brakingSystemTypeFront"
+          :on-update:value="inputHandler('brakingSystemTypeFront')"
+        />
+      </n-form-item>
+      <n-form-item label="Тормозная система, задняя ось">
+        <n-input
+          :value="transmission.brakingSystemTypeRear"
+          :on-update:value="inputHandler('brakingSystemTypeRear')"
         />
       </n-form-item>
 
