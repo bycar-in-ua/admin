@@ -2,7 +2,12 @@ import engine from "./engine";
 import transmission from "./transmission";
 
 import apiClient from "@/helpers/apiClient";
-import { FETCH_CAR, PURGE_CAR_EDITOR, SAVE_CAR } from "./actionTypes";
+import {
+  FETCH_CAR,
+  PURGE_CAR_EDITOR,
+  SAVE_CAR,
+  CREATE_NEW_COMPLECTATION,
+} from "./actionTypes";
 import { UPDATE_CAR, UPDATE_CAR_FIELD } from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
@@ -32,6 +37,16 @@ export const carEditor = {
     },
     async [SAVE_CAR]({ state }) {
       await apiClient.put(`/vehicles/${state.car.id}`, prepareCar(state.car));
+    },
+    async [CREATE_NEW_COMPLECTATION]({ commit, state }, name) {
+      const newComplectation = await apiClient.post("/complectations", {
+        displayName: name,
+        vehicle: state.car.id,
+      });
+      commit(UPDATE_CAR_FIELD, [
+        "complectations",
+        [...state.car.complectations, newComplectation],
+      ]);
     },
     [PURGE_CAR_EDITOR]({ commit }) {
       commit(UPDATE_CAR, carInitialState);

@@ -71,22 +71,22 @@
         />
       </n-form-item>
       <n-form-item label="При каких оборотах">
-        <n-input-number
-          :value="engine.powerRPMfrom"
-          class="w-full pr-1"
-          :show-button="false"
-          :on-update:value="inputHandler('powerRPMfrom')"
-        >
-          <template #prefix>От:</template>
-        </n-input-number>
-        <n-input-number
-          :value="engine.powerRPMto"
-          class="w-full pl-1"
-          :show-button="false"
-          :on-update:value="inputHandler('powerRPMto')"
-        >
-          <template #prefix>До:</template>
-        </n-input-number>
+        <n-input-group>
+          <n-input-number
+            :value="engine.powerRPMfrom"
+            :show-button="false"
+            :on-update:value="inputHandler('powerRPMfrom')"
+          >
+            <template #prefix>От:</template>
+          </n-input-number>
+          <n-input-number
+            :value="engine.powerRPMto"
+            :show-button="false"
+            :on-update:value="inputHandler('powerRPMto')"
+          >
+            <template #prefix>До:</template>
+          </n-input-number>
+        </n-input-group>
       </n-form-item>
       <n-form-item label="Крутящий момент, Н/м">
         <n-input-number
@@ -97,22 +97,22 @@
         />
       </n-form-item>
       <n-form-item label="При каких оборотах">
-        <n-input-number
-          :value="engine.torqueRPMfrom"
-          class="w-full pr-1"
-          :show-button="false"
-          :on-update:value="inputHandler('torqueRPMfrom')"
-        >
-          <template #prefix>От:</template>
-        </n-input-number>
-        <n-input-number
-          :value="engine.torqueRPMto"
-          class="w-full pl-1"
-          :show-button="false"
-          :on-update:value="inputHandler('torqueRPMto')"
-        >
-          <template #prefix>До:</template>
-        </n-input-number>
+        <n-input-group>
+          <n-input-number
+            :value="engine.torqueRPMfrom"
+            :show-button="false"
+            :on-update:value="inputHandler('torqueRPMfrom')"
+          >
+            <template #prefix>От:</template>
+          </n-input-number>
+          <n-input-number
+            :value="engine.torqueRPMto"
+            :show-button="false"
+            :on-update:value="inputHandler('torqueRPMto')"
+          >
+            <template #prefix>До:</template>
+          </n-input-number>
+        </n-input-group>
       </n-form-item>
       <div class="flex flex-col justify-center">
         <n-checkbox
@@ -152,6 +152,7 @@ import {
   NInputNumber,
   NCheckbox,
   NButton,
+  NInputGroup,
 } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {

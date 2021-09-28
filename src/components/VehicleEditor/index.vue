@@ -37,10 +37,16 @@ import Complectations from "./Complectations";
 import Engines from "./Engines";
 import Transmissions from "./Transmissions";
 import VahicleEditorSkeleton from "./Skeleton";
+import {
+  FETCH_OPTIONS,
+  FETCH_OPTION_CATEGORIES,
+} from "@/store/modules/library/actionTypes";
 
 const store = useStore();
 const route = useRoute();
 store.dispatch(carEditorNamespace(FETCH_CAR), route.params.id);
+store.dispatch(FETCH_OPTION_CATEGORIES);
+store.dispatch(FETCH_OPTIONS);
 
 const isFetched = computed(() => store.state.carEditor.isFetched);
 </script>

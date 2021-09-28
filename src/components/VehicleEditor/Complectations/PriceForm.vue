@@ -20,30 +20,15 @@
           size="small"
         />
       </n-form-item>
-      <n-form-item label="Цена">
-        <!-- <n-input-number :show-button="false" v-model="price">
-          <template #prefix> $ </template>
-        </n-input-number> -->
-      </n-form-item>
     </div>
   </n-form>
 </template>
 
 <script>
-/* eslint-disable */
-import { NH5, NForm, NFormItem, NSelect, NInputNumber } from "naive-ui";
-
 export default {
   name: "PriceForm",
-  data: () => ({
-    price: 0
-  }),
-  components: {
-    NH5,
-    NFormItem,
-    NForm,
-    NSelect,
-    NInputNumber
-  }
 };
+</script>
+<script setup>
+import { NH5, NForm, NFormItem, NSelect } from "naive-ui";
 </script>

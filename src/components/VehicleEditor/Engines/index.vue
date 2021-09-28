@@ -1,47 +1,48 @@
 <template>
-  <n-h3>Двигатели</n-h3>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <n-card
-      v-for="engine in engines"
-      :key="engine.id"
-      :title="engine.displayName"
-      hoverable
-      class="shadow-lg"
-    >
-      <n-table :bordered="false" :single-line="false" size="small">
-        <tbody>
-          <tr>
-            <td>Мощность, кВт</td>
-            <td>{{ engine.power }}</td>
-          </tr>
-          <tr>
-            <td>Крутящий момент, Н/м</td>
-            <td>{{ engine.torque }}</td>
-          </tr>
-        </tbody>
-      </n-table>
-      <template #action>
-        <div class="flex flex-wrap justify-between">
-          <a
-            href="#"
-            class="text-red-500"
-            @click.prevent="deleteEngine(engine.id)"
-          >
-            Удалить
-          </a>
-          <a
-            href="#"
-            class="text-primary"
-            @click.prevent="openEditModal(engine)"
-          >
-            Редактировать
-          </a>
-        </div>
-      </template>
-    </n-card>
-    <plus-button :callback="openCreateModal" />
-  </div>
-  <engine-modal />
+  <n-card title="Двигатели" size="small" class="my-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <n-card
+        v-for="engine in engines"
+        :key="engine.id"
+        :title="engine.displayName"
+        hoverable
+        class="shadow"
+      >
+        <n-table :bordered="false" :single-line="false" size="small">
+          <tbody>
+            <tr>
+              <td>Мощность, кВт</td>
+              <td>{{ engine.power }}</td>
+            </tr>
+            <tr>
+              <td>Крутящий момент, Н/м</td>
+              <td>{{ engine.torque }}</td>
+            </tr>
+          </tbody>
+        </n-table>
+        <template #action>
+          <div class="flex flex-wrap justify-between">
+            <a
+              href="#"
+              class="text-red-500"
+              @click.prevent="deleteEngine(engine.id)"
+            >
+              Удалить
+            </a>
+            <a
+              href="#"
+              class="text-primary"
+              @click.prevent="openEditModal(engine)"
+            >
+              Редактировать
+            </a>
+          </div>
+        </template>
+      </n-card>
+      <plus-button :callback="openCreateModal" />
+    </div>
+    <engine-modal />
+  </n-card>
 </template>
 
 <script>
@@ -55,7 +56,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import EngineModal from "./EngineModal";
 import PlusButton from "@/components/VehicleEditor/PlusButton";
-import { NH3, NCard, NTable } from "naive-ui";
+import { NCard, NTable } from "naive-ui";
 import {
   DELETE_ENGINE,
   OPEN_CREATE_ENGINE_MODAL,
