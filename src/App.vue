@@ -3,6 +3,7 @@
     :locale="ruRU"
     :date-locale="dateRuRU"
     :theme-overrides="themeOverrides"
+    :theme="theme"
   >
     <n-loading-bar-provider>
       <n-notification-provider>
@@ -18,7 +19,13 @@
 </template>
 
 <script>
-import { computed } from "vue";
+export default {
+  name: "App",
+};
+</script>
+
+<script setup>
+import { computed, provide, ref } from "vue";
 import { useStore } from "vuex";
 import {
   NConfigProvider,
@@ -32,43 +39,47 @@ import {
 import colors from "./colors";
 import AppLayout from "./layouts/AppLayout.vue";
 import { FETCH_VEHICLE_TYPES } from "./store/modules/library/actionTypes";
+import useMemory from "./hooks/useMemory";
 
-export default {
-  name: "App",
-  setup() {
-    const themeOverrides = {
-      common: {
-        primaryColor: colors.primary.default,
-        primaryColorHover: colors.primary.lighten1,
-        primaryColorPressed: colors.primary.darken1,
-        primaryColorSuppl: colors.primary.rgb,
+const themeOverrides = {
+  common: {
+    primaryColor: colors.primary.default,
+    primaryColorHover: colors.primary.lighten1,
+    primaryColorPressed: colors.primary.darken1,
+    primaryColorSuppl: colors.primary.rgb,
 
-        successColor: colors.success.default,
-        successColorHover: colors.success.lighten1,
-        successColorPressed: colors.success.darken1,
-        successColorSuppl: colors.success.rgb,
-      },
-    };
-
-    const store = useStore();
-    store.dispatch(FETCH_VEHICLE_TYPES);
-    console.log(store);
-    const isUserFetched = computed(() => store.state.auth.isFetched);
-
-    return {
-      ruRU,
-      dateRuRU,
-      themeOverrides,
-      darkTheme,
-      isUserFetched,
-    };
-  },
-  components: {
-    AppLayout,
-    NConfigProvider,
-    NLoadingBarProvider,
-    NNotificationProvider,
-    NSpin,
+    successColor: colors.success.default,
+    successColorHover: colors.success.lighten1,
+    successColorPressed: colors.success.darken1,
+    successColorSuppl: colors.success.rgb,
   },
 };
+
+const store = useStore();
+const memory = new useMemory();
+
+const newDarkTheme = {
+  ...darkTheme,
+  Button: {
+    textColor: "#ffffff",
+  },
+};
+
+const theme = ref(memory.get("darkTheme", false) === "1" ? newDarkTheme : null);
+
+const themeSwitcher = () => {
+  if (theme.value === null) {
+    memory.set("darkTheme", 1);
+    theme.value = newDarkTheme;
+  } else {
+    memory.set("darkTheme", 0);
+    theme.value = null;
+  }
+};
+
+provide("themeSwitcher", themeSwitcher);
+
+store.dispatch(FETCH_VEHICLE_TYPES);
+console.log(store);
+const isUserFetched = computed(() => store.state.auth.isFetched);
 </script>

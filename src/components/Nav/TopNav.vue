@@ -1,6 +1,10 @@
 <template>
   <div class="flex items-center h-full p-2">
     <div class="flex-grow" />
+    <n-icon size="25" class="mr-2 cursor-pointer" title="Сменить тему">
+      <star-half @click="themeSwitcher" />
+    </n-icon>
+
     <n-dropdown
       trigger="hover"
       :options="options"
@@ -18,7 +22,8 @@
 <script>
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { NAvatar, NDropdown } from "naive-ui";
+import { NAvatar, NDropdown, NIcon } from "naive-ui";
+import { StarHalf } from "@vicons/ionicons5";
 import { LOGOUT_USER } from "@/store/modules/auth/actionTypes";
 
 export default {
@@ -26,6 +31,8 @@ export default {
   components: {
     NAvatar,
     NDropdown,
+    NIcon,
+    StarHalf,
   },
   setup() {
     const store = useStore();
@@ -59,5 +66,6 @@ export default {
       selectHandler,
     };
   },
+  inject: ["themeSwitcher"],
 };
 </script>

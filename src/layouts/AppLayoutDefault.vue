@@ -10,7 +10,7 @@
       show-trigger
       @collapse="collapsed = true"
       @expand="collapsed = false"
-      class="main-nav-sidebar"
+      :style="navStyle"
     >
       <div class="h-12 flex justify-center items-center">
         <router-link :to="{ name: 'Dashboard' }">
@@ -38,6 +38,14 @@
 </template>
 
 <script>
+export default {
+  name: "DefaltLayout",
+};
+</script>
+
+<script setup>
+import { ref } from "vue";
+import useMemory from "@/hooks/useMemory";
 import {
   NLayout,
   NLayoutContent,
@@ -49,21 +57,25 @@ import {
 import TopNav from "../components/Nav/TopNav.vue";
 import SideNav from "../components/Nav/SideNav.vue";
 
-export default {
-  name: "DefaltLayout",
-  data: () => ({
-    collapsed: false,
-  }),
-  components: {
-    NLayout,
-    NLayoutContent,
-    NLayoutHeader,
-    NLayoutFooter,
-    NLayoutSider,
-    TopNav,
-    SideNav,
-    NH2,
-  },
+const collapsed = ref(false);
+
+const memory = new useMemory();
+
+const navBgImage = memory.get(
+  "navBgImage",
+  "https://images.drive.ru/i/0/5e95a4eeec05c42d5e000028.jpg"
+);
+
+const navStyle = {
+  background: `linear-gradient(
+      0deg,
+      rgba(3, 1, 40, 0.5) 0%,
+      rgba(14, 15, 114, 0.5) 47%,
+      rgba(28, 10, 134, 0.4)
+    ),
+    url("${navBgImage}")`,
+  backgroundSize: "cover",
+  backgroundPositionX: "-38%",
 };
 </script>
 
@@ -77,16 +89,5 @@ export default {
       flex: 1 1 auto;
     }
   }
-}
-.main-nav-sidebar {
-  background: linear-gradient(
-      0deg,
-      rgba(3, 1, 40, 0.5) 0%,
-      rgba(14, 15, 114, 0.5) 47%,
-      rgba(28, 10, 134, 0.4)
-    ),
-    url(https://images.drive.ru/i/0/5e95a4eeec05c42d5e000028.jpg);
-  background-size: cover;
-  background-position-x: -38%;
 }
 </style>
