@@ -53,15 +53,19 @@ const themeOverrides = {
     successColorPressed: colors.success.darken1,
     successColorSuppl: colors.success.rgb,
   },
+  Button: {
+    textColor: "#FFFFFF",
+  },
 };
-
+console.log(darkTheme, "darkTheme");
 const store = useStore();
 const memory = new useMemory();
 
 const newDarkTheme = {
   ...darkTheme,
   Button: {
-    textColor: "#ffffff",
+    ...darkTheme.Button,
+    common: { ...darkTheme.Button.common, baseColor: "#ffffff" },
   },
 };
 
