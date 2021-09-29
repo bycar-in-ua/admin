@@ -7,6 +7,8 @@ import {
   PURGE_CAR_EDITOR,
   SAVE_CAR,
   CREATE_NEW_COMPLECTATION,
+  SET_COMPLECTATION_OPTIONS,
+  CHANGE_COMPLECTATION_NAME,
 } from "./actionTypes";
 import { UPDATE_CAR, UPDATE_CAR_FIELD } from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
@@ -26,6 +28,7 @@ export const carEditor = {
   state: () => ({
     car: carInitialState,
     isFetched: false,
+    isFetching: false,
     isEdited: false,
   }),
   modules: { engine, transmission },
@@ -35,8 +38,14 @@ export const carEditor = {
       commit("updateFetched", true);
       commit(UPDATE_CAR, car);
     },
-    async [SAVE_CAR]({ state }) {
-      await apiClient.put(`/vehicles/${state.car.id}`, prepareCar(state.car));
+    async [SAVE_CAR]({ state, commit }) {
+      commit("updateFetching", true);
+      const updatedCar = await apiClient.put(`/vehicles/${state.car.id}`, {
+        vehicle: prepareCar(state.car),
+        complectations: state.car.complectations,
+      });
+      commit(UPDATE_CAR, updatedCar);
+      commit("updateFetching", false);
     },
     async [CREATE_NEW_COMPLECTATION]({ commit, state }, name) {
       const newComplectation = await apiClient.post("/complectations", {
@@ -46,6 +55,30 @@ export const carEditor = {
       commit(UPDATE_CAR_FIELD, [
         "complectations",
         [...state.car.complectations, newComplectation],
+      ]);
+    },
+    async [CHANGE_COMPLECTATION_NAME](
+      { commit, state },
+      [complectationIndex, name]
+    ) {
+      const targetComplectation = state.car.complectations[complectationIndex];
+      await apiClient.put(`/complectations/${targetComplectation.id}`, {
+        displayName: name,
+      });
+      commit(UPDATE_CAR_FIELD, [
+        `complectations[${complectationIndex}].displayName`,
+        name,
+      ]);
+    },
+    [SET_COMPLECTATION_OPTIONS](
+      { rootState, commit },
+      [complectationIndex, optionIds]
+    ) {
+      commit(UPDATE_CAR_FIELD, [
+        `complectations[${complectationIndex}].options`,
+        optionIds.map((optionId) =>
+          rootState.library.options.find((option) => option.id === optionId)
+        ),
       ]);
     },
     [PURGE_CAR_EDITOR]({ commit }) {
@@ -63,6 +96,7 @@ export const carEditor = {
       set(state.car, field, val);
     },
     ...createFetchingMutation("updateFetched", "isFetched"),
+    ...createFetchingMutation("updateFetching", "isFetching"),
   },
 };
 

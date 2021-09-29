@@ -22,3 +22,20 @@ export const prepareCar = (car) => {
   });
   return preparedCar;
 };
+
+export const prepareOption = (option) => {
+  return {
+    label: option.displayName,
+    value: option.id,
+  };
+};
+
+export const prepareOptionsByCategoties = (acc, cur) => {
+  if (acc[cur.category.id]) {
+    acc[cur.category.id].push(prepareOption(cur));
+  } else {
+    acc[cur.category.id] = [];
+    acc[cur.category.id].push(prepareOption(cur));
+  }
+  return acc;
+};

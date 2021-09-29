@@ -1,9 +1,12 @@
 <template>
   <n-form :model="car" :rules="rules">
     <div class="text-right mb-4">
-      <n-button type="primary" @click="saveAction" :disabled="!isEdited"
-        >Сохранить</n-button
-      >
+      <n-button type="primary" @click="saveAction" :disabled="!isEdited">
+        <template v-if="isFetching">
+          <n-spin size="small" stroke="white" />
+        </template>
+        <template v-else> Сохранить </template>
+      </n-button>
     </div>
     <n-form-item label="Статус">
       <n-select
@@ -63,6 +66,7 @@ import {
   NInput,
   NInputNumber,
   NImage,
+  NSpin,
 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
 import { statusOptions } from "@/helpers/postStatuses";
@@ -71,6 +75,7 @@ import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 const store = useStore();
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
+const isFetching = computed(() => store.state.carEditor.isFetching);
 
 const renderBrandLabel = (option) => {
   try {

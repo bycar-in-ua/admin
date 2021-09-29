@@ -1,8 +1,10 @@
 import apiClient from "@/helpers/apiClient";
+import { prepareOptionsByCategoties } from "@/helpers/preparers";
 import {
   FETCH_OPTION_CATEGORIES,
   FETCH_VEHICLE_TYPES,
   FETCH_OPTIONS,
+  CREATE_OPTION_CATEGORY,
 } from "./actionTypes";
 import { UPDATE_LIBRARY } from "./mutationTypes";
 
@@ -21,6 +23,15 @@ export const library = {
       const optionCategories = await apiClient.get("/option-categories");
       commit(UPDATE_LIBRARY, ["optionCategories", optionCategories]);
     },
+    async [CREATE_OPTION_CATEGORY]({ commit, state }, displayName) {
+      const newOptionCategory = await apiClient.post("/option-categories", {
+        displayName,
+      });
+      commit(UPDATE_LIBRARY, [
+        "optionCategories",
+        [...state.optionCategories, newOptionCategory],
+      ]);
+    },
     async [FETCH_OPTIONS]({ commit }) {
       const options = await apiClient.get("/options");
       commit(UPDATE_LIBRARY, ["options", options]);
@@ -33,24 +44,9 @@ export const library = {
   },
   getters: {
     getOptionsByCategories(state) {
-      return state.options.reduce((acc, cur) => {
-        if (acc[cur.category.id]) {
-          acc[cur.category.id].push(prepareOption(cur));
-        } else {
-          acc[cur.category.id] = [];
-          acc[cur.category.id].push(prepareOption(cur));
-        }
-        return acc;
-      }, {});
+      return state.options.reduce(prepareOptionsByCategoties, {});
     },
   },
 };
-
-function prepareOption(option) {
-  return {
-    label: option.displayName,
-    value: option.id,
-  };
-}
 
 export default library;
