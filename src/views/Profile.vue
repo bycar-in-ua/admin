@@ -1,13 +1,13 @@
 <template>
-  <pre>
-  {{ profile }}
-</pre
-  >
+  <pre v-text="profile" />
+  <nav-bg-upload />
 </template>
 
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import NavBgUpload from "@/components/Profile/NavBgUpload";
+
 export default {
   name: "Profile",
   setup() {
@@ -18,6 +18,9 @@ export default {
     return {
       profile,
     };
+  },
+  components: {
+    NavBgUpload,
   },
 };
 </script>

@@ -46,7 +46,7 @@
               />
             </n-popconfirm>
           </div>
-          <n-divider>Комбинации, ездовые характеристики, цены</n-divider>
+          <n-divider>Силовые агрегаты, ездовые характеристики, цены</n-divider>
           <n-collapse>
             <n-collapse-item title="2.0 Skyactiv - 6 АКПП - $35000" name="1">
               <price-form />

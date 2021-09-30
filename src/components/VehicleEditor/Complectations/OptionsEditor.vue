@@ -11,7 +11,7 @@
         filterable
         :options="optionsByCategories[category.id]"
         :value="getOptionsByCategory(complectation.options, category.id)"
-        :on-update:value="updateHandler(complectationIndex)"
+        :on-update:value="updateHandler"
       />
     </n-collapse-item>
   </n-collapse>
@@ -20,19 +20,20 @@
 <script>
 export default {
   name: "OptionsEditor",
-  props: {
-    complectation: Object,
-    complectationIndex: Number,
-  },
 };
 </script>
 
 <script setup>
-import { computed } from "vue";
+import { computed, defineProps } from "vue";
 import { useStore } from "vuex";
 import { NTransfer, NCollapse, NCollapseItem } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SET_COMPLECTATION_OPTIONS } from "@/store/modules/carEditor/actionTypes";
+
+const props = defineProps({
+  complectation: Object,
+  complectationIndex: Number,
+});
 
 const store = useStore();
 
@@ -47,9 +48,9 @@ const getOptionsByCategory = (options, categoryId) =>
     .filter((option) => option.category.id === categoryId)
     .map((option) => option.id);
 
-const updateHandler = (complectationIndex) => (value) => {
+const updateHandler = (value) => {
   store.dispatch(carEditorNamespace(SET_COMPLECTATION_OPTIONS), [
-    complectationIndex,
+    props.complectationIndex,
     value,
   ]);
 };
