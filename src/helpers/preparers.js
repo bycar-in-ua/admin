@@ -39,3 +39,13 @@ export const prepareOptionsByCategoties = (acc, cur) => {
   }
   return acc;
 };
+
+export const prepareOptionIdsByCategoties = (acc, cur) => {
+  if (acc[cur.category.id]) {
+    acc[cur.category.id].push(cur.id);
+  } else {
+    acc[cur.category.id] = [];
+    acc[cur.category.id].push(cur.id);
+  }
+  return acc;
+};

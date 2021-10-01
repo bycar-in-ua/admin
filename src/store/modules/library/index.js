@@ -4,6 +4,7 @@ import {
   FETCH_OPTION_CATEGORIES,
   FETCH_VEHICLE_TYPES,
   FETCH_OPTIONS,
+  CREATE_OPTION,
   CREATE_OPTION_CATEGORY,
 } from "./actionTypes";
 import { UPDATE_LIBRARY } from "./mutationTypes";
@@ -19,9 +20,20 @@ export const library = {
       const types = await apiClient.get("/types");
       commit(UPDATE_LIBRARY, ["types", types]);
     },
+    async [FETCH_OPTIONS]({ commit }) {
+      const options = await apiClient.get("/options");
+      commit(UPDATE_LIBRARY, ["options", options]);
+    },
     async [FETCH_OPTION_CATEGORIES]({ commit }) {
       const optionCategories = await apiClient.get("/option-categories");
       commit(UPDATE_LIBRARY, ["optionCategories", optionCategories]);
+    },
+    async [CREATE_OPTION]({ commit, state }, [category, displayName]) {
+      const newOption = await apiClient.post("/options", {
+        category,
+        displayName,
+      });
+      commit(UPDATE_LIBRARY, ["options", [...state.options, newOption]]);
     },
     async [CREATE_OPTION_CATEGORY]({ commit, state }, displayName) {
       const newOptionCategory = await apiClient.post("/option-categories", {
@@ -31,10 +43,6 @@ export const library = {
         "optionCategories",
         [...state.optionCategories, newOptionCategory],
       ]);
-    },
-    async [FETCH_OPTIONS]({ commit }) {
-      const options = await apiClient.get("/options");
-      commit(UPDATE_LIBRARY, ["options", options]);
     },
   },
   mutations: {

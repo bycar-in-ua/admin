@@ -11,7 +11,11 @@ import {
   SET_COMPLECTATION_OPTIONS,
   CHANGE_COMPLECTATION_NAME,
 } from "./actionTypes";
-import { UPDATE_CAR, UPDATE_CAR_FIELD } from "./mutationTypes";
+import {
+  UPDATE_CAR,
+  UPDATE_CAR_FIELD,
+  UPDATE_IS_EDITED,
+} from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
 import { prepareCar } from "@/helpers/preparers";
@@ -41,11 +45,14 @@ export const carEditor = {
       dispatch(SET_OPTIONS, car.complectations);
       commit(UPDATE_CAR, car);
     },
-    async [SAVE_CAR]({ state, commit }) {
+    async [SAVE_CAR]({ state, commit, getters }) {
       commit("updateFetching", true);
       const updatedCar = await apiClient.put(`/vehicles/${state.car.id}`, {
         vehicle: prepareCar(state.car),
-        complectations: state.car.complectations,
+        complectations: state.car.complectations.map((cmpl) => ({
+          ...cmpl,
+          options: getters["getOptionsByComplectations"][cmpl.id] || [],
+        })),
       });
       commit(UPDATE_CAR, updatedCar);
       commit("updateFetching", false);
@@ -97,6 +104,9 @@ export const carEditor = {
     [UPDATE_CAR_FIELD](state, [field, val]) {
       state.isEdited = true;
       set(state.car, field, val);
+    },
+    [UPDATE_IS_EDITED](state, status) {
+      state.isEdited = status;
     },
     ...createFetchingMutation("updateFetched", "isFetched"),
     ...createFetchingMutation("updateFetching", "isFetching"),

@@ -6,16 +6,14 @@
       :title="category.displayName"
       :name="category.id"
     >
-      <div class="">
-        <n-transfer
-          virtual-scroll
-          filterable
-          :options="optionsByCategories[category.id]"
-          :value="getOptionsByCategory(complectation.options, category.id)"
-          :on-update:value="updateHandler"
-        />
-        <add-new-option />
-      </div>
+      <n-transfer
+        virtual-scroll
+        filterable
+        :options="optionsByCategories[category.id]"
+        :value="getOptionsByCategory(category.id)"
+        :on-update:value="updateHandler(category.id)"
+      />
+      <add-new-option :category-id="category.id" />
     </n-collapse-item>
   </n-collapse>
 </template>
@@ -31,9 +29,9 @@ import { computed, defineProps } from "vue";
 import { useStore } from "vuex";
 import { NTransfer, NCollapse, NCollapseItem } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SET_COMPLECTATION_OPTIONS } from "@/store/modules/carEditor/actionTypes";
 
 import AddNewOption from "./AddNewOption";
+import { CHANGE_OPTIONS } from "@/store/modules/carEditor/options/actionTypes";
 
 const props = defineProps({
   complectation: Object,
@@ -48,14 +46,17 @@ const optionsByCategories = computed(
   () => store.getters["getOptionsByCategories"]
 );
 
-const getOptionsByCategory = (options, categoryId) =>
-  options
-    .filter((option) => option.category.id === categoryId)
-    .map((option) => option.id);
+const complectationOptionByCategories = computed(
+  () => store.state.carEditor.options[props.complectation.id]
+);
 
-const updateHandler = (value) => {
-  store.dispatch(carEditorNamespace(SET_COMPLECTATION_OPTIONS), [
-    props.complectationIndex,
+const getOptionsByCategory = (catId) =>
+  complectationOptionByCategories.value[catId] || [];
+
+const updateHandler = (catId) => (value) => {
+  store.dispatch(carEditorNamespace(CHANGE_OPTIONS), [
+    props.complectation.id,
+    catId,
     value,
   ]);
 };
