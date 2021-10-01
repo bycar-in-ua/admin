@@ -6,13 +6,16 @@
       :title="category.displayName"
       :name="category.id"
     >
-      <n-transfer
-        virtual-scroll
-        filterable
-        :options="optionsByCategories[category.id]"
-        :value="getOptionsByCategory(complectation.options, category.id)"
-        :on-update:value="updateHandler"
-      />
+      <div class="">
+        <n-transfer
+          virtual-scroll
+          filterable
+          :options="optionsByCategories[category.id]"
+          :value="getOptionsByCategory(complectation.options, category.id)"
+          :on-update:value="updateHandler"
+        />
+        <add-new-option />
+      </div>
     </n-collapse-item>
   </n-collapse>
 </template>
@@ -29,6 +32,8 @@ import { useStore } from "vuex";
 import { NTransfer, NCollapse, NCollapseItem } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SET_COMPLECTATION_OPTIONS } from "@/store/modules/carEditor/actionTypes";
+
+import AddNewOption from "./AddNewOption";
 
 const props = defineProps({
   complectation: Object,

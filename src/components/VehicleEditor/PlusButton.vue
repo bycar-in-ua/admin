@@ -3,13 +3,13 @@
     class="
       shadow-lg
       rounded
-      border border-gray-200
+      border border-gray-300
       flex
       justify-center
       items-center
       cursor-pointer
       transition-all
-      hover:bg-gray-200
+      hover:bg-gray-300
       p-8
     "
     @click="props.callback"

@@ -1,5 +1,6 @@
 import engine from "./engine";
 import transmission from "./transmission";
+import options from "./options";
 
 import apiClient from "@/helpers/apiClient";
 import {
@@ -14,6 +15,7 @@ import { UPDATE_CAR, UPDATE_CAR_FIELD } from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
 import { prepareCar } from "@/helpers/preparers";
+import { SET_OPTIONS } from "./options/actionTypes";
 
 export const carEditorNamespace = (action) => `carEditor/${action}`;
 
@@ -31,11 +33,12 @@ export const carEditor = {
     isFetching: false,
     isEdited: false,
   }),
-  modules: { engine, transmission },
+  modules: { engine, transmission, options },
   actions: {
-    async [FETCH_CAR]({ commit }, carId) {
+    async [FETCH_CAR]({ commit, dispatch }, carId) {
       const car = await apiClient.get(`/vehicles/edit/${carId}`);
       commit("updateFetched", true);
+      dispatch(SET_OPTIONS, car.complectations);
       commit(UPDATE_CAR, car);
     },
     async [SAVE_CAR]({ state, commit }) {
