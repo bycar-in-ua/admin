@@ -62,7 +62,7 @@
           :on-update:value="inputHandler('compressionRatio')"
         />
       </n-form-item>
-      <n-form-item label="Мощность, кВт">
+      <n-form-item label="Мощность, лс">
         <n-input-number
           :value="engine.power"
           class="w-full"

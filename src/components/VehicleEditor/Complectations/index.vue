@@ -47,21 +47,17 @@
             </n-popconfirm>
           </div>
           <n-divider>Силовые агрегаты, ездовые характеристики, цены</n-divider>
-          <n-collapse>
-            <n-collapse-item title="2.0 Skyactiv - 6 АКПП - $35000" name="1">
-              <price-form />
-            </n-collapse-item>
-
-            <n-collapse-item title="2.5 Skyactiv - 6 АКПП - $38000" name="2">
-              <price-form />
-            </n-collapse-item>
-          </n-collapse>
+          <power-units-editor
+            :complectation="complectation"
+            :complectationIndex="index"
+          />
           <div class="px-8 pt-6">
             <n-icon
               size="40"
               :color="colors.primary.lighten1"
               title="Добавить комбинацию Двигателя и Трансмиссии"
               class="cursor-pointer"
+              @click="createPowerUnit(index)"
             >
               <add-circle-outline />
             </n-icon>
@@ -117,12 +113,13 @@ import {
   NInput,
 } from "naive-ui";
 import { AddCircleOutline } from "@vicons/ionicons5";
-import PriceForm from "./PriceForm";
 import OptionsEditor from "./OptionsEditor";
 import ComplectationTitleEditor from "./ComplectationTitleEditor";
+import PowerUnitsEditor from "./PowerUnitsEditor";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { CREATE_NEW_COMPLECTATION } from "@/store/modules/carEditor/actionTypes";
 import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/actionTypes";
+import { PUSH_NEW_POWER_UNIT } from "@/store/modules/carEditor/mutationTypes";
 
 const store = useStore();
 
@@ -143,4 +140,7 @@ const createOptionCategory = async () => {
   await store.dispatch(CREATE_OPTION_CATEGORY, newOptCatName.value);
   newOptCatName.value = "";
 };
+
+const createPowerUnit = (complectationIndex) =>
+  store.commit(carEditorNamespace(PUSH_NEW_POWER_UNIT), complectationIndex);
 </script>

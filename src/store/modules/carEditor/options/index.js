@@ -11,9 +11,12 @@ export const options = {
     [SET_OPTIONS]({ commit }, complectations) {
       let options = {};
 
-      complectations.forEach((item) => {
+      complectations.forEach((complectation) => {
         Object.assign(options, {
-          [item.id]: item.options.reduce(prepareOptionIdsByCategoties, {}),
+          [complectation.id]: complectation.options.reduce(
+            prepareOptionIdsByCategoties,
+            {}
+          ),
         });
       });
 

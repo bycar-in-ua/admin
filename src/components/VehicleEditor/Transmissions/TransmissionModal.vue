@@ -114,6 +114,7 @@ import {
   CREATE_NEW_TRANSMISSION,
   EDIT_TRANSMISSION,
 } from "@/store/modules/carEditor/transmission/actionTypes";
+import { driveTypes, gearboxTypes } from "@/helpers/transmissionHelpers";
 
 const store = useStore();
 
@@ -131,36 +132,6 @@ const closeModal = (val) => {
 const transmission = computed(
   () => store.state.carEditor.transmission.transmission
 );
-
-const driveTypes = [
-  {
-    label: "Передний",
-    value: "FWD",
-  },
-  {
-    label: "Полный",
-    value: "AWD",
-  },
-  {
-    label: "Задний",
-    value: "RWD",
-  },
-];
-
-const gearboxTypes = [
-  {
-    label: "АКПП",
-    value: "automatic",
-  },
-  {
-    label: "МКПП",
-    value: "mechanical",
-  },
-  {
-    label: "Вариатор",
-    value: "variator",
-  },
-];
 
 const inputHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_TRANSMISSION_FIELD), [field, val]);
