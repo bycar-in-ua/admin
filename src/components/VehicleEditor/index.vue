@@ -1,0 +1,58 @@
+<template>
+  <div v-if="isFetched" class="flex relative">
+    <div class="pr-6" style="flex: 0 0 75%" :nativeScrollbar="false">
+      <vehicle-title />
+      <description-editor />
+      <general-options />
+      <Complectations />
+      <Engines />
+      <Transmissions />
+    </div>
+    <div style="flex: 0 0 25%">
+      <side-column />
+    </div>
+  </div>
+  <vahicle-editor-skeleton v-else />
+</template>
+
+<script>
+export default {
+  name: "VehicleEditor",
+};
+</script>
+
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+
+import { carEditorNamespace } from "@/store/modules/carEditor";
+import { FETCH_CAR } from "@/store/modules/carEditor/actionTypes";
+
+import SideColumn from "./SideColumn";
+import VehicleTitle from "./VehicleTitle";
+import DescriptionEditor from "./DescriptionEditor";
+import GeneralOptions from "./GeneralOptions";
+import Complectations from "./Complectations";
+import Engines from "./Engines";
+import Transmissions from "./Transmissions";
+import VahicleEditorSkeleton from "./Skeleton";
+import {
+  FETCH_OPTIONS,
+  FETCH_OPTION_CATEGORIES,
+} from "@/store/modules/library/actionTypes";
+
+const store = useStore();
+const route = useRoute();
+store.dispatch(carEditorNamespace(FETCH_CAR), route.params.id);
+store.dispatch(FETCH_OPTION_CATEGORIES);
+store.dispatch(FETCH_OPTIONS);
+
+const isFetched = computed(() => store.state.carEditor.isFetched);
+</script>
+
+<style>
+.editor-scroll {
+  max-height: calc(100vh - 10rem);
+}
+</style>

@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
 import { FETCH_USER } from "@/store/modules/auth/actionTypes";
-import Dashboard from "../views/Dashboard.vue";
+import Dashboard from "@/views/Dashboard.vue";
 
 const routes = [
   {
     path: "/login",
     name: "Login",
-    component: () => import("../views/Login.vue"),
+    component: () => import("@/views/Login.vue"),
     meta: {
       layout: "LoginLayout",
     },
@@ -18,9 +18,30 @@ const routes = [
     component: Dashboard,
   },
   {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("@/views/Profile.vue"),
+  },
+  {
     path: "/vehicles",
     name: "Vehicles",
-    component: () => import("../views/Vehicles.vue"),
+    component: () => import("@/views/Vehicles.vue"),
+    meta: {
+      title: "Автомобили",
+    },
+  },
+  {
+    path: "/vehicles/:id",
+    name: "EditVehicle",
+    component: () => import("@/views/EditVehicle.vue"),
+  },
+  {
+    path: "/brands",
+    name: "Brands",
+    component: () => import("@/views/Brands.vue"),
+    meta: {
+      title: "Бренды",
+    },
   },
 ];
 
@@ -30,7 +51,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log(store, "store");
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   if (!store.getters.isLogedIn) {

@@ -10,22 +10,24 @@
       show-trigger
       @collapse="collapsed = true"
       @expand="collapsed = false"
+      :style="navStyle"
     >
-      <n-menu
-        :collapsed="collapsed"
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :options="menuOptions"
-        :render-label="renderMenuLabel"
-        :render-icon="renderMenuIcon"
-        :expand-icon="expandIcon"
-      />
+      <div class="h-12 flex justify-center items-center">
+        <router-link :to="{ name: 'Dashboard' }">
+          <a href="/" class="font-bold text-white text-2xl">
+            <template v-if="collapsed"> b </template>
+            <template v-else> bycar.in.ua </template>
+          </a>
+        </router-link>
+      </div>
+      <side-nav :collapsed="collapsed" />
     </n-layout-sider>
     <n-layout class="h-full main-content" :native-scrollbar="false">
       <n-layout-header class="z-10 h-12" position="absolute" bordered>
-        test
+        <top-nav />
       </n-layout-header>
-      <n-layout-content class="pt-12">
+      <n-layout-content class="pt-16 p-8 container mx-auto">
+        <n-h2 v-if="$route.meta.title" v-text="$route.meta.title" strong />
         <slot />
       </n-layout-content>
       <n-layout-footer class="text-center p-2">
@@ -36,73 +38,44 @@
 </template>
 
 <script>
-import { h } from "vue";
-import { RouterLink } from "vue-router";
+export default {
+  name: "DefaltLayout",
+};
+</script>
+
+<script setup>
+import { ref } from "vue";
+import useMemory from "@/hooks/useMemory";
 import {
   NLayout,
   NLayoutContent,
   NLayoutHeader,
   NLayoutFooter,
   NLayoutSider,
-  NMenu,
-  NIcon,
+  NH2,
 } from "naive-ui";
-import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
+import TopNav from "../components/Nav/TopNav.vue";
+import SideNav from "../components/Nav/SideNav.vue";
 
-const menuOptions = [
-  {
-    label: "Дашборд",
-    route: {
-      name: "Dashboard",
-      exact: true,
-    },
-  },
-  {
-    label: "Автомобили",
-    route: {
-      name: "Vehicles",
-    },
-  },
-];
+const collapsed = ref(false);
 
-export default {
-  name: "DefaltLayout",
-  setup() {
-    const renderMenuLabel = (option) => {
-      return h(
-        RouterLink,
-        { to: option.route, exacr: option.route?.exact },
-        option.label
-      );
-    };
-    const renderMenuIcon = (option) => {
-      // return render placeholder for indent
-      if (option.key === "sheep-man") return true;
-      // return falsy, don't render icon placeholder
-      if (option.key === "food") return null;
-      return h(NIcon, null, { default: () => h(BookmarkOutline) });
-    };
-    const expandIcon = () => {
-      return h(NIcon, null, { default: () => h(CaretDownOutline) });
-    };
-    return {
-      menuOptions,
-      renderMenuLabel,
-      renderMenuIcon,
-      expandIcon,
-    };
-  },
-  data: () => ({
-    collapsed: false,
-  }),
-  components: {
-    NLayout,
-    NLayoutContent,
-    NLayoutHeader,
-    NLayoutFooter,
-    NLayoutSider,
-    NMenu,
-  },
+const memory = new useMemory();
+
+const navBgImage = memory.get(
+  "navBgImage",
+  "https://images.drive.ru/i/0/5e95a4eeec05c42d5e000028.jpg"
+);
+
+const navStyle = {
+  background: `linear-gradient(
+      0deg,
+      rgba(3, 1, 40, 0.5) 0%,
+      rgba(14, 15, 114, 0.5) 47%,
+      rgba(28, 10, 134, 0.4)
+    ),
+    url("${navBgImage}")`,
+  backgroundSize: "cover",
+  backgroundPositionX: "-38%",
 };
 </script>
 

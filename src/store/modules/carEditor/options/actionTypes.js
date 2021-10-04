@@ -1,0 +1,2 @@
+export const SET_OPTIONS = "SET_OPTIONS";
+export const CHANGE_OPTIONS = "CHANGE_OPTIONS";
