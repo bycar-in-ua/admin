@@ -1,7 +1,5 @@
+import { API_URL } from "@/constants";
 import validateResponse from "./validateResponse";
-
-//TODO отрефакторить это дерьмо
-const API_URL = "http://localhost:3000";
 
 export const get = async (path) => {
   try {
