@@ -11,14 +11,14 @@ services:
     networks:
       - internal
       - proxy
-    command: "yarn serve"
+    command: "yarn serve:prod"
     labels:
       - traefik.enable=true
       - traefik.http.routers.staging-admin.rule=Host(`staging-admin.bycar.in.ua`)
       - traefik.http.routers.staging-admin.entrypoints=websecure
       - traefik.http.routers.staging-admin.tls=true
       - traefik.http.routers.staging-admin.tls.certresolver=letsencrypt-resolver
-      - traefik.http.services.staging-admin.loadbalancer.server.port=3010
+      - traefik.http.services.staging-admin.loadbalancer.server.port=5000
 
 networks:
   internal:

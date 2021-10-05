@@ -1,4 +1,4 @@
-import { API_URL } from "@/constants";
+import { API_URL, CDN_URL } from "@/constants";
 import validateResponse from "./validateResponse";
 
 export const get = async (path) => {
@@ -69,7 +69,7 @@ export const uploadFiles = async (path, files) => {
     for (let index = 0; index < files.length; index++) {
       formData.append(files[index].name, files[index]);
     }
-    const response = await fetch("http://localhost:3020" + path, {
+    const response = await fetch(CDN_URL + path, {
       method: "POST",
       body: formData,
     });
