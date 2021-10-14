@@ -8,7 +8,7 @@
     <n-loading-bar-provider>
       <n-notification-provider>
         <app-layout v-if="isUserFetched">
-          <router-view />
+          <router-view :key="locale" />
         </app-layout>
         <div v-else class="h-screen flex justify-center items-center">
           <n-spin :size="100" />
@@ -27,6 +27,7 @@ export default {
 <script setup>
 import { computed, provide, ref } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import {
   NConfigProvider,
   ruRU,
@@ -54,9 +55,10 @@ const themeOverrides = {
     successColorSuppl: colors.success.rgb,
   },
 };
-console.log(darkTheme, "darkTheme");
+
 const store = useStore();
-const memory = new useMemory();
+const memory = useMemory();
+const { locale } = useI18n();
 
 const newDarkTheme = {
   ...darkTheme,
@@ -81,6 +83,6 @@ const themeSwitcher = () => {
 provide("themeSwitcher", themeSwitcher);
 
 store.dispatch(FETCH_VEHICLE_TYPES);
-console.log(store);
+
 const isUserFetched = computed(() => store.state.auth.isFetched);
 </script>

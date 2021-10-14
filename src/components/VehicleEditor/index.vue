@@ -1,16 +1,14 @@
 <template>
   <div v-if="isFetched" class="flex relative">
-    <div class="pr-6" style="flex: 0 0 75%" :nativeScrollbar="false">
+    <n-scrollbar class="pr-6 mr-1" style="flex: 0 0 75%; max-height: 85vh">
       <vehicle-title />
       <description-editor />
       <general-options />
       <Complectations />
       <Engines />
       <Transmissions />
-    </div>
-    <div style="flex: 0 0 25%">
-      <side-column />
-    </div>
+    </n-scrollbar>
+    <side-column style="flex: 0 0 24%" />
   </div>
   <vahicle-editor-skeleton v-else />
 </template>
@@ -29,6 +27,7 @@ import { useRoute } from "vue-router";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { FETCH_CAR } from "@/store/modules/carEditor/actionTypes";
 
+import { NScrollbar } from "naive-ui";
 import SideColumn from "./SideColumn";
 import VehicleTitle from "./VehicleTitle";
 import DescriptionEditor from "./DescriptionEditor";
@@ -50,9 +49,3 @@ store.dispatch(FETCH_OPTIONS);
 
 const isFetched = computed(() => store.state.carEditor.isFetched);
 </script>
-
-<style>
-.editor-scroll {
-  max-height: calc(100vh - 10rem);
-}
-</style>

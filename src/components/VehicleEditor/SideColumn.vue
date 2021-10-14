@@ -5,10 +5,10 @@
         <template v-if="isFetching">
           <n-spin size="small" stroke="white" />
         </template>
-        <template v-else> Сохранить </template>
+        <template v-else> {{ t("save") }} </template>
       </n-button>
     </div>
-    <n-form-item label="Статус">
+    <n-form-item :label="t('status')">
       <n-select
         size="medium"
         :value="car.status"
@@ -16,7 +16,7 @@
         :on-update:value="updateCarField('status')"
       />
     </n-form-item>
-    <n-form-item label="Бренд" required>
+    <n-form-item :label="t('brand')" required>
       <n-select
         size="medium"
         disabled
@@ -24,20 +24,20 @@
         :renderLabel="renderBrandLabel"
       />
     </n-form-item>
-    <n-form-item label="Модель" path="model">
+    <n-form-item :label="t('vehicle.model')" path="model">
       <n-input
         type="text"
         :value="car.model"
         :on-update:value="updateCarField('model')"
-        placeholder="Введите название модели"
+        :placeholder="t('vehicle.enterModel')"
       />
     </n-form-item>
-    <n-form-item label="Модельный год" path="year">
+    <n-form-item :label="t('vehicle.modelYear')" path="year">
       <n-input-number
         :show-button="false"
         class="w-full"
         :value="car.year"
-        placeholder="Введите модельный год"
+        :placeholder="t('vehicle.enterModelYear')"
         :on-update:value="updateCarField('year')"
       />
     </n-form-item>
@@ -53,6 +53,7 @@ export default {
 <script setup>
 import { h, computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 
 import { yearValidator } from "@/helpers/validators";
 import { carEditorNamespace } from "@/store/modules/carEditor";
@@ -73,6 +74,7 @@ import { statusOptions } from "@/helpers/postStatuses";
 import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 
 const store = useStore();
+const { t } = useI18n();
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
 const isFetching = computed(() => store.state.carEditor.isFetching);

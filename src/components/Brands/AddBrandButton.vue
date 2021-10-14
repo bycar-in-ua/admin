@@ -1,6 +1,8 @@
 <template>
   <div class="mb-6">
-    <n-button type="primary" @click="openModal">Создать</n-button>
+    <n-button type="primary" @click="openModal">
+      {{ t("create") }}
+    </n-button>
   </div>
 </template>
 
@@ -24,4 +26,10 @@ export default {
     },
   },
 };
+</script>
+
+<script setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 </script>

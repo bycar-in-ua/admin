@@ -27,11 +27,15 @@
         <top-nav />
       </n-layout-header>
       <n-layout-content class="pt-16 p-8 container mx-auto">
-        <n-h2 v-if="$route.meta.title" v-text="$route.meta.title" strong />
+        <n-h2
+          v-if="$route.meta.title"
+          v-text="t(...$route.meta.title)"
+          strong
+        />
         <slot />
       </n-layout-content>
       <n-layout-footer class="text-center p-2">
-        <a href="https://bycar.in.ua/">bycar.in.ua</a> Все права защищены.
+        <a href="https://bycar.in.ua/">bycar.in.ua</a> {{ t("copiright") }}
       </n-layout-footer>
     </n-layout>
   </n-layout>
@@ -45,6 +49,7 @@ export default {
 
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useMemory from "@/hooks/useMemory";
 import {
   NLayout,
@@ -59,7 +64,9 @@ import SideNav from "../components/Nav/SideNav.vue";
 
 const collapsed = ref(false);
 
-const memory = new useMemory();
+const memory = useMemory();
+
+const { t } = useI18n();
 
 const navBgImage = memory.get(
   "navBgImage",

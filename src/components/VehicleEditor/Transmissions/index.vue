@@ -1,5 +1,9 @@
 <template>
-  <n-card title="Трансимиссии" size="small" class="my-4 shadow">
+  <n-card
+    :title="t('vehicle.transmission.title', 2)"
+    size="small"
+    class="my-4 shadow"
+  >
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <n-card
         v-for="transmission in transmissions"
@@ -11,11 +15,11 @@
         <n-table :bordered="false" :single-line="false" size="small">
           <tbody>
             <tr>
-              <td>Привод</td>
+              <td>{{ t("vehicle.transmission.drive") }}</td>
               <td>{{ transmission.drive }}, {{ transmission.driveName }}</td>
             </tr>
             <tr>
-              <td>КПП</td>
+              <td>{{ t("vehicle.transmission.gearbox.abbr") }}</td>
               <td>
                 {{ transmission.gearbox.numberOfGears }}
                 {{ transmission.gearbox.type }}
@@ -30,14 +34,14 @@
               class="text-red-500"
               @click.prevent="deleteEngine(transmission.id)"
             >
-              Удалить
+              {{ t("delete") }}
             </a>
             <a
               href="#"
               class="text-primary"
               @click.prevent="openEditModal(transmission)"
             >
-              Редактировать
+              {{ t("edit") }}
             </a>
           </div>
         </template>
@@ -57,6 +61,7 @@ export default {
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import { NCard, NTable } from "naive-ui";
 import PlusButton from "@/components/VehicleEditor/PlusButton";
 import TransmissionModal from "./TransmissionModal";
@@ -68,6 +73,7 @@ import {
 } from "@/store/modules/carEditor/transmission/actionTypes";
 
 const store = useStore();
+const { t } = useI18n();
 
 const transmissions = computed(() => store.state.carEditor.car.transmissions);
 

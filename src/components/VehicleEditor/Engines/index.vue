@@ -1,5 +1,5 @@
 <template>
-  <n-card title="Двигатели" size="small" class="my-4">
+  <n-card :title="t('vehicle.engine.title', 2)" size="small" class="my-4">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <n-card
         v-for="engine in engines"
@@ -11,11 +11,11 @@
         <n-table :bordered="false" :single-line="false" size="small">
           <tbody>
             <tr>
-              <td>Мощность, кВт</td>
+              <td>{{ t("vehicle.engine.power") }}</td>
               <td>{{ engine.power }}</td>
             </tr>
             <tr>
-              <td>Крутящий момент, Н/м</td>
+              <td>{{ t("vehicle.engine.torque") }}</td>
               <td>{{ engine.torque }}</td>
             </tr>
           </tbody>
@@ -27,14 +27,14 @@
               class="text-red-500"
               @click.prevent="deleteEngine(engine.id)"
             >
-              Удалить
+              {{ t("delete") }}
             </a>
             <a
               href="#"
               class="text-primary"
               @click.prevent="openEditModal(engine)"
             >
-              Редактировать
+              {{ t("edit") }}
             </a>
           </div>
         </template>
@@ -54,6 +54,7 @@ export default {
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import EngineModal from "./EngineModal";
 import PlusButton from "@/components/VehicleEditor/PlusButton";
 import { NCard, NTable } from "naive-ui";
@@ -65,6 +66,7 @@ import {
 import { carEditorNamespace } from "@/store/modules/carEditor";
 
 const store = useStore();
+const { t } = useI18n();
 
 const engines = computed(() => store.state.carEditor.car.engines);
 

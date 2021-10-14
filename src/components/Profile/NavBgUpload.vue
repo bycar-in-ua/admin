@@ -2,7 +2,7 @@
   <n-thing title="Настройка фонового изображение навигации">
     <template #description> Текущее изображение: </template>
     <div class="">
-      <img :src="navBgImage" class=" max-w-3xl" />
+      <img :src="navBgImage" class="max-w-3xl" />
     </div>
     <template #action>
       <n-upload :on-change="uploadHandler">
@@ -23,7 +23,7 @@ import apiClient from "@/helpers/apiClient";
 import { NUpload, NButton, NThing } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
 
-const memory = new useMemory();
+const memory = useMemory();
 
 const navBgImage = memory.get("navBgImage", null);
 
