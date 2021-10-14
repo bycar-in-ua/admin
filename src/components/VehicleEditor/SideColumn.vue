@@ -70,7 +70,7 @@ import {
   NSpin,
 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
-import { statusOptions } from "@/helpers/postStatuses";
+import { statuses } from "@/helpers/postStatuses";
 import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 
 const store = useStore();
@@ -78,6 +78,11 @@ const { t } = useI18n();
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
 const isFetching = computed(() => store.state.carEditor.isFetching);
+
+const statusOptions = statuses.map((status) => ({
+  value: status,
+  label: t("vehicle.status." + status),
+}));
 
 const renderBrandLabel = (option) => {
   try {
