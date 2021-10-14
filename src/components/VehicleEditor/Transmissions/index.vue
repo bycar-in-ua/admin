@@ -8,7 +8,9 @@
       <n-card
         v-for="transmission in transmissions"
         :key="transmission.id"
-        :title="`${transmission.drive} ${transmission.driveName} - ${transmission.gearbox.numberOfGears} ${transmission.gearbox.type}`"
+        :title="`${transmission.drive} ${transmission.driveName || ''} - ${
+          transmission.gearbox.numberOfGears
+        } ${t('vehicle.transmission.gearbox.' + transmission.gearbox.type)}`"
         hoverable
         class="shadow"
       >
@@ -22,7 +24,9 @@
               <td>{{ t("vehicle.transmission.gearbox.abbr") }}</td>
               <td>
                 {{ transmission.gearbox.numberOfGears }}
-                {{ transmission.gearbox.type }}
+                {{
+                  t("vehicle.transmission.gearbox." + transmission.gearbox.type)
+                }}
               </td>
             </tr>
           </tbody>

@@ -34,10 +34,10 @@
 
         <n-form-item
           :label="t('vehicle.powerUnits.consumption')"
-          class="col-span-2 md:col-span-3"
+          class="col-span-2 md:col-span-3 -mx-2"
         >
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.city"
             :on-update:value="inputHandler('consumption.city', index)"
@@ -46,7 +46,7 @@
             <template #suffix> {{ t("units.volume") }} </template>
           </n-input-number>
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.highway"
             :on-update:value="inputHandler('consumption.highway', index)"
@@ -55,7 +55,7 @@
             <template #suffix> {{ t("units.volume") }} </template>
           </n-input-number>
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.mixed"
             :on-update:value="inputHandler('consumption.mixed', index)"
@@ -101,7 +101,6 @@ import {
   NInputNumber,
   NSelect,
 } from "naive-ui";
-import { getGearboxType } from "@/helpers/transmissionHelpers";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SET_POWER_UNIT_OPTION } from "@/store/modules/carEditor/actionTypes";
 
@@ -122,9 +121,9 @@ const engineOptions = engines.value.map((engine) => ({
 }));
 
 const transmissionOptions = transmissions.value.map((transmission) => ({
-  label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${
-    getGearboxType(transmission?.gearbox?.type)?.label
-  }`,
+  label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${t(
+    "vehicle.transmission.gearbox." + transmission?.gearbox?.type
+  )}`,
   value: transmission.id,
 }));
 
@@ -133,7 +132,7 @@ const getPowerUnitName = (powerUnit) =>
     powerUnit.engine?.displayName,
     powerUnit.transmission?.drive,
     powerUnit.transmission?.gearbox?.numberOfGears,
-    getGearboxType(powerUnit.transmission?.gearbox?.type)?.label,
+    t("vehicle.transmission.gearbox." + powerUnit.transmission?.gearbox?.type),
   ].join(" ");
 
 const getSelectedItem = (itemType, itemId) => {

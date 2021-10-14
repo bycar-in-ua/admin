@@ -16,7 +16,7 @@
           :on-update:value="inputHandler('displacement')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.injectionType')">
+      <n-form-item :label="t('vehicle.engine.injectionType.title')">
         <n-select
           :value="engine.injection"
           :options="injectionTypes"
@@ -32,7 +32,7 @@
       <n-form-item :label="t('vehicle.manufactureIndex')">
         <n-input :on-update:value="inputHandler('manufactureIndex')" />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.fuelType')">
+      <n-form-item :label="t('vehicle.engine.fuelType.title')">
         <n-select
           :value="engine.fuelType"
           :options="fuelTypes"
@@ -47,7 +47,7 @@
           :on-update:value="inputHandler('pistons')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.pistonsPlacement')">
+      <n-form-item :label="t('vehicle.engine.pistonsPlacement.title')">
         <n-select
           :value="engine.pistonsPlacement"
           :options="pistonsPlacement"
@@ -181,62 +181,20 @@ const closeModal = (val) => {
   store.commit(carEditorNamespace(UPDATE_ENGINE_MODAL_OPEN), val);
 };
 
-const injectionTypes = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "direct",
-    label: "Непосредственный впрыск",
-  },
-  {
-    value: "distributed",
-    label: "Распределенный впрыск",
-  },
-  {
-    value: "mono",
-    label: "Моновпрыск",
-  },
-];
+const injectionTypes = ["direct", "distributed", "mono"].map((type) => ({
+  value: type,
+  label: t(`vehicle.engine.injectionType.${type}`),
+}));
 
-const fuelTypes = [
-  {
-    value: "gas",
-    label: "Бензин",
-  },
-  {
-    value: "dt",
-    label: "Дизель",
-  },
-  {
-    value: "lpg",
-    label: "Газ",
-  },
-];
+const fuelTypes = ["gas", "dt", "lpg"].map((type) => ({
+  value: type,
+  label: t(`vehicle.engine.fuelType.${type}`),
+}));
 
-const pistonsPlacement = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "R",
-    label: "Рядное",
-  },
-  {
-    value: "V",
-    label: "V-образное",
-  },
-  {
-    value: "W",
-    label: "W-образное",
-  },
-  {
-    value: "H",
-    label: "Оппозитное",
-  },
-];
+const pistonsPlacement = ["R", "V", "W", "H"].map((placement) => ({
+  value: placement,
+  label: t(`vehicle.engine.pistonsPlacement.${placement}`),
+}));
 
 const engine = computed(() => store.state.carEditor.engine.engine);
 

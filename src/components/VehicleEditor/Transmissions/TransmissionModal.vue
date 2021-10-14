@@ -13,7 +13,7 @@
       <n-form-item :label="t('vehicle.transmission.drive')">
         <n-select
           :value="transmission.drive"
-          :options="driveTypes"
+          :options="driveTypesOptions"
           :on-update:value="inputHandler('drive')"
         />
       </n-form-item>
@@ -54,7 +54,7 @@
       <n-form-item :label="t('vehicle.transmission.gearbox.type')">
         <n-select
           :value="transmission.gearbox.type"
-          :options="gearboxTypes"
+          :options="gearboxTypesOptions"
           :on-update:value="inputHandler('gearbox.type')"
         />
       </n-form-item>
@@ -125,6 +125,16 @@ import { driveTypes, gearboxTypes } from "@/helpers/transmissionHelpers";
 
 const store = useStore();
 const { t } = useI18n();
+
+const driveTypesOptions = driveTypes.map((type) => ({
+  label: t("vehicle.transmission.driveType." + type),
+  value: type,
+}));
+
+const gearboxTypesOptions = gearboxTypes.map((type) => ({
+  label: t("vehicle.transmission.gearbox." + type),
+  value: type,
+}));
 
 const isModalShowing = computed(
   () => store.state.carEditor.transmission.isTransmissionModalOpen
