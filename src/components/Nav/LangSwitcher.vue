@@ -10,7 +10,7 @@ export default {
 </script>
 
 <script setup>
-import { computed, inject } from "vue";
+import { computed } from "vue";
 import { NDropdown } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { setCookie } from "@/helpers/cookieHelpers";
@@ -27,11 +27,8 @@ const options = computed(() =>
   }))
 );
 
-const reloadApp = inject("reloadApp");
-
 const langSwitchHandler = (lang) => {
-  setCookie("lang", lang);
+  setCookie("lang", lang, { domain: ".bycar.in.ua" });
   i18n.locale.value = lang;
-  reloadApp();
 };
 </script>

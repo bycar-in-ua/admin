@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :inline="true" class="mt-4">
+  <n-form :inline="true" class="mt-4">
     <n-form-item :label="t('options.addNew')" path="optionName">
       <n-input v-model:value="optionName" :placeholder="t('enter')" />
     </n-form-item>
