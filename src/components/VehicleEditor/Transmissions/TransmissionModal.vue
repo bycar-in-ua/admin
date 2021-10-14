@@ -3,58 +3,62 @@
     :show="isModalShowing"
     :on-update:show="closeModal"
     preset="card"
-    :title="isEdit ? transmission.displayName : 'Создание новой трансмиссии'"
+    :title="
+      isEdit ? transmission.displayName : t('vehicle.transmission.addingNew')
+    "
     :mask-closable="false"
     class="max-w-3xl"
   >
     <n-form class="grid md:grid-cols-2 gap-4">
-      <n-form-item label="Привод">
+      <n-form-item :label="t('vehicle.transmission.drive')">
         <n-select
           :value="transmission.drive"
-          :options="driveTypes"
+          :options="driveTypesOptions"
           :on-update:value="inputHandler('drive')"
         />
       </n-form-item>
-      <n-form-item label="Технология привода">
+      <n-form-item :label="t('vehicle.transmission.driveName')">
         <n-input
           :value="transmission.driveName"
           :on-update:value="inputHandler('driveName')"
         />
       </n-form-item>
-      <n-form-item label="Передняя подвеска">
+      <n-form-item :label="t('vehicle.transmission.suspensionTypeFront')">
         <n-input
           :value="transmission.suspensionTypeFront"
           :on-update:value="inputHandler('suspensionTypeFront')"
         />
       </n-form-item>
-      <n-form-item label="Задняя подвеска">
+      <n-form-item :label="t('vehicle.transmission.suspensionTypeRear')">
         <n-input
           :value="transmission.suspensionTypeRear"
           :on-update:value="inputHandler('suspensionTypeRear')"
         />
       </n-form-item>
-      <n-form-item label="Тормозная система, передняя ось">
+      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeFront')">
         <n-input
           :value="transmission.brakingSystemTypeFront"
           :on-update:value="inputHandler('brakingSystemTypeFront')"
         />
       </n-form-item>
-      <n-form-item label="Тормозная система, задняя ось">
+      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeRear')">
         <n-input
           :value="transmission.brakingSystemTypeRear"
           :on-update:value="inputHandler('brakingSystemTypeRear')"
         />
       </n-form-item>
 
-      <n-h4 class="md:col-span-2 mt-0">КПП</n-h4>
-      <n-form-item label="Тип КПП">
+      <n-h4 class="md:col-span-2 mt-0">{{
+        t("vehicle.transmission.gearbox.abbr")
+      }}</n-h4>
+      <n-form-item :label="t('vehicle.transmission.gearbox.type')">
         <n-select
           :value="transmission.gearbox.type"
-          :options="gearboxTypes"
+          :options="gearboxTypesOptions"
           :on-update:value="inputHandler('gearbox.type')"
         />
       </n-form-item>
-      <n-form-item label="Количество передач">
+      <n-form-item :label="t('vehicle.transmission.gearbox.numberOfGears')">
         <n-input-number
           :value="transmission.gearbox.numberOfGears"
           class="w-full"
@@ -62,19 +66,19 @@
           :on-update:value="inputHandler('gearbox.numberOfGears')"
         />
       </n-form-item>
-      <n-form-item label="Название технологии">
+      <n-form-item :label="t('vehicle.transmission.gearbox.technology')">
         <n-input
           :value="transmission.gearbox.technology"
           :on-update:value="inputHandler('gearbox.technology')"
         />
       </n-form-item>
-      <n-form-item label="Производственный индекс">
+      <n-form-item :label="t('vehicle.manufactureIndex')">
         <n-input
           :value="transmission.gearbox.manufactureIndex"
           :on-update:value="inputHandler('gearbox.manufactureIndex')"
         />
       </n-form-item>
-      <n-form-item label="Производитель">
+      <n-form-item :label="t('manufacturer')">
         <n-input
           :value="transmission.gearbox.made"
           :on-update:value="inputHandler('gearbox.made')"
@@ -84,9 +88,11 @@
     <template #action>
       <div class="text-right">
         <n-button v-if="isEdit" type="primary" @click="updateAction">
-          Обновить
+          {{ t("update") }}
         </n-button>
-        <n-button v-else type="primary" @click="createAction">Создать</n-button>
+        <n-button v-else type="primary" @click="createAction">
+          {{ t("create") }}
+        </n-button>
       </div>
     </template>
   </n-modal>
@@ -95,6 +101,7 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import {
   NModal,
   NForm,
@@ -117,6 +124,17 @@ import {
 import { driveTypes, gearboxTypes } from "@/helpers/transmissionHelpers";
 
 const store = useStore();
+const { t } = useI18n();
+
+const driveTypesOptions = driveTypes.map((type) => ({
+  label: t("vehicle.transmission.driveType." + type),
+  value: type,
+}));
+
+const gearboxTypesOptions = gearboxTypes.map((type) => ({
+  label: t("vehicle.transmission.gearbox." + type),
+  value: type,
+}));
 
 const isModalShowing = computed(
   () => store.state.carEditor.transmission.isTransmissionModalOpen

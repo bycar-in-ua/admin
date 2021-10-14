@@ -1,26 +1,30 @@
-export class useMemory {
-  constructor(memoryType = "local") {
-    switch (memoryType) {
-      case "session":
-        this.memory = sessionStorage;
-        break;
-      default:
-        this.memory = localStorage;
-        break;
-    }
+export function useMemory(memoryType) {
+  let memory = undefined;
+  switch (memoryType) {
+    case "session":
+      memory = sessionStorage;
+      break;
+    default:
+      memory = localStorage;
+      break;
   }
 
-  get(key, defaultVal) {
-    const result = this.memory.getItem(key);
+  const get = (key, defaultVal) => {
+    const result = memory.getItem(key);
     if (result) {
       return result;
     }
     return defaultVal;
-  }
+  };
 
-  set(key, val) {
-    this.memory.setItem(key, val);
-  }
+  const set = (key, val) => {
+    memory.setItem(key, val);
+  };
+
+  return {
+    get,
+    set,
+  };
 }
 
 export default useMemory;

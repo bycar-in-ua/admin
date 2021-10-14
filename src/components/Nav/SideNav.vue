@@ -14,6 +14,7 @@
 <script>
 import { h } from "vue";
 import { RouterLink } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { NMenu, NIcon } from "naive-ui";
 import {
   PodiumSharp,
@@ -30,28 +31,19 @@ function renderMenuIcon(icon) {
 
 const menuOptions = [
   {
-    label: "Дашборд",
     key: "Dashboard",
     exact: true,
     icon: PodiumSharp,
   },
   {
-    label: "Автомобили",
     key: "Vehicles",
     icon: CarSport,
   },
   {
-    label: "Бренды",
     key: "Brands",
     icon: Albums,
   },
 ];
-
-const createMenuOptions = () =>
-  menuOptions.map((item) => ({
-    ...item,
-    icon: renderMenuIcon(item.icon),
-  }));
 
 export default {
   name: "SideNav",
@@ -59,6 +51,15 @@ export default {
     collapsed: Boolean,
   },
   setup() {
+    const { t } = useI18n();
+
+    const createMenuOptions = () =>
+      menuOptions.map((item) => ({
+        ...item,
+        label: t(`menuItems.${item.key}`),
+        icon: renderMenuIcon(item.icon),
+      }));
+
     const renderMenuLabel = (option) => {
       return h(
         RouterLink,
@@ -70,6 +71,7 @@ export default {
     const expandIcon = () => {
       return h(NIcon, null, { default: () => h(CaretDownOutline) });
     };
+
     return {
       renderMenuLabel,
       expandIcon,

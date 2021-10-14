@@ -8,14 +8,14 @@
       class="mr-4"
     />
     <n-button-group v-if="isEdit">
-      <n-button type="success" ghost title="Сохранить" @click="handleSave">
+      <n-button type="success" ghost :title="t('save')" @click="handleSave">
         <template #icon>
           <n-icon>
             <CheckmarkSharp />
           </n-icon>
         </template>
       </n-button>
-      <n-button type="error" ghost title="Отменить" @click="handleDismiss">
+      <n-button type="error" ghost :title="t('discard')" @click="handleDismiss">
         <template #icon>
           <n-icon>
             <CloseSharp />
@@ -27,7 +27,7 @@
       v-else
       type="primary"
       ghost
-      title="Редактировать название комплектации"
+      :title="t('complectations.edit')"
       @click="handleEditClick"
     >
       <template #icon>
@@ -47,6 +47,7 @@ export default {
 <script setup>
 import { defineProps, ref } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { CHANGE_COMPLECTATION_NAME } from "@/store/modules/carEditor/actionTypes";
 import { NInput, NButton, NButtonGroup, NIcon } from "naive-ui";
@@ -64,6 +65,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const { t } = useI18n();
 
 const isEdit = ref(false);
 const inputRef = ref(null);

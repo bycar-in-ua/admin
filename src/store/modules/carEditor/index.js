@@ -131,9 +131,9 @@ export const carEditor = {
     },
     [PUSH_NEW_POWER_UNIT](state, complectationIndex) {
       console.log(complectationIndex, "complectationIndex");
-      state.car.complectations[complectationIndex].powerUnits.push(
-        powerUnitEmptyTemplte
-      );
+      state.car.complectations[complectationIndex].powerUnits.push({
+        ...powerUnitEmptyTemplte,
+      });
     },
     ...createFetchingMutation("updateFetched", "isFetched"),
     ...createFetchingMutation("updateFetching", "isFetching"),

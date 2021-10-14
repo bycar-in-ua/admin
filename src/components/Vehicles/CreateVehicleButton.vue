@@ -1,14 +1,16 @@
 <template>
   <div class="mb-6">
-    <n-button type="primary" @click="isModalOpen = true">Создать</n-button>
+    <n-button type="primary" @click="isModalOpen = true">{{
+      t("create")
+    }}</n-button>
     <n-modal
       v-model:show="isModalOpen"
       preset="card"
-      title="Добавление нового автомобиля"
+      :title="t('vehicle.addNew')"
       class="max-w-xl"
     >
       <n-form :model="formModel" ref="formRef" :rules="rules">
-        <n-form-item label="Тип транспортного средства" path="type">
+        <n-form-item :label="t('vehicle.type')" path="type">
           <n-select
             v-model:value="formModel.type"
             :options="createOptions(types)"
@@ -16,32 +18,35 @@
             disabled
           />
         </n-form-item>
-        <n-form-item label="Бренд" path="brand">
+        <n-form-item :label="t('brand', 1)" path="brand">
           <n-select
             v-model:value="formModel.brand"
             :options="createOptions(brands)"
+            :placeholder="t('choose')"
             size="medium"
             filterable
           />
         </n-form-item>
-        <n-form-item label="Модель" path="model">
+        <n-form-item :label="t('vehicle.model')" path="model">
           <n-input
             v-model:value="formModel.model"
             type="text"
-            placeholder="Введите название модели"
+            :placeholder="t('vehicle.enterModel')"
           />
         </n-form-item>
-        <n-form-item label="Модельный год" path="year">
+        <n-form-item :label="t('vehicle.modelYear')" path="year">
           <n-input
             v-model:value="formModel.year"
             type="text"
-            placeholder="Введите модельный год"
+            :placeholder="t('vehicle.enterModelYear')"
           />
         </n-form-item>
       </n-form>
       <template #action>
         <div class="text-right">
-          <n-button type="primary" @click="submitHandler">Создать</n-button>
+          <n-button type="primary" @click="submitHandler">{{
+            t("create")
+          }}</n-button>
         </div>
       </template>
     </n-modal>
@@ -52,6 +57,7 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 import apiClient from "@/helpers/apiClient";
 import { yearValidator } from "@/helpers/validators";
@@ -84,6 +90,8 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const { t } = useI18n();
+
     const types = computed(() => store.state.library.types);
     const brands = computed(() => store.state.brands.all);
 
@@ -122,6 +130,7 @@ export default {
       formModel,
       rules,
       submitHandler,
+      t,
     };
   },
   components: { NButton, NModal, NForm, NFormItem, NSelect, NInput },

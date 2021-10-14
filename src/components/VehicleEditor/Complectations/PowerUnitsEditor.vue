@@ -7,21 +7,21 @@
       :name="index"
     >
       <n-form class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <n-form-item label="Двигатель">
+        <n-form-item :label="t('vehicle.engine.title')">
           <n-select
             :options="engineOptions"
             :value="powerUnit.engine.id"
             :on-update:value="selectHandler('engine', index)"
           />
         </n-form-item>
-        <n-form-item label="Трансмиссия">
+        <n-form-item :label="t('vehicle.powerUnits.transmission')">
           <n-select
             :options="transmissionOptions"
             :value="powerUnit.transmission.id"
             :on-update:value="selectHandler('transmission', index)"
           />
         </n-form-item>
-        <n-form-item label="Цена">
+        <n-form-item :label="t('price')">
           <n-input-number
             class="w-full"
             :show-button="false"
@@ -33,46 +33,46 @@
         </n-form-item>
 
         <n-form-item
-          label="Расход топлива, л/100 км"
-          class="col-span-2 md:col-span-3"
+          :label="t('vehicle.powerUnits.consumption')"
+          class="col-span-2 md:col-span-3 -mx-2"
         >
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.city"
             :on-update:value="inputHandler('consumption.city', index)"
           >
-            <template #prefix> Город </template>
-            <template #suffix> л </template>
+            <template #prefix> {{ t("city") }} </template>
+            <template #suffix> {{ t("units.volume") }} </template>
           </n-input-number>
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.highway"
             :on-update:value="inputHandler('consumption.highway', index)"
           >
-            <template #prefix> Трасса </template>
-            <template #suffix> л </template>
+            <template #prefix> {{ t("highway") }} </template>
+            <template #suffix> {{ t("units.volume") }} </template>
           </n-input-number>
           <n-input-number
-            class="text-center w-full"
+            class="text-center w-full mx-2"
             :show-button="false"
             :value="powerUnit.consumption.mixed"
             :on-update:value="inputHandler('consumption.mixed', index)"
           >
-            <template #prefix> Смешанный </template>
-            <template #suffix> л </template>
+            <template #prefix> {{ t("mixed") }} </template>
+            <template #suffix> {{ t("units.volume") }} </template>
           </n-input-number>
         </n-form-item>
 
-        <n-form-item label="Разгон 0-100 км/ч, с">
+        <n-form-item :label="t('vehicle.powerUnits.speedUp100')">
           <n-input-number
             class="w-full"
             :value="powerUnit.speedUp100"
             :on-update:value="inputHandler('speedUp100', index)"
           />
         </n-form-item>
-        <n-form-item label="Максимальная скорость, км/ч">
+        <n-form-item :label="t('vehicle.powerUnits.maxSpeed')">
           <n-input-number
             class="w-full"
             :value="powerUnit.maxSpeed"
@@ -90,41 +90,41 @@ export default {
 </script>
 
 <script setup>
-/* eslint-disable */
-import { defineProps, computed, h } from "vue";
+import { defineProps, computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import {
   NCollapse,
   NCollapseItem,
   NForm,
   NFormItem,
   NInputNumber,
-  NSelect
+  NSelect,
 } from "naive-ui";
-import { getGearboxType } from "@/helpers/transmissionHelpers";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SET_POWER_UNIT_OPTION } from "@/store/modules/carEditor/actionTypes";
 
 const props = defineProps({
   complectation: Object,
-  complectationIndex: Number
+  complectationIndex: Number,
 });
 
 const store = useStore();
+const { t } = useI18n();
 
 const engines = computed(() => store.state.carEditor.car.engines);
 const transmissions = computed(() => store.state.carEditor.car.transmissions);
 
 const engineOptions = engines.value.map((engine) => ({
   label: engine.displayName,
-  value: engine.id
+  value: engine.id,
 }));
 
 const transmissionOptions = transmissions.value.map((transmission) => ({
-  label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${
-    getGearboxType(transmission?.gearbox?.type)?.label
-  }`,
-  value: transmission.id
+  label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${t(
+    "vehicle.transmission.gearbox." + transmission?.gearbox?.type
+  )}`,
+  value: transmission.id,
 }));
 
 const getPowerUnitName = (powerUnit) =>
@@ -132,22 +132,19 @@ const getPowerUnitName = (powerUnit) =>
     powerUnit.engine?.displayName,
     powerUnit.transmission?.drive,
     powerUnit.transmission?.gearbox?.numberOfGears,
-    getGearboxType(powerUnit.transmission?.gearbox?.type)?.label
+    t("vehicle.transmission.gearbox." + powerUnit.transmission?.gearbox?.type),
   ].join(" ");
 
 const getSelectedItem = (itemType, itemId) => {
   switch (itemType) {
     case "engine":
       return engines.value.find((engine) => engine.id === itemId);
-      break;
     case "transmission":
       return transmissions.value.find(
         (transmission) => transmission.id === itemId
       );
-      break;
     default:
       return {};
-      break;
   }
 };
 
@@ -156,7 +153,7 @@ const selectHandler = (field, powerUnitIndex) => (value) => {
     props.complectationIndex,
     powerUnitIndex,
     field,
-    getSelectedItem(field, value)
+    getSelectedItem(field, value),
   ]);
 };
 
@@ -165,7 +162,7 @@ const inputHandler = (field, powerUnitIndex) => (value) => {
     props.complectationIndex,
     powerUnitIndex,
     field,
-    value
+    value,
   ]);
 };
 </script>

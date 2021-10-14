@@ -1,5 +1,5 @@
 <template>
-  <n-card title="Комплектации" size="small" class="my-4 shadow">
+  <n-card :title="t('complectations.title')" size="small" class="my-4 shadow">
     <n-collapse>
       <n-collapse-item
         v-for="(complectation, index) in complectations"
@@ -18,7 +18,7 @@
             :complectation="complectation"
             :complectationIndex="index"
           />
-          <n-divider>Опции</n-divider>
+          <n-divider>{{ t("options.title") }}</n-divider>
           <options-editor
             :complectation="complectation"
             :complectationIndex="index"
@@ -26,14 +26,15 @@
           <div class="px-8 pt-6">
             <n-popconfirm
               :show-icon="false"
-              positive-text="Добавить категорию опций"
+              :positive-text="t('options.addCategory')"
+              :negative-text="t('discard')"
               @positive-click="createOptionCategory"
             >
               <template #trigger>
                 <n-icon
                   size="40"
                   :color="colors.primary.lighten1"
-                  title="Добавить категорию опций"
+                  :title="t('options.addCategory')"
                   class="cursor-pointer"
                 >
                   <add-circle-outline />
@@ -42,11 +43,11 @@
               <n-input
                 v-model:value="newOptCatName"
                 type="text"
-                placeholder="Введите название категории опций"
+                :placeholder="t('options.enterCategoryName')"
               />
             </n-popconfirm>
           </div>
-          <n-divider>Силовые агрегаты, ездовые характеристики, цены</n-divider>
+          <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
           <power-units-editor
             :complectation="complectation"
             :complectationIndex="index"
@@ -55,7 +56,7 @@
             <n-icon
               size="40"
               :color="colors.primary.lighten1"
-              title="Добавить комбинацию Двигателя и Трансмиссии"
+              :title="t('vehicle.powerUnits.addNew')"
               class="cursor-pointer"
               @click="createPowerUnit(index)"
             >
@@ -68,14 +69,15 @@
     <n-divider>
       <n-popconfirm
         :show-icon="false"
-        positive-text="Добавить комплектацию"
+        :positive-text="t('complectations.addNew')"
+        :negative-text="t('discard')"
         @positive-click="createComplectation"
       >
         <template #trigger>
           <n-icon
             size="40"
             :color="colors.primary.lighten1"
-            title="Добавить комплектацию"
+            :title="t('complectations.addNew')"
             class="cursor-pointer"
           >
             <add-circle-outline />
@@ -85,7 +87,7 @@
         <n-input
           v-model:value="newComplectationName"
           type="text"
-          placeholder="Введите название комплектации"
+          :placeholder="t('complectations.enterName')"
         />
       </n-popconfirm>
     </n-divider>
@@ -101,6 +103,7 @@ export default {
 <script setup>
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import colors from "@/colors";
 import {
   NCard,
@@ -122,6 +125,7 @@ import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/actionTypes";
 import { PUSH_NEW_POWER_UNIT } from "@/store/modules/carEditor/mutationTypes";
 
 const store = useStore();
+const { t } = useI18n();
 
 const complectations = computed(() => store.state.carEditor.car.complectations);
 

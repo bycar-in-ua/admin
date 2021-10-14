@@ -1,5 +1,5 @@
 <template>
-  <n-card title="Вход в админпанель" class="shadow-lg max-w-lg" loading>
+  <n-card :title="t('adminPanelEnter')" class="shadow-lg max-w-lg" loading>
     <template #header-extra>
       <a href="https://bycar.in.ua/">bycar.in.ua</a>
     </template>
@@ -9,17 +9,17 @@
       ref="loginForm"
       :disabled="isFetching"
     >
-      <n-form-item label="Имя пользователя" path="username">
+      <n-form-item :label="t('userName')" path="username">
         <n-input
           type="text"
-          placeholder="Введите имя пользователя"
+          :placeholder="t('enterUserName')"
           v-model:value="model.username"
         />
       </n-form-item>
-      <n-form-item label="Пароль" path="password">
+      <n-form-item :label="t('password')" path="password">
         <n-input
           type="password"
-          placeholder="Введите пароль"
+          :placeholder="t('enterPassword')"
           v-model:value="model.password"
         />
       </n-form-item>
@@ -29,7 +29,7 @@
       <div class="text-right">
         <n-button type="primary" @click="submitHandler">
           <n-spin v-if="isFetching" stroke="white" />
-          <template v-else> Войти </template>
+          <template v-else> {{ t("login") }} </template>
         </n-button>
       </div>
     </template>
@@ -50,6 +50,7 @@ import { mapActions } from "vuex";
 import { LOGIN_USER } from "../../store/modules/auth/actionTypes";
 import useErrorHandler from "../../hooks/useErrorHandler";
 import { useNotification } from "naive-ui";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "Login",
@@ -65,10 +66,12 @@ export default {
     const loading = useLoadingBar();
     const notification = useNotification();
     const { handleError } = useErrorHandler(notification);
+    const { t } = useI18n();
 
     return {
       loading,
       handleError,
+      t,
     };
   },
   data: () => ({

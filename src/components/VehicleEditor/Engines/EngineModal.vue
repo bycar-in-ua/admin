@@ -3,12 +3,12 @@
     :show="isModalShowing"
     :on-update:show="closeModal"
     preset="card"
-    :title="isEdit ? engine.displayName : 'Создание нового двигателя'"
+    :title="isEdit ? engine.displayName : t('vehicle.engine.addingNew')"
     :mask-closable="false"
     class="max-w-3xl"
   >
     <n-form class="grid md:grid-cols-2 gap-4">
-      <n-form-item label="Объем, куб. см.">
+      <n-form-item :label="t('vehicle.engine.displacement')">
         <n-input-number
           :value="engine.displacement"
           class="w-full"
@@ -16,30 +16,30 @@
           :on-update:value="inputHandler('displacement')"
         />
       </n-form-item>
-      <n-form-item label="Система впрыска">
+      <n-form-item :label="t('vehicle.engine.injectionType.title')">
         <n-select
           :value="engine.injection"
           :options="injectionTypes"
           :on-update:value="inputHandler('injection')"
         />
       </n-form-item>
-      <n-form-item label="Торговая марка">
+      <n-form-item :label="t('tradename')">
         <n-input
           :value="engine.tradename"
           :on-update:value="inputHandler('tradename')"
         />
       </n-form-item>
-      <n-form-item label="Производственный индекс">
+      <n-form-item :label="t('vehicle.manufactureIndex')">
         <n-input :on-update:value="inputHandler('manufactureIndex')" />
       </n-form-item>
-      <n-form-item label="Тип топлива">
+      <n-form-item :label="t('vehicle.engine.fuelType.title')">
         <n-select
           :value="engine.fuelType"
           :options="fuelTypes"
           :on-update:value="inputHandler('fuelType')"
         />
       </n-form-item>
-      <n-form-item label="Количество цилиндров">
+      <n-form-item :label="t('vehicle.engine.pistonsQuantity')">
         <n-input-number
           :value="engine.pistons"
           class="w-full"
@@ -47,14 +47,14 @@
           :on-update:value="inputHandler('pistons')"
         />
       </n-form-item>
-      <n-form-item label="Расположение цилиндров">
+      <n-form-item :label="t('vehicle.engine.pistonsPlacement.title')">
         <n-select
           :value="engine.pistonsPlacement"
           :options="pistonsPlacement"
           :on-update:value="inputHandler('pistonsPlacement')"
         />
       </n-form-item>
-      <n-form-item label="Степень сжатия">
+      <n-form-item :label="t('vehicle.engine.compressionRatio')">
         <n-input-number
           :value="engine.compressionRatio"
           class="w-full"
@@ -62,7 +62,7 @@
           :on-update:value="inputHandler('compressionRatio')"
         />
       </n-form-item>
-      <n-form-item label="Мощность, лс">
+      <n-form-item :label="t('vehicle.engine.power')">
         <n-input-number
           :value="engine.power"
           class="w-full"
@@ -70,25 +70,25 @@
           :on-update:value="inputHandler('power')"
         />
       </n-form-item>
-      <n-form-item label="При каких оборотах">
+      <n-form-item :label="t('vehicle.engine.rpm')">
         <n-input-group>
           <n-input-number
             :value="engine.powerRPMfrom"
             :show-button="false"
             :on-update:value="inputHandler('powerRPMfrom')"
           >
-            <template #prefix>От:</template>
+            <template #prefix>{{ t("from") }}:</template>
           </n-input-number>
           <n-input-number
             :value="engine.powerRPMto"
             :show-button="false"
             :on-update:value="inputHandler('powerRPMto')"
           >
-            <template #prefix>До:</template>
+            <template #prefix>{{ t("to") }}:</template>
           </n-input-number>
         </n-input-group>
       </n-form-item>
-      <n-form-item label="Крутящий момент, Н/м">
+      <n-form-item :label="t('vehicle.engine.torque')">
         <n-input-number
           :value="engine.torque"
           class="w-full"
@@ -96,34 +96,34 @@
           :on-update:value="inputHandler('torque')"
         />
       </n-form-item>
-      <n-form-item label="При каких оборотах">
+      <n-form-item :label="t('vehicle.engine.rpm')">
         <n-input-group>
           <n-input-number
             :value="engine.torqueRPMfrom"
             :show-button="false"
             :on-update:value="inputHandler('torqueRPMfrom')"
           >
-            <template #prefix>От:</template>
+            <template #prefix>{{ t("from") }}:</template>
           </n-input-number>
           <n-input-number
             :value="engine.torqueRPMto"
             :show-button="false"
             :on-update:value="inputHandler('torqueRPMto')"
           >
-            <template #prefix>До:</template>
+            <template #prefix>{{ t("to") }}:</template>
           </n-input-number>
         </n-input-group>
       </n-form-item>
       <div class="flex flex-col justify-center">
         <n-checkbox
           :checked="engine.turbo"
-          label="Турбо"
+          :label="t('vehicle.engine.turbo')"
           class="py-1"
           :on-update:checked="inputHandler('turbo')"
         />
         <n-checkbox
           :checked="engine.hybrid"
-          label="Гибрид"
+          :label="t('vehicle.engine.hybrid')"
           class="py-1"
           :on-update:checked="inputHandler('hybrid')"
         />
@@ -132,9 +132,11 @@
     <template #action>
       <div class="text-right">
         <n-button v-if="isEdit" type="primary" @click="updateAction">
-          Обновить
+          {{ t("update") }}
         </n-button>
-        <n-button v-else type="primary" @click="createAction">Создать</n-button>
+        <n-button v-else type="primary" @click="createAction">{{
+          t("create")
+        }}</n-button>
       </div>
     </template>
   </n-modal>
@@ -143,6 +145,7 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import {
   NModal,
   NForm,
@@ -165,6 +168,7 @@ import {
 } from "@/store/modules/carEditor/engine/actionTypes";
 
 const store = useStore();
+const { t } = useI18n();
 
 const isModalShowing = computed(
   () => store.state.carEditor.engine.isEngineModalOpen
@@ -177,62 +181,20 @@ const closeModal = (val) => {
   store.commit(carEditorNamespace(UPDATE_ENGINE_MODAL_OPEN), val);
 };
 
-const injectionTypes = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "direct",
-    label: "Непосредственный впрыск",
-  },
-  {
-    value: "distributed",
-    label: "Распределенный впрыск",
-  },
-  {
-    value: "mono",
-    label: "Моновпрыск",
-  },
-];
+const injectionTypes = ["direct", "distributed", "mono"].map((type) => ({
+  value: type,
+  label: t(`vehicle.engine.injectionType.${type}`),
+}));
 
-const fuelTypes = [
-  {
-    value: "gas",
-    label: "Бензин",
-  },
-  {
-    value: "dt",
-    label: "Дизель",
-  },
-  {
-    value: "lpg",
-    label: "Газ",
-  },
-];
+const fuelTypes = ["gas", "dt", "lpg"].map((type) => ({
+  value: type,
+  label: t(`vehicle.engine.fuelType.${type}`),
+}));
 
-const pistonsPlacement = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "R",
-    label: "Рядное",
-  },
-  {
-    value: "V",
-    label: "V-образное",
-  },
-  {
-    value: "W",
-    label: "W-образное",
-  },
-  {
-    value: "H",
-    label: "Оппозитное",
-  },
-];
+const pistonsPlacement = ["R", "V", "W", "H"].map((placement) => ({
+  value: placement,
+  label: t(`vehicle.engine.pistonsPlacement.${placement}`),
+}));
 
 const engine = computed(() => store.state.carEditor.engine.engine);
 

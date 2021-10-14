@@ -5,6 +5,8 @@
       <star-half @click="themeSwitcher" />
     </n-icon>
 
+    <lang-switcher />
+
     <n-dropdown
       trigger="hover"
       :options="options"
@@ -22,9 +24,11 @@
 <script>
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { NAvatar, NDropdown, NIcon } from "naive-ui";
 import { StarHalf } from "@vicons/ionicons5";
 import { LOGOUT_USER } from "@/store/modules/auth/actionTypes";
+import LangSwitcher from "./LangSwitcher.vue";
 
 export default {
   name: "TopNav",
@@ -33,10 +37,12 @@ export default {
     NDropdown,
     NIcon,
     StarHalf,
+    LangSwitcher,
   },
   setup() {
     const store = useStore();
     const router = useRouter();
+    const { t } = useI18n();
 
     const handlepsMap = {
       profile: () => {
@@ -52,17 +58,20 @@ export default {
       handlepsMap[key]();
     }
 
+    const profileMenuItems = [
+      {
+        key: "profile",
+      },
+      {
+        key: "logout",
+      },
+    ];
+
     return {
-      options: [
-        {
-          label: "Профиль",
-          key: "profile",
-        },
-        {
-          label: "Выйти",
-          key: "logout",
-        },
-      ],
+      options: profileMenuItems.map((item) => ({
+        key: item.key,
+        label: t(item.key),
+      })),
       selectHandler,
     };
   },

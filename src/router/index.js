@@ -27,7 +27,7 @@ const routes = [
     name: "Vehicles",
     component: () => import("@/views/Vehicles.vue"),
     meta: {
-      title: "Автомобили",
+      title: ["car", 2],
     },
   },
   {
@@ -40,7 +40,7 @@ const routes = [
     name: "Brands",
     component: () => import("@/views/Brands.vue"),
     meta: {
-      title: "Бренды",
+      title: ["brand", 2],
     },
   },
 ];
