@@ -21,6 +21,7 @@ import {
   CaretDownOutline,
   CarSport,
   Albums,
+  Library,
 } from "@vicons/ionicons5";
 
 function renderMenuIcon(icon) {
@@ -42,6 +43,10 @@ const menuOptions = [
   {
     key: "Brands",
     icon: Albums,
+  },
+  {
+    key: "Library",
+    icon: Library,
   },
 ];
 

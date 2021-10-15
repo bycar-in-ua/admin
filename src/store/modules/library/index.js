@@ -7,7 +7,7 @@ import {
   CREATE_OPTION,
   CREATE_OPTION_CATEGORY,
 } from "./actionTypes";
-import { UPDATE_LIBRARY } from "./mutationTypes";
+import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
 
 export const library = {
   state: () => ({
@@ -48,6 +48,14 @@ export const library = {
   mutations: {
     [UPDATE_LIBRARY](state, [lib, data]) {
       state[lib] = data;
+    },
+    [UPDATE_LIBRARY_ITEM](state, [lib, item]) {
+      const targetItemIndex = state[lib].findIndex(
+        (libItem) => libItem.id === item.id
+      );
+
+      console.log(state[lib]);
+      state[lib][targetItemIndex] = item;
     },
   },
   getters: {

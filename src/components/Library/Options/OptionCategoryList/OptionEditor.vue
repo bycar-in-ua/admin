@@ -1,0 +1,53 @@
+<template>
+  <n-input-group>
+    <n-input
+      v-model:value="inputModel"
+      :loading="loading"
+      :disabled="loading"
+    />
+    <n-button
+      ghost
+      :title="t('discard')"
+      @click="negativeClick"
+      :disabled="loading"
+    >
+      <template #icon>
+        <n-icon><CloseSharp /></n-icon>
+      </template>
+    </n-button>
+    <n-button
+      ghost
+      :title="t('save')"
+      @click="positiveClick(inputModel)"
+      :disabled="loading"
+    >
+      <template #icon>
+        <n-icon><CheckmarkSharp /></n-icon>
+      </template>
+    </n-button>
+  </n-input-group>
+</template>
+
+<script>
+export default {
+  name: "OptionEditor",
+};
+</script>
+
+<script setup>
+import { ref, defineProps } from "vue";
+import { useI18n } from "vue-i18n";
+import { NInput, NInputGroup, NButton, NIcon } from "naive-ui";
+import { CheckmarkSharp, CloseSharp } from "@vicons/ionicons5";
+
+const props = defineProps({
+  value: String,
+  positiveClick: Function,
+  negativeClick: Function,
+  loading: Boolean,
+});
+
+const { t } = useI18n();
+
+const inputModel = ref(props.value);
+</script>
