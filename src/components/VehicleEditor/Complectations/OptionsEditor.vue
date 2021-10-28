@@ -13,7 +13,7 @@
         :value="getOptionsByCategory(category.id)"
         :on-update:value="updateHandler(category.id)"
       />
-      <add-new-option :category-id="category.id" />
+      <add-new-option :category-id="category.id" form-class="mt-4" />
     </n-collapse-item>
   </n-collapse>
 </template>
@@ -29,8 +29,7 @@ import { computed, defineProps } from "vue";
 import { useStore } from "vuex";
 import { NTransfer, NCollapse, NCollapseItem } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-
-import AddNewOption from "./AddNewOption";
+import AddNewOption from "@/components/common/AddNewOption";
 import { CHANGE_OPTIONS } from "@/store/modules/carEditor/options/actionTypes";
 
 const props = defineProps({

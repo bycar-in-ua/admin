@@ -8,13 +8,19 @@
         :negative-click="hadleClose"
         :loading="isFetching"
       />
-      <div v-else class="flex justify-between items-center title-wraper">
+      <div v-else class="flex items-center">
         {{ optionCategory.displayName }}
         <n-icon
-          class="title-icon cursor-pointer transition-all"
+          class="title-icon cursor-pointer transition-all ml-auto"
           @click="isEdit = true"
         >
           <PencilSharp />
+        </n-icon>
+        <n-icon
+          class="title-icon transition-all cursor-pointer ml-2"
+          @click="handleDelete"
+        >
+          <CloseSharp />
         </n-icon>
       </div>
     </template>
@@ -25,12 +31,19 @@
         :option="option"
       />
     </n-list>
+    <template #action>
+      <add-new-option
+        :category-id="optionCategory.id"
+        :show-feedback="false"
+        form-item-class=" flex-grow"
+      />
+    </template>
   </n-card>
 </template>
 
 <script>
 export default {
-  name: "OptionCategoryList",
+  name: "OptionCategory",
 };
 </script>
 
@@ -38,15 +51,17 @@ export default {
 import { defineProps, ref } from "vue";
 import { useStore } from "vuex";
 import { NList, NCard, NIcon } from "naive-ui";
-import { PencilSharp } from "@vicons/ionicons5";
+import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
 import OptionCategoryListItem from "./OptionCategoryListItem";
 import OptionEditor from "./OptionEditor";
+import AddNewOption from "@/components/common/AddNewOption";
 import apiClient from "@/helpers/apiClient";
 import { UPDATE_LIBRARY_ITEM } from "@/store/modules/library/mutationTypes";
 
 const props = defineProps({
   optionCategory: Object,
   options: Array,
+  openDeleteDrawer: Function,
 });
 
 const store = useStore();
@@ -68,17 +83,17 @@ const hadnleSave = async (val) => {
 };
 
 const hadleClose = () => (isEdit.value = false);
+
+const handleDelete = async () => {
+  props.openDeleteDrawer(props.optionCategory.id);
+};
 </script>
 
 <style lang="scss">
-.title-wraper {
-  &:hover {
-    .title-icon {
-      opacity: 1;
-    }
-  }
-}
 .title-icon {
   opacity: 0.2;
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>

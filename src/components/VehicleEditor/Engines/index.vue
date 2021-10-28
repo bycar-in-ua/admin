@@ -56,7 +56,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import EngineModal from "./EngineModal";
-import PlusButton from "@/components/VehicleEditor/PlusButton";
+import PlusButton from "@/components/common/PlusButton";
 import { NCard, NTable } from "naive-ui";
 import {
   DELETE_ENGINE,

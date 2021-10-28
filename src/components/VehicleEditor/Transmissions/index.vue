@@ -67,7 +67,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NCard, NTable } from "naive-ui";
-import PlusButton from "@/components/VehicleEditor/PlusButton";
+import PlusButton from "@/components/common/PlusButton";
 import TransmissionModal from "./TransmissionModal";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {

@@ -24,28 +24,16 @@
             :complectationIndex="index"
           />
           <div class="px-8 pt-6">
-            <n-popconfirm
-              :show-icon="false"
-              :positive-text="t('options.addCategory')"
-              :negative-text="t('discard')"
-              @positive-click="createOptionCategory"
-            >
-              <template #trigger>
-                <n-icon
-                  size="40"
-                  :color="colors.primary.lighten1"
-                  :title="t('options.addCategory')"
-                  class="cursor-pointer"
-                >
-                  <add-circle-outline />
-                </n-icon>
-              </template>
-              <n-input
-                v-model:value="newOptCatName"
-                type="text"
-                :placeholder="t('options.enterCategoryName')"
-              />
-            </n-popconfirm>
+            <add-new-option-category>
+              <n-icon
+                size="40"
+                :color="colors.primary.lighten1"
+                :title="t('options.addCategory')"
+                class="cursor-pointer"
+              >
+                <add-circle-outline />
+              </n-icon>
+            </add-new-option-category>
           </div>
           <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
           <power-units-editor
@@ -96,6 +84,7 @@
 
 <script>
 export default {
+  components: { AddNewOptionCategory },
   name: "Complectations",
 };
 </script>
@@ -119,9 +108,9 @@ import { AddCircleOutline } from "@vicons/ionicons5";
 import OptionsEditor from "./OptionsEditor";
 import ComplectationTitleEditor from "./ComplectationTitleEditor";
 import PowerUnitsEditor from "./PowerUnitsEditor";
+import AddNewOptionCategory from "@/components/common/AddNewOptionCategory";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { CREATE_NEW_COMPLECTATION } from "@/store/modules/carEditor/actionTypes";
-import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/actionTypes";
 import { PUSH_NEW_POWER_UNIT } from "@/store/modules/carEditor/mutationTypes";
 
 const store = useStore();
@@ -130,7 +119,6 @@ const { t } = useI18n();
 const complectations = computed(() => store.state.carEditor.car.complectations);
 
 const newComplectationName = ref("");
-const newOptCatName = ref("");
 
 const createComplectation = async () => {
   await store.dispatch(
@@ -138,11 +126,6 @@ const createComplectation = async () => {
     newComplectationName.value
   );
   newComplectationName.value = "";
-};
-
-const createOptionCategory = async () => {
-  await store.dispatch(CREATE_OPTION_CATEGORY, newOptCatName.value);
-  newOptCatName.value = "";
 };
 
 const createPowerUnit = (complectationIndex) =>
