@@ -9,8 +9,10 @@ import {
   DELETE_OPTION,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
+import images from "./images";
 
 export const library = {
+  modules: { images },
   state: () => ({
     types: [],
     optionCategories: [],

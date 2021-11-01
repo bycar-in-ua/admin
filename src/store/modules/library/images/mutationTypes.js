@@ -1,0 +1,2 @@
+export const UPDATE_IMAGES = "UPDATE_IMAGES";
+export const UPDATE_IMAGES_META = "UPDATE_IMAGES_META";
