@@ -1,5 +1,5 @@
 <template>
-  <form class="my-4 text-right">
+  <form>
     <n-button
       type="primary"
       size="medium"
@@ -7,7 +7,7 @@
       :disabled="isUploading"
       @click="handleClick"
     >
-      {{ t("images.addNew") }}
+      {{ t("images.addNew", 2) }}
     </n-button>
     <input
       type="file"

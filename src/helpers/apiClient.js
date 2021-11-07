@@ -47,7 +47,7 @@ export const put = async (path, body) => {
   }
 };
 
-export const remove = async (path) => {
+export const remove = async (path, body) => {
   try {
     const response = await fetch(API_URL + path, {
       method: "DELETE",
@@ -55,6 +55,7 @@ export const remove = async (path) => {
         "Content-Type": "application/json;charset=utf-8",
       },
       credentials: "include",
+      body: JSON.stringify(body),
     });
     await validateResponse(response);
     return await response.json();

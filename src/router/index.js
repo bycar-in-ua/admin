@@ -53,7 +53,7 @@ const routes = [
     name: "Images",
     component: () => import("@/views/Images.vue"),
     meta: {
-      title: ["images.title"],
+      title: ["images.title", 2],
     },
   },
 ];
