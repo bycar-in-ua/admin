@@ -97,6 +97,9 @@ export const vehicleRU = {
       technology: "Название технологии",
     },
   },
+  images: {
+    saveVehicleImages: "Сохранить изображения автомобиля",
+  },
 };
 
 export const vehicleUA = {
@@ -197,5 +200,8 @@ export const vehicleUA = {
       numberOfGears: "Кількість передач",
       technology: "Назва технології",
     },
+  },
+  images: {
+    saveVehicleImages: "Зберегти зображення автомобіля",
   },
 };

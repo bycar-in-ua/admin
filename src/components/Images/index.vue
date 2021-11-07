@@ -1,5 +1,9 @@
 <template>
-  <ImagesToolBar :selectable="selectable" :selected-images="selectedImages" />
+  <ImagesToolBar
+    :selectable="selectable"
+    :selected-images="selectedImages"
+    :additional-actions="toolbarActions"
+  />
   <div
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-4"
   >
@@ -56,6 +60,11 @@ const props = defineProps({
     default: false,
     requierd: false,
   },
+  preselectedImages: {
+    type: Array,
+    default: () => [],
+  },
+  toolbarActions: Array,
 });
 
 const store = useStore();
@@ -65,7 +74,7 @@ store.dispatch(FETCH_IMAGES);
 
 const selectable = ref(props.isSelectable);
 
-const selectedImages = ref([]);
+const selectedImages = ref(props.preselectedImages);
 
 provide("setImagesSelectable", () => {
   selectable.value = true;

@@ -12,6 +12,12 @@
       {{ t("choose", 2) }}
     </n-button>
 
+    <component
+      v-for="(action, index) in additionalActions"
+      :key="index"
+      :is="action.component"
+      @click="action.clickCallback(selectedImages)"
+    />
     <template v-if="selectedImages.length">
       <n-button
         type="error"
@@ -35,7 +41,7 @@ export default {
 </script>
 
 <script setup>
-import { inject, defineProps, ref } from "vue";
+import { inject, defineProps, ref, provide } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import AddNewImage from "./AddNewImage";
@@ -52,6 +58,10 @@ const props = defineProps({
     default: false,
   },
   selectedImages: {
+    type: Array,
+    default: () => [],
+  },
+  additionalActions: {
     type: Array,
     default: () => [],
   },
@@ -73,4 +83,8 @@ const deleteHandler = async () => {
     isFetching.value = false;
   }
 };
+
+provide("seImagesToolbarFetching", (value) => {
+  isFetching.value = value;
+});
 </script>

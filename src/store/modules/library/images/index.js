@@ -1,7 +1,11 @@
 import apiClient from "@/helpers/apiClient";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { FETCH_IMAGES } from "./actionTypes";
-import { UPDATE_IMAGES, UPDATE_IMAGES_META } from "./mutationTypes";
+import {
+  UPDATE_IMAGES,
+  UPDATE_IMAGES_FETCHING,
+  UPDATE_IMAGES_META,
+} from "./mutationTypes";
 
 export const images = {
   state: () => ({
@@ -13,12 +17,12 @@ export const images = {
   actions: {
     async [FETCH_IMAGES]({ commit }, page = 1) {
       try {
-        commit("updateFetching", true);
+        commit(UPDATE_IMAGES_FETCHING, true);
         const images = await apiClient.get(`/images/${page}`);
         commit(UPDATE_IMAGES, images.items);
         commit(UPDATE_IMAGES_META, images.meta);
       } finally {
-        commit("updateFetching", false);
+        commit(UPDATE_IMAGES_FETCHING, false);
       }
     },
   },
@@ -30,7 +34,7 @@ export const images = {
       state.currentPage = meta.currentPage;
       state.totalPages = meta.totalPages;
     },
-    ...createFetchingMutation(),
+    ...createFetchingMutation(UPDATE_IMAGES_FETCHING),
   },
 };
 
