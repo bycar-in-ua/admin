@@ -2,12 +2,10 @@
   <n-card :title="t('images.title', 2)" size="medium">
     <n-image-group>
       <div class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
-        <n-image
+        <vehicle-image-card
           v-for="image in images"
           :key="image.id"
-          :src="cdnLink(image.path, 300, 300)"
-          :preview-src="cdnLink(image.path)"
-          class=""
+          :image="image"
         />
       </div>
     </n-image-group>
@@ -32,9 +30,9 @@ export default {
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import { NCard, NImage, NImageGroup, NButton } from "naive-ui";
-import { cdnLink } from "@/helpers/cdn";
+import { NCard, NImageGroup, NButton } from "naive-ui";
 import VehicleImagesModal from "./VehicleImagesModal";
+import VehicleImageCard from "./VehicleImageCard";
 
 const store = useStore();
 
