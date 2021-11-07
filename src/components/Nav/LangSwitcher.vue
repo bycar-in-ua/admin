@@ -14,6 +14,7 @@ import { computed } from "vue";
 import { NDropdown } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { setCookie } from "@/helpers/cookieHelpers";
+import { COOKIE_DOMAIN } from "@/constants";
 
 const i18n = useI18n();
 
@@ -28,7 +29,7 @@ const options = computed(() =>
 );
 
 const langSwitchHandler = (lang) => {
-  setCookie("lang", lang, { domain: ".bycar.in.ua" });
+  setCookie("lang", lang, { domain: COOKIE_DOMAIN });
   i18n.locale.value = lang;
 };
 </script>

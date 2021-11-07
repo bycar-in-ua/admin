@@ -1,6 +1,10 @@
 <template>
-  <n-form :inline="true" class="mt-4">
-    <n-form-item :label="t('options.addNew')" path="optionName">
+  <n-form :inline="true" :class="formClass" :show-feedback="showFeedback">
+    <n-form-item
+      :label="t('options.addNew')"
+      path="optionName"
+      :class="formItemClass"
+    >
       <n-input v-model:value="optionName" :placeholder="t('enter')" />
     </n-form-item>
     <n-form-item>
@@ -30,6 +34,12 @@ const props = defineProps({
   categoryId: {
     type: Number,
     requierd: true,
+  },
+  formClass: String,
+  formItemClass: String,
+  showFeedback: {
+    type: Boolean,
+    default: true,
   },
 });
 

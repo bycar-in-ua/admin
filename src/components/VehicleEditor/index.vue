@@ -7,6 +7,7 @@
       <Complectations />
       <Engines />
       <Transmissions />
+      <VehicleImages />
     </n-scrollbar>
     <side-column style="flex: 0 0 24%" />
   </div>
@@ -35,6 +36,7 @@ import GeneralOptions from "./GeneralOptions";
 import Complectations from "./Complectations";
 import Engines from "./Engines";
 import Transmissions from "./Transmissions";
+import VehicleImages from "./VehicleImages";
 import VahicleEditorSkeleton from "./Skeleton";
 import {
   FETCH_OPTIONS,

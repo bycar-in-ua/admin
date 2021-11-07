@@ -11,6 +11,7 @@ import {
   SET_COMPLECTATION_OPTIONS,
   CHANGE_COMPLECTATION_NAME,
   SET_POWER_UNIT_OPTION,
+  SAVE_CAR_IMAGES,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -92,6 +93,13 @@ export const carEditor = {
         name,
       ]);
     },
+    async [SAVE_CAR_IMAGES]({ state, commit }, imagesIds) {
+      const carImages = await apiClient.put(
+        `/vehicles/${state.car.id}/images`,
+        imagesIds
+      );
+      commit(UPDATE_CAR_FIELD, ["images", carImages]);
+    },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },
       [complectationIndex, optionIds]
@@ -137,6 +145,11 @@ export const carEditor = {
     },
     ...createFetchingMutation("updateFetched", "isFetched"),
     ...createFetchingMutation("updateFetching", "isFetching"),
+  },
+  getters: {
+    getCarImagesIds(state) {
+      return state.car.images.map((image) => image.id);
+    },
   },
 };
 

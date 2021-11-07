@@ -48,6 +48,14 @@ const routes = [
     name: "Library",
     component: () => import("@/views/Library.vue"),
   },
+  {
+    path: "/images",
+    name: "Images",
+    component: () => import("@/views/Images.vue"),
+    meta: {
+      title: ["images.title", 2],
+    },
+  },
 ];
 
 const router = createRouter({

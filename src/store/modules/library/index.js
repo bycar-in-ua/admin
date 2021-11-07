@@ -6,10 +6,13 @@ import {
   FETCH_OPTIONS,
   CREATE_OPTION,
   CREATE_OPTION_CATEGORY,
+  DELETE_OPTION,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
+import images from "./images";
 
 export const library = {
+  modules: { images },
   state: () => ({
     types: [],
     optionCategories: [],
@@ -44,6 +47,13 @@ export const library = {
         [...state.optionCategories, newOptionCategory],
       ]);
     },
+    async [DELETE_OPTION]({ commit, state }, id) {
+      await apiClient.delete(`/options/${id}`);
+      commit(UPDATE_LIBRARY, [
+        "options",
+        state.options.filter((option) => option.id !== id),
+      ]);
+    },
   },
   mutations: {
     [UPDATE_LIBRARY](state, [lib, data]) {
@@ -54,7 +64,6 @@ export const library = {
         (libItem) => libItem.id === item.id
       );
 
-      console.log(state[lib]);
       state[lib][targetItemIndex] = item;
     },
   },
