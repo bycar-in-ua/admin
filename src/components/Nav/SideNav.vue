@@ -22,6 +22,7 @@ import {
   CarSport,
   Albums,
   Library,
+  Images,
 } from "@vicons/ionicons5";
 
 function renderMenuIcon(icon) {
@@ -47,6 +48,10 @@ const menuOptions = [
   {
     key: "Library",
     icon: Library,
+  },
+  {
+    key: "Images",
+    icon: Images,
   },
 ];
 
