@@ -42,7 +42,6 @@ import VehicleColorsModal from "./VehicleColorsModal";
 import ColorCard from "./ColorCard";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SAVE_CAR_COLORS } from "@/store/modules/carEditor/actionTypes";
-// const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const store = useStore();
 const { t } = useI18n();

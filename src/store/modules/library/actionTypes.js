@@ -5,3 +5,5 @@ export const CREATE_OPTION = "CREATE_OPTION";
 export const FETCH_OPTIONS = "FETCH_OPTIONS";
 export const DELETE_OPTION = "DELETE_OPTION";
 export const FETCH_COLORS = "FETCH_COLORS";
+export const CREATE_NEW_COLOR = "CREATE_NEW_COLOR";
+export const DELETE_COLOR = "DELETE_COLOR";
