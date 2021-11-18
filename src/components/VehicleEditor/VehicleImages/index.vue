@@ -1,5 +1,5 @@
 <template>
-  <n-card :title="t('images.title', 2)" size="medium">
+  <n-card :title="t('images.title', 2)" class="my-4 shadow">
     <n-image-group>
       <div class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
         <vehicle-image-card
@@ -12,12 +12,12 @@
     <template #action>
       <div class="flex justify-end">
         <n-button type="primary" size="medium" @click="openModal">
-          {{ t("images.addNew", 2) }}
+          {{ t("images.add", 2) }}
         </n-button>
       </div>
     </template>
   </n-card>
-  <VehicleImagesModal :show="isModalOpen" :close-callback="closeModal" />
+  <VehicleImagesModal :show="isModalOpen" :toggle-callback="toggleModal" />
 </template>
 
 <script>
@@ -46,7 +46,7 @@ const openModal = () => {
   isModalOpen.value = true;
 };
 
-const closeModal = (val) => {
+const toggleModal = (val) => {
   isModalOpen.value = val;
 };
 </script>

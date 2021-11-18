@@ -3,7 +3,7 @@
     :show="show"
     preset="card"
     class="max-w-6xl"
-    @update:show="closeCallback"
+    @update:show="toggleCallback"
   >
     <Images
       :is-selectable="true"
@@ -49,7 +49,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  closeCallback: {
+  toggleCallback: {
     type: Function,
   },
 });
@@ -61,10 +61,6 @@ const isFetching = ref(false);
 const existingImages = computed(
   () => store.getters[carEditorNamespace("getCarImagesIds")]
 );
-
-const closeCallback = (val) => {
-  props.closeCallback(val);
-};
 
 const toolbarActions = [
   {
@@ -83,7 +79,7 @@ const toolbarActions = [
           carEditorNamespace(SAVE_CAR_IMAGES),
           selectedImages
         );
-        props.closeCallback(false);
+        props.toggleCallback(false);
       } finally {
         isFetching.value = false;
       }

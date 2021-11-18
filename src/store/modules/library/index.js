@@ -7,6 +7,7 @@ import {
   CREATE_OPTION,
   CREATE_OPTION_CATEGORY,
   DELETE_OPTION,
+  FETCH_COLORS,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
 import images from "./images";
@@ -17,6 +18,7 @@ export const library = {
     types: [],
     optionCategories: [],
     options: [],
+    colors: [],
   }),
   actions: {
     async [FETCH_VEHICLE_TYPES]({ commit }) {
@@ -53,6 +55,10 @@ export const library = {
         "options",
         state.options.filter((option) => option.id !== id),
       ]);
+    },
+    async [FETCH_COLORS]({ commit }, brandId = "") {
+      const colors = await apiClient.get(`/colors/${brandId}`);
+      commit(UPDATE_LIBRARY, ["colors", colors]);
     },
   },
   mutations: {

@@ -4,6 +4,7 @@ import { vehicleRU, vehicleUA } from "./vehicle";
 import { optionsRU, optionsUA } from "./options";
 import { complectationRU, complectationUA } from "./complectations";
 import { imagesRU, imagesUA } from "./images";
+import { colorsRU, colorsUA } from "./colors";
 
 export default {
   ru: {
@@ -20,6 +21,7 @@ export default {
     options: optionsRU,
     complectations: complectationRU,
     images: imagesRU,
+    colors: colorsRU,
   },
   ua: {
     ...generalUA,
@@ -35,5 +37,6 @@ export default {
     options: optionsUA,
     complectations: complectationUA,
     images: imagesUA,
+    colors: colorsUA,
   },
 };
