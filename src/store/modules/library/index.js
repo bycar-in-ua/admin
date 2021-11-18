@@ -8,6 +8,8 @@ import {
   CREATE_OPTION_CATEGORY,
   DELETE_OPTION,
   FETCH_COLORS,
+  CREATE_NEW_COLOR,
+  DELETE_COLOR,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
 import images from "./images";
@@ -59,6 +61,17 @@ export const library = {
     async [FETCH_COLORS]({ commit }, brandId = "") {
       const colors = await apiClient.get(`/colors/${brandId}`);
       commit(UPDATE_LIBRARY, ["colors", colors]);
+    },
+    async [CREATE_NEW_COLOR]({ commit, state }, colorData) {
+      const newColor = await apiClient.post("/colors", colorData);
+      commit(UPDATE_LIBRARY, ["colors", [...state.colors, newColor]]);
+    },
+    async [DELETE_COLOR]({ commit, state }, id) {
+      await apiClient.delete(`/colors/${id}`);
+      commit(UPDATE_LIBRARY, [
+        "colors",
+        state.colors.filter((color) => color.id !== id),
+      ]);
     },
   },
   mutations: {

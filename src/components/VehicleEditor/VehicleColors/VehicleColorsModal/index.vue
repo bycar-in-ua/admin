@@ -40,7 +40,7 @@ export default {
 </script>
 
 <script setup>
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import { useI18n } from "vue-i18n";
 import { NModal, NButton } from "naive-ui";
 import ColorsList from "./ColorsList";
@@ -49,4 +49,7 @@ import AddNewColor from "./AddNewColor";
 const { t } = useI18n();
 
 const isAddingNew = ref(false);
+const toggleAdding = (val) => (isAddingNew.value = val);
+
+provide("toggleAddingNewColor", toggleAdding);
 </script>

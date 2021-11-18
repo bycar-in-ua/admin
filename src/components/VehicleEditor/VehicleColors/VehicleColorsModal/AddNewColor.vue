@@ -46,7 +46,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -63,9 +63,13 @@ import ColorCard from "../ColorCard";
 import { ArchiveOutline } from "@vicons/ionicons5";
 import { colorsRU } from "@/i18n/colors";
 import apiClient from "@/helpers/apiClient";
+import { CREATE_NEW_COLOR } from "@/store/modules/library/actionTypes";
+
 
 const store = useStore();
 const { t } = useI18n();
+
+const toggleAdding = inject("toggleAddingNewColor");
 
 const carBrand = computed(() => store.state.carEditor.car.brand);
 
@@ -97,11 +101,11 @@ const colorUploadHandler = async ({ file }) => {
 const submitHandler = async () => {
   try {
     isFetching.value = true;
-    const newColor = await apiClient.post("/colors", {
+    await store.dispatch(CREATE_NEW_COLOR, {
       ...formModel.value,
-      brandIdenity: carBrand.value,
+      brandIdentity: carBrand.value,
     });
-    console.log(newColor);
+    toggleAdding(false);
   } finally {
     isFetching.value = false;
   }

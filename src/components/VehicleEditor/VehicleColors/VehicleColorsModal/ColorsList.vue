@@ -8,12 +8,12 @@
       :key="color.id"
       :color="color"
       :select-action="selectHandler"
-      :close-action="closeHandler"
+      :close-action="deleteHandler"
       :selected="selectedColors.includes(color.id)"
     />
   </div>
   <n-empty v-else size="large" :show-description="false" class="p-4" />
-  <div class="flex justify-end">
+  <div class="flex justify-end mt-4">
     <n-button
       type="primary"
       :disabled="!selectedColors.length || isFetching"
@@ -36,7 +36,10 @@ import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NEmpty, NButton } from "naive-ui";
-import { FETCH_COLORS } from "@/store/modules/library/actionTypes";
+import {
+  DELETE_COLOR,
+  FETCH_COLORS,
+} from "@/store/modules/library/actionTypes";
 import ColorCard from "../ColorCard";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { SAVE_CAR_COLORS } from "@/store/modules/carEditor/actionTypes";
@@ -63,8 +66,8 @@ const selectHandler = (color, selected) => {
   selectedColors.value.push(color.id);
 };
 
-const closeHandler = (color) => {
-  console.log("close", color);
+const deleteHandler = async (color) => {
+  await store.dispatch(DELETE_COLOR, color.id);
 };
 
 const saveHandler = async () => {
