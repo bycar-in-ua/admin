@@ -49,7 +49,6 @@ import AddNewColor from "./AddNewColor";
 const { t } = useI18n();
 
 const isAddingNew = ref(false);
-
 const toggleAdding = (val) => (isAddingNew.value = val);
 
 provide("toggleAddingNewColor", toggleAdding);
