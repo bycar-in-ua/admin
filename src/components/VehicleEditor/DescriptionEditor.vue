@@ -4,6 +4,8 @@
     :init="{
       height: 400,
       menubar: false,
+      skin: darkTheme == '1' ? 'oxide-dark' : '',
+      content_css: darkTheme == '1' ? 'dark' : '',
     }"
     v-model="desriptionModel"
   />
@@ -12,6 +14,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useMemory } from "@/hooks/useMemory";
 import Editor from "@tinymce/tinymce-vue";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
@@ -21,6 +24,9 @@ export default {
   setup() {
     const store = useStore();
     const car = computed(() => store.state.carEditor.car);
+    const memory = useMemory();
+
+    const darkTheme = memory.get("darkTheme", false);
 
     const desriptionModel = computed({
       get: () => car.value.description,
@@ -33,6 +39,7 @@ export default {
 
     return {
       desriptionModel,
+      darkTheme,
     };
   },
   components: {

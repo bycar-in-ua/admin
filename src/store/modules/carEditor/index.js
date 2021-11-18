@@ -12,6 +12,7 @@ import {
   CHANGE_COMPLECTATION_NAME,
   SET_POWER_UNIT_OPTION,
   SAVE_CAR_IMAGES,
+  SAVE_CAR_COLORS,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -52,7 +53,7 @@ export const carEditor = {
   modules: { engine, transmission, options },
   actions: {
     async [FETCH_CAR]({ commit, dispatch }, carId) {
-      const car = await apiClient.get(`/vehicles/edit/${carId}`);
+      const car = await apiClient.get(`/vehicles/${carId}`);
       commit("updateFetched", true);
       dispatch(SET_OPTIONS, car.complectations);
       commit(UPDATE_CAR, car);
@@ -99,6 +100,13 @@ export const carEditor = {
         imagesIds
       );
       commit(UPDATE_CAR_FIELD, ["images", carImages]);
+    },
+    async [SAVE_CAR_COLORS]({ state, commit }, colorsIds) {
+      const carColors = await apiClient.put(
+        `/vehicles/${state.car.id}/colors`,
+        colorsIds
+      );
+      commit(UPDATE_CAR_FIELD, ["colors", carColors]);
     },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },

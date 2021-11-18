@@ -7,7 +7,7 @@
       :disabled="isUploading"
       @click="handleClick"
     >
-      {{ t("images.addNew", 2) }}
+      {{ t("images.upload", 2) }}
     </n-button>
     <input
       type="file"
