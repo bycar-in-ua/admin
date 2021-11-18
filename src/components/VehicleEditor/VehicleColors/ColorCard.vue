@@ -10,15 +10,7 @@
     />
     <n-icon
       size="30"
-      class="
-        icon
-        cursor-pointer
-        absolute
-        left-0
-        top-0
-        hover:text-primary
-        transition-all
-      "
+      class="icon cursor-pointer left-0 top-0 hover:text-primary transition-all"
       @click="closeHandler"
     >
       <close-circle-outline />
@@ -93,7 +85,7 @@ const closeHandler = async () => {
     }
   }
   .icon {
-    @apply opacity-0;
+    @apply opacity-0 absolute;
   }
 }
 </style>
