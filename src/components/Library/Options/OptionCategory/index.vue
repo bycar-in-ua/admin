@@ -13,24 +13,28 @@
         <n-icon
           class="title-icon cursor-pointer transition-all ml-auto"
           @click="isEdit = true"
+          :title="t('edit')"
         >
           <PencilSharp />
         </n-icon>
         <n-icon
           class="title-icon transition-all cursor-pointer ml-2"
           @click="handleDelete"
+          :title="t('delete')"
         >
           <CloseSharp />
         </n-icon>
       </div>
     </template>
-    <n-list>
-      <OptionCategoryListItem
-        v-for="option in options"
-        :key="option.id"
-        :option="option"
-      />
-    </n-list>
+    <n-scrollbar class="max-h-48 pr-3">
+      <n-list>
+        <OptionCategoryListItem
+          v-for="option in options"
+          :key="option.id"
+          :option="option"
+        />
+      </n-list>
+    </n-scrollbar>
     <template #action>
       <add-new-option
         :category-id="optionCategory.id"
@@ -49,8 +53,9 @@ export default {
 
 <script setup>
 import { defineProps, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
-import { NList, NCard, NIcon } from "naive-ui";
+import { NList, NCard, NIcon, NScrollbar } from "naive-ui";
 import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
 import OptionCategoryListItem from "./OptionCategoryListItem";
 import OptionEditor from "./OptionEditor";
@@ -65,6 +70,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const { t } = useI18n();
 
 const isEdit = ref(false);
 const isFetching = ref(false);

@@ -12,6 +12,8 @@
         :options="optionsByCategories[category.id]"
         :value="getOptionsByCategory(category.id)"
         :on-update:value="updateHandler(category.id)"
+        size="large"
+        class="options-transfer"
       />
       <add-new-option :category-id="category.id" form-class="mt-4" />
     </n-collapse-item>
@@ -60,3 +62,20 @@ const updateHandler = (catId) => (value) => {
   ]);
 };
 </script>
+
+<style lang="scss">
+.options-transfer {
+  &.n-transfer {
+    width: 100%;
+    .n-transfer-list
+      .n-transfer-list-body
+      .n-transfer-list-flex-container
+      .n-transfer-list-content
+      .n-transfer-list-item {
+      height: auto;
+      max-height: 100%;
+      @apply py-1;
+    }
+  }
+}
+</style>
