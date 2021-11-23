@@ -2,21 +2,29 @@
   <n-data-table
     :columns="columns"
     :data="createData(cars)"
-    :pagination="pagination"
+    :loading="cars.isFetching"
   />
+  <div v-if="cars.pageCount > 1" class="flex justify-end my-4">
+    <n-pagination
+      :page-count="cars.pageCount"
+      :page-size="cars.pageSize"
+      :page="cars.page"
+      @update:page="handlePagination"
+    />
+  </div>
 </template>
 
 <script>
 import { computed, h } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { NDataTable, NButton, NTag } from "naive-ui";
+import { NDataTable, NButton, NTag, NPagination } from "naive-ui";
 import { useStore } from "vuex";
 import { FETCH_CARS } from "@/store/modules/cars/actionTypes";
 import { getStatusTag } from "@/helpers/postStatuses";
 
 const createData = (cars) =>
-  cars.map((car) => ({
+  cars.items.map((car) => ({
     key: car.id,
     name: car.displayName,
     status: car.status,
@@ -31,7 +39,7 @@ export default {
 
     store.dispatch(FETCH_CARS);
 
-    const cars = computed(() => store.state.cars.all);
+    const cars = computed(() => store.state.cars);
 
     const createColumns = ({ editCallback }) => {
       return [
@@ -74,6 +82,10 @@ export default {
       ];
     };
 
+    const handlePagination = (page) => {
+      store.dispatch(FETCH_CARS, page);
+    };
+
     return {
       createData,
       cars,
@@ -82,13 +94,12 @@ export default {
           router.push({ name: "EditVehicle", params: { id: rowData.key } });
         },
       }),
-      pagination: {
-        pageSize: 10,
-      },
+      handlePagination,
     };
   },
   components: {
     NDataTable,
+    NPagination,
   },
 };
 </script>

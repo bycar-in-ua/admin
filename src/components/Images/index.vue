@@ -36,6 +36,7 @@
     :page="images.curentPage"
     :page-count="images.totalPages"
     :disabled="images.isFetching"
+    @update:page="handlePagination"
   />
 </template>
 
@@ -75,6 +76,10 @@ store.dispatch(FETCH_IMAGES);
 const selectable = ref(props.isSelectable);
 
 const selectedImages = ref(props.preselectedImages);
+
+const handlePagination = (page) => {
+  store.dispatch(FETCH_IMAGES, page);
+};
 
 provide("setImagesSelectable", () => {
   selectable.value = true;

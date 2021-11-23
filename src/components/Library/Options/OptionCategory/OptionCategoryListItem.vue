@@ -9,10 +9,18 @@
     />
     <div v-else class="flex justify-between items-center">
       {{ option.label }}
-      <n-icon class="cursor-pointer ml-auto" @click="isEdit = true">
+      <n-icon
+        class="cursor-pointer ml-auto"
+        @click="isEdit = true"
+        :title="t('edit')"
+      >
         <PencilSharp />
       </n-icon>
-      <n-icon class="cursor-pointer ml-2" @click="handleDelete">
+      <n-icon
+        class="cursor-pointer ml-2"
+        @click="handleDelete"
+        :title="t('delete')"
+      >
         <CloseSharp />
       </n-icon>
     </div>
@@ -27,6 +35,7 @@ export default {
 
 <script setup>
 import { defineProps, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { NListItem, NIcon } from "naive-ui";
 import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
@@ -40,6 +49,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const { t } = useI18n();
 
 const isEdit = ref(false);
 const isFetching = ref(false);
