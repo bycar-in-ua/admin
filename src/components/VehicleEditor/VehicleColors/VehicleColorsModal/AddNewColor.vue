@@ -65,7 +65,6 @@ import { colorsRU } from "@/i18n/colors";
 import apiClient from "@/helpers/apiClient";
 import { CREATE_NEW_COLOR } from "@/store/modules/library/actionTypes";
 
-
 const store = useStore();
 const { t } = useI18n();
 
