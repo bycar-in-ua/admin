@@ -33,12 +33,26 @@
       />
     </n-form-item>
     <n-form-item :label="t('vehicle.modelYear')" path="year">
-      <n-input-number
-        :show-button="false"
-        class="w-full"
-        :value="car.year"
-        :placeholder="t('vehicle.enterModelYear')"
-        :on-update:value="updateCarField('year')"
+      <n-input-group>
+        <n-input-number
+          class="w-full"
+          :value="car.yearFrom"
+          :placeholder="t('vehicle.enterModelYear')"
+          :on-update:value="updateCarField('yearFrom')"
+        />
+        <n-input-number
+          class="w-full"
+          :value="car.yearTo"
+          :placeholder="t('vehicle.enterModelYear')"
+          :on-update:value="updateCarField('yearTo')"
+        />
+      </n-input-group>
+    </n-form-item>
+    <n-form-item :label="t('vehicle.bodyName')">
+      <n-input
+        type="text"
+        :value="car.bodyName"
+        :on-update:value="updateCarField('bodyName')"
       />
     </n-form-item>
   </n-form>
@@ -66,6 +80,7 @@ import {
   NSelect,
   NInput,
   NInputNumber,
+  NInputGroup,
   NImage,
   NSpin,
 } from "naive-ui";

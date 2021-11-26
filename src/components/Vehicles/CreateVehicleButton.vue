@@ -34,12 +34,26 @@
             :placeholder="t('vehicle.enterModel')"
           />
         </n-form-item>
-        <n-form-item :label="t('vehicle.modelYear')" path="year">
-          <n-input
-            v-model:value="formModel.year"
-            type="text"
-            :placeholder="t('vehicle.enterModelYear')"
-          />
+        <n-form-item :label="t('vehicle.modelYear')" path="yearFrom">
+          <n-input-group>
+            <n-input-number
+              v-model:value="formModel.yearFrom"
+              type="text"
+              :placeholder="t('vehicle.enterModelYear')"
+              :min="2010"
+              class="w-full"
+            />
+            <n-input-number
+              v-model:value="formModel.yearTo"
+              type="text"
+              :placeholder="t('vehicle.enterModelYear')"
+              :min="2010"
+              class="w-full"
+            />
+          </n-input-group>
+        </n-form-item>
+        <n-form-item :label="t('vehicle.bodyName')">
+          <n-input v-model:value="formModel.bodyName" type="text" />
         </n-form-item>
       </n-form>
       <template #action>
@@ -64,7 +78,16 @@ import { yearValidator } from "@/helpers/validators";
 import { brandNamespace } from "@/store/modules/brands";
 import { FETCH_BRANDS } from "@/store/modules/brands/actionTypes";
 
-import { NButton, NModal, NForm, NFormItem, NSelect, NInput } from "naive-ui";
+import {
+  NButton,
+  NModal,
+  NForm,
+  NFormItem,
+  NSelect,
+  NInput,
+  NInputNumber,
+  NInputGroup,
+} from "naive-ui";
 
 const rules = {
   type: {
@@ -79,7 +102,7 @@ const rules = {
     required: true,
     message: "Поле Модель не может быть пустым",
   },
-  year: {
+  yearFrom: {
     required: true,
     validator: yearValidator,
   },
@@ -106,7 +129,9 @@ export default {
       type: typeCar.id,
       brand: null,
       model: null,
-      year: null,
+      yearFrom: null,
+      yearTo: null,
+      bodyName: null,
     });
 
     const createOptions = (options) =>
@@ -133,6 +158,15 @@ export default {
       t,
     };
   },
-  components: { NButton, NModal, NForm, NFormItem, NSelect, NInput },
+  components: {
+    NButton,
+    NModal,
+    NForm,
+    NFormItem,
+    NSelect,
+    NInput,
+    NInputNumber,
+    NInputGroup,
+  },
 };
 </script>
