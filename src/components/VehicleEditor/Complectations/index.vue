@@ -6,7 +6,7 @@
         :key="complectation.id"
         :name="complectation.id"
       >
-        <template #header>
+        <template #header class="jkbkk">
           <n-h4
             v-text="complectation.displayName"
             :complectationIndex="index"
@@ -50,6 +50,19 @@
             >
               <add-circle-outline />
             </n-icon>
+          </div>
+          <n-divider />
+          <div class="flex justify-end mb-4">
+            <n-button
+              type="error"
+              size="medium"
+              @click="deleteHandler(complectation.id)"
+              :loading="isFetching"
+              :disabled="isFetching"
+            >
+              <template #icon> <CloseSharp /> </template>
+              {{ t("complectations.delete") }}
+            </n-button>
           </div>
         </div>
       </n-collapse-item>
@@ -103,14 +116,18 @@ import {
   NIcon,
   NPopconfirm,
   NInput,
+  NButton,
 } from "naive-ui";
-import { AddCircleOutline } from "@vicons/ionicons5";
+import { AddCircleOutline, CloseSharp } from "@vicons/ionicons5";
 import OptionsEditor from "./OptionsEditor";
 import ComplectationTitleEditor from "./ComplectationTitleEditor";
 import PowerUnitsEditor from "./PowerUnitsEditor";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { CREATE_NEW_COMPLECTATION } from "@/store/modules/carEditor/actionTypes";
+import {
+  CREATE_NEW_COMPLECTATION,
+  DELETE_COMPLECTATION,
+} from "@/store/modules/carEditor/actionTypes";
 import { PUSH_NEW_POWER_UNIT } from "@/store/modules/carEditor/mutationTypes";
 
 const store = useStore();
@@ -118,6 +135,7 @@ const { t } = useI18n();
 
 const complectations = computed(() => store.state.carEditor.car.complectations);
 
+const isFetching = ref(false);
 const newComplectationName = ref("");
 
 const createComplectation = async () => {
@@ -130,4 +148,16 @@ const createComplectation = async () => {
 
 const createPowerUnit = (complectationIndex) =>
   store.commit(carEditorNamespace(PUSH_NEW_POWER_UNIT), complectationIndex);
+
+const deleteHandler = async (complectationId) => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(
+      carEditorNamespace(DELETE_COMPLECTATION),
+      complectationId
+    );
+  } finally {
+    isFetching.value = false;
+  }
+};
 </script>

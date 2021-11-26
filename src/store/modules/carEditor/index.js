@@ -13,6 +13,7 @@ import {
   SET_POWER_UNIT_OPTION,
   SAVE_CAR_IMAGES,
   SAVE_CAR_COLORS,
+  DELETE_COMPLECTATION,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -109,6 +110,15 @@ export const carEditor = {
         colorsIds
       );
       commit(UPDATE_CAR_FIELD, ["colors", carColors]);
+    },
+    async [DELETE_COMPLECTATION]({ commit, state }, complectationId) {
+      await apiClient.delete(`/complectations/${complectationId}`);
+      commit(UPDATE_CAR_FIELD, [
+        "complectations",
+        state.car.complectations.filter(
+          (complectation) => complectation.id !== complectationId
+        ),
+      ]);
     },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },

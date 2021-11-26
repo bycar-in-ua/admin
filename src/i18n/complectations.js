@@ -3,6 +3,7 @@ export const complectationRU = {
   edit: "Редактировать название комплектации",
   addNew: "Добавить комплектацию",
   enterName: "Введите название комплектации",
+  delete: "Удалить комплектацию",
 };
 
 export const complectationUA = {
@@ -10,4 +11,5 @@ export const complectationUA = {
   edit: "Редагувати назву комплектації",
   addNew: "Додати комплектацію",
   enterName: "Введіть назву комплектації",
+  delete: "Видалити комплектацію",
 };
