@@ -37,11 +37,13 @@
         <n-input-number
           class="w-full"
           :value="car.yearFrom"
+          :min="2010"
           :placeholder="t('vehicle.enterModelYear')"
           :on-update:value="updateCarField('yearFrom')"
         />
         <n-input-number
           class="w-full"
+          :min="car.yearFrom"
           :value="car.yearTo"
           :placeholder="t('vehicle.enterModelYear')"
           :on-update:value="updateCarField('yearTo')"
@@ -65,7 +67,7 @@ export default {
 </script>
 
 <script setup>
-import { h, computed } from "vue";
+import { h, computed, inject } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 
@@ -90,6 +92,8 @@ import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
+const showNotification = inject("showNotification");
+
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
 const isFetching = computed(() => store.state.carEditor.isFetching);
@@ -130,7 +134,20 @@ const rules = {
 const updateCarField = (field) => (val) =>
   store.commit(carEditorNamespace(UPDATE_CAR_FIELD), [field, val]);
 
-const saveAction = () => {
-  store.dispatch(carEditorNamespace(SAVE_CAR));
+const saveAction = async () => {
+  try {
+    await store.dispatch(carEditorNamespace(SAVE_CAR));
+    showNotification("success", {
+      title: t("notifications.vehicle.saving.success"),
+      duration: 3000,
+    });
+  } catch (error) {
+    showNotification("error", {
+      title: t("notifications.error.title.default"),
+      content: t("notifications.vehicle.saving.error"),
+      description: error.message,
+      duration: undefined,
+    });
+  }
 };
 </script>

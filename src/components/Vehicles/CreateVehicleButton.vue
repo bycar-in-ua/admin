@@ -47,7 +47,7 @@
               v-model:value="formModel.yearTo"
               type="text"
               :placeholder="t('vehicle.enterModelYear')"
-              :min="2010"
+              :min="formModel.yearFrom"
               class="w-full"
             />
           </n-input-group>
@@ -68,7 +68,13 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+export default {
+  name: "CreateVehicleButton",
+};
+</script>
+
+<script setup>
+import { computed, ref, inject } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -108,65 +114,46 @@ const rules = {
   },
 };
 
-export default {
-  name: "CreateVehicleButton",
-  setup() {
-    const store = useStore();
-    const router = useRouter();
-    const { t } = useI18n();
+const store = useStore();
+const router = useRouter();
+const { t } = useI18n();
+const showNotification = inject("showNotification");
 
-    const types = computed(() => store.state.library.types);
-    const brands = computed(() => store.state.brands.all);
+const types = computed(() => store.state.library.types);
+const brands = computed(() => store.state.brands.all);
 
-    store.dispatch(brandNamespace(FETCH_BRANDS));
+store.dispatch(brandNamespace(FETCH_BRANDS));
 
-    const isModalOpen = ref(false);
-    const formRef = ref(null);
+const isModalOpen = ref(false);
+const formRef = ref(null);
 
-    const typeCar = types.value.find((type) => type.name === "car");
+const typeCar = types.value.find((type) => type.name === "car");
 
-    const formModel = ref({
-      type: typeCar.id,
-      brand: null,
-      model: null,
-      yearFrom: null,
-      yearTo: null,
-      bodyName: null,
+const formModel = ref({
+  type: typeCar.id,
+  brand: null,
+  model: null,
+  yearFrom: null,
+  yearTo: null,
+  bodyName: null,
+});
+
+const createOptions = (options) =>
+  options.map((option) => ({
+    label: option.displayName,
+    value: option.id,
+  }));
+
+const submitHandler = async () => {
+  try {
+    await formRef.value.validate();
+    const newVehicle = await apiClient.post("/vehicles", formModel.value);
+    router.push({ name: "EditVehicle", params: { id: newVehicle.id } });
+  } catch (error) {
+    showNotification("error", {
+      title: t("notifications.error.title.default"),
+      content: t("notifications.vehicle.creating.error"),
     });
-
-    const createOptions = (options) =>
-      options.map((option) => ({
-        label: option.displayName,
-        value: option.id,
-      }));
-
-    const submitHandler = async () => {
-      await formRef.value.validate();
-      const newVehicle = await apiClient.post("/vehicles", formModel.value);
-      router.push({ name: "EditVehicle", params: { id: newVehicle.id } });
-    };
-
-    return {
-      brands,
-      types,
-      createOptions,
-      isModalOpen,
-      formRef,
-      formModel,
-      rules,
-      submitHandler,
-      t,
-    };
-  },
-  components: {
-    NButton,
-    NModal,
-    NForm,
-    NFormItem,
-    NSelect,
-    NInput,
-    NInputNumber,
-    NInputGroup,
-  },
+  }
 };
 </script>

@@ -5,6 +5,7 @@ import { optionsRU, optionsUA } from "./options";
 import { complectationRU, complectationUA } from "./complectations";
 import { imagesRU, imagesUA } from "./images";
 import { colorsRU, colorsUA } from "./colors";
+import { notificationsRU, notificationsUA } from "./notifications";
 
 export default {
   ru: {
@@ -22,6 +23,7 @@ export default {
     complectations: complectationRU,
     images: imagesRU,
     colors: colorsRU,
+    notifications: notificationsRU,
   },
   ua: {
     ...generalUA,
@@ -38,5 +40,6 @@ export default {
     complectations: complectationUA,
     images: imagesUA,
     colors: colorsUA,
+    notifications: notificationsUA,
   },
 };
