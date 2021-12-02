@@ -52,7 +52,13 @@
             </n-icon>
           </div>
           <n-divider />
-          <div class="flex justify-end mb-4">
+          <div class="flex mb-4">
+            <n-checkbox
+              :label="t('complectations.base')"
+              class="mr-auto"
+              :checked="complectation.base"
+              :on-update:checked="baseCheckHandler(complectation.id)"
+            />
             <n-button
               type="error"
               size="medium"
@@ -116,6 +122,7 @@ import {
   NIcon,
   NPopconfirm,
   NInput,
+  NCheckbox,
   NButton,
 } from "naive-ui";
 import { AddCircleOutline, CloseSharp } from "@vicons/ionicons5";
@@ -128,7 +135,10 @@ import {
   CREATE_NEW_COMPLECTATION,
   DELETE_COMPLECTATION,
 } from "@/store/modules/carEditor/actionTypes";
-import { PUSH_NEW_POWER_UNIT } from "@/store/modules/carEditor/mutationTypes";
+import {
+  PUSH_NEW_POWER_UNIT,
+  SET_DEFAULT_COMPLECTATION,
+} from "@/store/modules/carEditor/mutationTypes";
 
 const store = useStore();
 const { t } = useI18n();
@@ -137,6 +147,14 @@ const complectations = computed(() => store.state.carEditor.car.complectations);
 
 const isFetching = ref(false);
 const newComplectationName = ref("");
+
+const baseCheckHandler = (cmplId) => (val) => {
+  if (val) {
+    store.commit(carEditorNamespace(SET_DEFAULT_COMPLECTATION), cmplId);
+    return;
+  }
+  store.commit(carEditorNamespace(SET_DEFAULT_COMPLECTATION), false);
+};
 
 const createComplectation = async () => {
   await store.dispatch(

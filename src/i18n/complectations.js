@@ -4,6 +4,7 @@ export const complectationRU = {
   addNew: "Добавить комплектацию",
   enterName: "Введите название комплектации",
   delete: "Удалить комплектацию",
+  base: "Базовая комплектация",
 };
 
 export const complectationUA = {
@@ -12,4 +13,5 @@ export const complectationUA = {
   addNew: "Додати комплектацію",
   enterName: "Введіть назву комплектації",
   delete: "Видалити комплектацію",
+  base: "Базова комплектація",
 };
