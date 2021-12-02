@@ -174,10 +174,18 @@ export const vehicleRU = {
     },
     gearbox: {
       abbr: "КПП",
-      automatic: "АКПП",
-      mechanical: "МКПП",
-      variator: "Вариатор",
       type: "Тип КПП",
+      types: {
+        automatic: "АКПП",
+        mechanical: "МКПП",
+      },
+      subType: "Подтип КПП",
+      subTypes: {
+        hydroеransformer: "Гидротрансформатор",
+        variator: "Вариатор",
+        robotic: "Робот",
+        twoClutchesRobotic: "Робот с 2-мя сцеплениями",
+      },
       numberOfGears: "Количество передач",
       technology: "Название технологии",
     },
@@ -363,10 +371,18 @@ export const vehicleUA = {
     },
     gearbox: {
       abbr: "КПП",
-      automatic: "АКПП",
-      mechanical: "МКПП",
-      variator: "Варіатор",
       type: "Тип КПП",
+      types: {
+        automatic: "АКПП",
+        mechanical: "МКПП",
+      },
+      subType: "Підтип КПП",
+      subTypes: {
+        hydroеransformer: "Гідротрансформатор",
+        variator: "Варіатор",
+        robotic: "Робот",
+        twoClutchesRobotic: "Робот з 2-ма зчепленнями",
+      },
       numberOfGears: "Кількість передач",
       technology: "Назва технології",
     },

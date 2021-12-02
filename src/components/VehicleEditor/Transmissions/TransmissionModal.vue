@@ -73,7 +73,15 @@
         <n-select
           :value="transmission.gearbox.type"
           :options="gearboxTypesOptions"
-          :on-update:value="inputHandler('gearbox.type')"
+          :on-update:value="gearboxTypeChangeHandler"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.gearbox.subType')">
+        <n-select
+          :value="transmission.gearbox.subType"
+          :options="gearboxSubTypesOptions"
+          :on-update:value="inputHandler('gearbox.subType')"
+          :disabled="transmission.gearbox.type === 'mechanical'"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.gearbox.numberOfGears')">
@@ -141,20 +149,30 @@ import {
   CREATE_NEW_TRANSMISSION,
   EDIT_TRANSMISSION,
 } from "@/store/modules/carEditor/transmission/actionTypes";
-import { driveTypes, gearboxTypes } from "@/helpers/transmissionHelpers";
 import { vehicleRU as vehicleWordings } from "@/i18n/vehicle";
 
 const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();
 
-const driveTypesOptions = driveTypes.map((type) => ({
+const driveTypesOptions = Object.keys(
+  vehicleWordings.transmission.driveType
+).map((type) => ({
   label: t("vehicle.transmission.driveType." + type),
   value: type,
 }));
 
-const gearboxTypesOptions = gearboxTypes.map((type) => ({
-  label: t("vehicle.transmission.gearbox." + type),
+const gearboxTypesOptions = Object.keys(
+  vehicleWordings.transmission.gearbox.types
+).map((type) => ({
+  label: t("vehicle.transmission.gearbox.types." + type),
+  value: type,
+}));
+
+const gearboxSubTypesOptions = Object.keys(
+  vehicleWordings.transmission.gearbox.subTypes
+).map((type) => ({
+  label: t("vehicle.transmission.gearbox.subTypes." + type),
   value: type,
 }));
 
@@ -221,6 +239,17 @@ const transmission = computed(
 
 const inputHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_TRANSMISSION_FIELD), [field, val]);
+};
+
+const gearboxTypeChangeHandler = (val) => {
+  store.commit(carEditorNamespace(UPDATE_TRANSMISSION_FIELD), [
+    "gearbox.type",
+    val,
+  ]);
+  store.commit(carEditorNamespace(UPDATE_TRANSMISSION_FIELD), [
+    "gearbox.subType",
+    null,
+  ]);
 };
 
 const createAction = async () => {

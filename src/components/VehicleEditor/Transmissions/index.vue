@@ -10,7 +10,9 @@
         :key="transmission.id"
         :title="`${transmission.drive} ${transmission.driveName || ''} - ${
           transmission.gearbox.numberOfGears
-        } ${t('vehicle.transmission.gearbox.' + transmission.gearbox.type)}`"
+        } ${t(
+          'vehicle.transmission.gearbox.types.' + transmission.gearbox.type
+        )}`"
         hoverable
         class="shadow"
       >
@@ -25,7 +27,10 @@
               <td>
                 {{ transmission.gearbox.numberOfGears }}
                 {{
-                  t("vehicle.transmission.gearbox." + transmission.gearbox.type)
+                  t(
+                    "vehicle.transmission.gearbox.types." +
+                      transmission.gearbox.type
+                  )
                 }}
               </td>
             </tr>
