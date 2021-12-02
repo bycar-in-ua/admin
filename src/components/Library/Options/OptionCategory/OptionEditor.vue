@@ -12,7 +12,7 @@
       :disabled="loading"
     >
       <template #icon>
-        <n-icon><CloseSharp /></n-icon>
+        <n-icon><Close /></n-icon>
       </template>
     </n-button>
     <n-button
@@ -22,7 +22,7 @@
       :disabled="loading"
     >
       <template #icon>
-        <n-icon><CheckmarkSharp /></n-icon>
+        <n-icon><Checkmark /></n-icon>
       </template>
     </n-button>
   </n-input-group>
@@ -38,7 +38,7 @@ export default {
 import { ref, defineProps } from "vue";
 import { useI18n } from "vue-i18n";
 import { NInput, NInputGroup, NButton, NIcon } from "naive-ui";
-import { CheckmarkSharp, CloseSharp } from "@vicons/ionicons5";
+import { Checkmark, Close } from "@vicons/ionicons5";
 
 const props = defineProps({
   value: String,

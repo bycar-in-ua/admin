@@ -10,6 +10,7 @@ import {
   FETCH_COLORS,
   CREATE_NEW_COLOR,
   DELETE_COLOR,
+  CHANGE_OPTION_CATEGORY,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
 import images from "./images";
@@ -57,6 +58,15 @@ export const library = {
         "options",
         state.options.filter((option) => option.id !== id),
       ]);
+    },
+    async [CHANGE_OPTION_CATEGORY]({ commit }, [option, targetCategoryId]) {
+      const changedOption = await apiClient.put(`/options/${option.value}`, {
+        displayName: option.label,
+        category: {
+          id: targetCategoryId,
+        },
+      });
+      commit(UPDATE_LIBRARY_ITEM, ["options", changedOption]);
     },
     async [FETCH_COLORS]({ commit }, brandId = "") {
       const colors = await apiClient.get(`/colors/${brandId}`);

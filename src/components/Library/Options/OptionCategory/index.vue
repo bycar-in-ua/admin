@@ -32,6 +32,7 @@
           v-for="option in options"
           :key="option.id"
           :option="option"
+          :category="optionCategory"
         />
       </n-list>
     </n-scrollbar>
