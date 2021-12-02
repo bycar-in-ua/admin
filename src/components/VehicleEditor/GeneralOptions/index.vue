@@ -39,6 +39,12 @@
           :on-update:value="inputHandler('numberOfDoors')"
         />
       </n-form-item>
+      <n-form-item :label="t('vehicle.discDiameter')">
+        <n-input-number
+          :value="car.discDiameter"
+          :on-update:value="inputHandler('discDiameter')"
+        />
+      </n-form-item>
 
       <n-divider class="sm:col-span-2 md:col-span-3">
         {{ t("vehicle.generalCharacteristics.dimensions.title") }}

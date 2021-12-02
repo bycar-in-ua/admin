@@ -19,6 +19,7 @@ export const vehicleRU = {
   enterModelYear: "Введите модельный год",
   manufactureIndex: "Производственный индекс",
   numberOfDoors: "Количество дверей",
+  discDiameter: "Диаметр дисков",
   bodyTypes: {
     title: "Тип кузова",
     items: {
@@ -207,6 +208,7 @@ export const vehicleUA = {
   enterModelYear: "Введіть модельний рік",
   manufactureIndex: "Виробничий індекс",
   numberOfDoors: "Кількість дверей",
+  discDiameter: "Діаметр дисків",
   bodyTypes: {
     title: "Тип кузову",
     items: {
