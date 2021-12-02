@@ -4,6 +4,11 @@ export const notificationsRU = {
       default: "Упс! Что-то пошло не так =(",
     },
   },
+  success: {
+    title: {
+      default: "Данные успешно сохранены",
+    },
+  },
   vehicle: {
     creating: {
       error:
@@ -21,6 +26,11 @@ export const notificationsUA = {
   error: {
     title: {
       default: "Упс! Щось пішло не так =(",
+    },
+  },
+  success: {
+    title: {
+      default: "Дані успішно збережено",
     },
   },
   vehicle: {

@@ -24,9 +24,12 @@
         />
       </n-form-item>
       <n-form-item :label="t('tradename')">
-        <n-input
+        <n-select
           :value="engine.tradename"
+          :options="tradenames"
           :on-update:value="inputHandler('tradename')"
+          filterable
+          tag
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.manufactureIndex')">
@@ -143,7 +146,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -156,6 +159,7 @@ import {
   NCheckbox,
   NButton,
   NInputGroup,
+  useNotification,
 } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
@@ -166,9 +170,19 @@ import {
   CREATE_NEW_ENGINE,
   EDIT_ENGINE,
 } from "@/store/modules/carEditor/engine/actionTypes";
+import apiClient from "@/helpers/apiClient";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
+
+const tradenames = ref([]);
+
+onMounted(async () => {
+  const res = await apiClient.get("/engines/tradenames");
+
+  tradenames.value = res.map((item) => ({ value: item, label: item }));
+});
 
 const isModalShowing = computed(
   () => store.state.carEditor.engine.isEngineModalOpen
@@ -202,10 +216,33 @@ const inputHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_ENGINE_FIELD), [field, val]);
 };
 
-const createAction = () =>
-  store.dispatch(carEditorNamespace(CREATE_NEW_ENGINE));
+const createAction = async () => {
+  try {
+    await store.dispatch(carEditorNamespace(CREATE_NEW_ENGINE));
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  }
+};
 
-const updateAction = () => {
-  store.dispatch(carEditorNamespace(EDIT_ENGINE));
+const updateAction = async () => {
+  try {
+    await store.dispatch(carEditorNamespace(EDIT_ENGINE));
+    notification.success({
+      title: t("notifications.success.title.default"),
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+    });
+  }
 };
 </script>

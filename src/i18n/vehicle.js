@@ -137,8 +137,39 @@ export const vehicleRU = {
     driveName: "Технология привода",
     suspensionTypeFront: "Передняя подвеска",
     suspensionTypeRear: "Задняя подвеска",
+    suspensions: {
+      types: {
+        dependent: {
+          title: "Зависимые",
+          items: {
+            solidAxle: "Неразрезной мост",
+            semiIndependentBeam: "Полузависимая балка",
+          },
+        },
+        independent: {
+          title: "Независимые",
+          items: {
+            mcPherson: "McPherson",
+            doubleWishbone: "Двухрычажная",
+            multiLink: "Многорычажная",
+          },
+        },
+      },
+      workItems: {
+        spring: "Пружинная",
+        pneumatic: "Пневматическая",
+        hydraulic: "Гидравлическая",
+        adaptive: "Адаптивная",
+        axleSpring: "Рессорная",
+        torsion: "Торсионная",
+      },
+    },
     brakingSystemTypeFront: "Тормозная система, передняя ось",
     brakingSystemTypeRear: "Тормозная система, задняя ось",
+    brakingSystemTypes: {
+      discBrakes: "Дисковые",
+      drumBrakes: "Барабанные",
+    },
     gearbox: {
       abbr: "КПП",
       automatic: "АКПП",
@@ -293,8 +324,39 @@ export const vehicleUA = {
     driveName: "Технологія приводу",
     suspensionTypeFront: "Передня підвіска",
     suspensionTypeRear: "Задня підвіска",
+    suspensions: {
+      types: {
+        dependent: {
+          title: "Залежні",
+          items: {
+            solidAxle: "Нерозрізний міст",
+            semiIndependentBeam: "Напівзалежна балка",
+          },
+        },
+        independent: {
+          title: "Незалежні",
+          items: {
+            mcPherson: "McPherson",
+            doubleWishbone: "Двухважільна",
+            multiLink: "Багатоважільна",
+          },
+        },
+      },
+      workItems: {
+        spring: "Пружинна",
+        pneumatic: "Пневматична",
+        hydraulic: "Гідравлічна",
+        adaptive: "Адаптивна",
+        axleSpring: "Ресорна",
+        torsion: "Торсіонна",
+      },
+    },
     brakingSystemTypeFront: "Гальмівна система, передня вісь",
     brakingSystemTypeRear: "Гальмівна система, задня вісь",
+    brakingSystemTypes: {
+      discBrakes: "Дискові",
+      drumBrakes: "Барабанні",
+    },
     gearbox: {
       abbr: "КПП",
       automatic: "АКПП",

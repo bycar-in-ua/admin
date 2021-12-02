@@ -7,7 +7,7 @@
       isEdit ? transmission.displayName : t('vehicle.transmission.addingNew')
     "
     :mask-closable="false"
-    class="max-w-3xl"
+    class="max-w-4xl"
   >
     <n-form class="grid md:grid-cols-2 gap-4">
       <n-form-item :label="t('vehicle.transmission.drive')">
@@ -24,26 +24,44 @@
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.suspensionTypeFront')">
-        <n-input
-          :value="transmission.suspensionTypeFront"
-          :on-update:value="inputHandler('suspensionTypeFront')"
-        />
+        <n-input-group>
+          <n-select
+            :value="transmission.suspensionTypeFront"
+            :options="suspensionTypesOptions"
+            :on-update:value="inputHandler('suspensionTypeFront')"
+          />
+          <n-select
+            :value="transmission.suspensionWorkItemFront"
+            :options="workItemsOptions"
+            :on-update:value="inputHandler('suspensionWorkItemFront')"
+          />
+        </n-input-group>
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.suspensionTypeRear')">
-        <n-input
-          :value="transmission.suspensionTypeRear"
-          :on-update:value="inputHandler('suspensionTypeRear')"
-        />
+        <n-input-group>
+          <n-select
+            :value="transmission.suspensionTypeRear"
+            :options="suspensionTypesOptions"
+            :on-update:value="inputHandler('suspensionTypeRear')"
+          />
+          <n-select
+            :value="transmission.suspensionWorkItemRear"
+            :options="workItemsOptions"
+            :on-update:value="inputHandler('suspensionWorkItemRear')"
+          />
+        </n-input-group>
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.brakingSystemTypeFront')">
-        <n-input
+        <n-select
           :value="transmission.brakingSystemTypeFront"
+          :options="breakingSystemOptions"
           :on-update:value="inputHandler('brakingSystemTypeFront')"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.brakingSystemTypeRear')">
-        <n-input
+        <n-select
           :value="transmission.brakingSystemTypeRear"
+          :options="breakingSystemOptions"
           :on-update:value="inputHandler('brakingSystemTypeRear')"
         />
       </n-form-item>
@@ -106,11 +124,13 @@ import {
   NModal,
   NForm,
   NFormItem,
+  NInputGroup,
   NInput,
   NSelect,
   NInputNumber,
   NButton,
   NH4,
+  useNotification,
 } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
@@ -122,9 +142,11 @@ import {
   EDIT_TRANSMISSION,
 } from "@/store/modules/carEditor/transmission/actionTypes";
 import { driveTypes, gearboxTypes } from "@/helpers/transmissionHelpers";
+import { vehicleRU as vehicleWordings } from "@/i18n/vehicle";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
 
 const driveTypesOptions = driveTypes.map((type) => ({
   label: t("vehicle.transmission.driveType." + type),
@@ -143,6 +165,52 @@ const isEdit = computed(
   () => store.getters[carEditorNamespace("isTransmissionEdit")]
 );
 
+const createSelectOption = (item, translationPath) => ({
+  value: item,
+  label: t(translationPath + item),
+});
+
+const breakingSystemOptions = Object.keys(
+  vehicleWordings.transmission.brakingSystemTypes
+).map((item) =>
+  createSelectOption(item, "vehicle.transmission.brakingSystemTypes.")
+);
+
+const suspensionTypesOptions = [
+  {
+    type: "group",
+    label: t("vehicle.transmission.suspensions.types.independent.title"),
+    key: "independent",
+    children: Object.keys(
+      vehicleWordings.transmission.suspensions.types.independent.items
+    ).map((item) =>
+      createSelectOption(
+        item,
+        "vehicle.transmission.suspensions.types.independent.items."
+      )
+    ),
+  },
+  {
+    type: "group",
+    label: t("vehicle.transmission.suspensions.types.dependent.title"),
+    key: "dependent",
+    children: Object.keys(
+      vehicleWordings.transmission.suspensions.types.dependent.items
+    ).map((item) =>
+      createSelectOption(
+        item,
+        "vehicle.transmission.suspensions.types.dependent.items."
+      )
+    ),
+  },
+];
+
+const workItemsOptions = Object.keys(
+  vehicleWordings.transmission.suspensions.workItems
+).map((item) =>
+  createSelectOption(item, "vehicle.transmission.suspensions.workItems.")
+);
+
 const closeModal = (val) => {
   store.commit(carEditorNamespace(UPDATE_TRANSMISSION_MODAL_OPEN), val);
 };
@@ -155,10 +223,35 @@ const inputHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_TRANSMISSION_FIELD), [field, val]);
 };
 
-const createAction = () =>
-  store.dispatch(carEditorNamespace(CREATE_NEW_TRANSMISSION));
+const createAction = async () => {
+  try {
+    await store.dispatch(carEditorNamespace(CREATE_NEW_TRANSMISSION));
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  }
+};
 
-const updateAction = () => {
-  store.dispatch(carEditorNamespace(EDIT_TRANSMISSION));
+const updateAction = async () => {
+  try {
+    await store.dispatch(carEditorNamespace(EDIT_TRANSMISSION));
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  }
 };
 </script>
