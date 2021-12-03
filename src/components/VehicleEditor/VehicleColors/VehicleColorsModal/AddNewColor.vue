@@ -10,7 +10,7 @@
       <n-upload
         class="w-full"
         v-if="!formModel.reference"
-        @change="colorUploadHandler"
+        @change="formColorUploadHandler"
         :show-file-list="false"
       >
         <n-upload-dragger>
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed, inject } from "vue";
+import { ref, computed, inject, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -64,9 +64,11 @@ import { ArchiveOutline } from "@vicons/ionicons5";
 import { colorsRU } from "@/i18n/colors";
 import apiClient from "@/helpers/apiClient";
 import { CREATE_NEW_COLOR } from "@/store/modules/library/actionTypes";
+import useClipboard from "@/hooks/useClipboard";
 
 const store = useStore();
 const { t } = useI18n();
+const { getImage } = useClipboard();
 
 const toggleAdding = inject("toggleAddingNewColor");
 
@@ -85,16 +87,18 @@ const formModel = ref({
   reference: null,
 });
 
-const colorUploadHandler = async ({ file }) => {
+const uploader = async (file) => {
   try {
     isFetching.value = true;
-    const colorImageLink = await apiClient.uploadFiles("/upload-color", [
-      file.file,
-    ]);
+    const colorImageLink = await apiClient.uploadFiles("/upload-color", [file]);
     formModel.value.reference = colorImageLink[0];
   } finally {
     isFetching.value = false;
   }
+};
+
+const formColorUploadHandler = async ({ file }) => {
+  await uploader(file.file);
 };
 
 const submitHandler = async () => {
@@ -109,4 +113,22 @@ const submitHandler = async () => {
     isFetching.value = false;
   }
 };
+
+async function pasteListener(e) {
+  const image = getImage(e);
+
+  if (image) {
+    await uploader(image);
+    return;
+  }
+  return;
+}
+
+onMounted(() => {
+  window.addEventListener("paste", pasteListener);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("paste", pasteListener);
+});
 </script>

@@ -18,7 +18,7 @@
       :disablad="isFetching"
     >
       <n-upload
-        :on-change="uploadHandler"
+        :on-change="formUploadHandler"
         :show-file-list="false"
         list-type="image-card"
         class="mb-4"
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import {
   UPDATE_BRAND_MODAL_OPEN,
@@ -109,11 +109,13 @@ import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
 import { brandNamespace } from "@/store/modules/brands";
 import apiClient from "@/helpers/apiClient";
 import { cdnLink } from "@/helpers/cdn";
+import useClipboard from "@/hooks/useClipboard";
 
 export default {
   name: "BrandModal",
   setup() {
     const store = useStore();
+    const { getImage } = useClipboard();
     const brandForm = ref(null);
 
     const brand = computed(() => store.state.brands.modal.brand);
@@ -162,18 +164,38 @@ export default {
       },
     };
 
-    const uploadHandler = async (options) => {
+    const uploader = async (file) => {
       isImageLoading.value = true;
-      const response = await apiClient.uploadFiles(
-        "/upload-brand-logo",
-        options.fileList.map((fileInfo) => fileInfo.file)
-      );
+      const response = await apiClient.uploadFiles("/upload-brand-logo", [
+        file,
+      ]);
       setTimeout(() => {
         updateFieldAction("logo", response[0]);
         isImageLoading.value = false;
       }, 2000);
     };
 
+    const formUploadHandler = async ({ file }) => {
+      await uploader(file.file);
+    };
+
+    async function pasteListener(e) {
+      const image = getImage(e);
+
+      if (image) {
+        await uploader(image);
+        return;
+      }
+      return;
+    }
+
+    onMounted(() => {
+      window.addEventListener("paste", pasteListener);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("paste", pasteListener);
+    });
     return {
       brandForm,
       brandModel,
@@ -185,7 +207,7 @@ export default {
       saveAction,
       createAction,
       rules,
-      uploadHandler,
+      formUploadHandler,
       cdnLink,
       isImageLoading,
     };
