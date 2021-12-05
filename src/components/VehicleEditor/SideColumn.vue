@@ -37,13 +37,11 @@
         <n-input-number
           class="w-full"
           :value="car.yearFrom"
-          :min="2010"
           :placeholder="t('vehicle.enterModelYear')"
           :on-update:value="updateCarField('yearFrom')"
         />
         <n-input-number
           class="w-full"
-          :min="car.yearFrom"
           :value="car.yearTo"
           :placeholder="t('vehicle.enterModelYear')"
           :on-update:value="updateCarField('yearTo')"

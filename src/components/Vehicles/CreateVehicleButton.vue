@@ -40,14 +40,12 @@
               v-model:value="formModel.yearFrom"
               type="text"
               :placeholder="t('vehicle.enterModelYear')"
-              :min="2010"
               class="w-full"
             />
             <n-input-number
               v-model:value="formModel.yearTo"
               type="text"
               :placeholder="t('vehicle.enterModelYear')"
-              :min="formModel.yearFrom"
               class="w-full"
             />
           </n-input-group>
