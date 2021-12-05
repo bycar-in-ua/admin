@@ -83,21 +83,22 @@ export const vehicleRU = {
     title: "Двигатель | Двигатели",
     addingNew: "Создание нового двигателя",
     displacement: "Объем, куб. см.",
-    injectionType: {
-      title: "Система впрыска",
+    injectionType: "Система впрыска",
+    injectionTypes: {
       direct: "Непосредственный впрыск",
       distributed: "Распределенный впрыск",
       mono: "Моновпрыск",
+      combined: "Комбинированный",
     },
-    fuelType: {
-      title: "Тип топлива",
+    fuelType: "Тип топлива",
+    fuelTypes: {
       gas: "Бензин",
       dt: "Дизель",
       lpg: "Газ",
     },
     pistonsQuantity: "Количество цилиндров",
-    pistonsPlacement: {
-      title: "Расположение цилиндров",
+    pistonsPlacement: "Расположение цилиндров",
+    pistonsPlacements: {
       R: "Рядное",
       V: "V-образное",
       W: "W-образное",
@@ -280,21 +281,22 @@ export const vehicleUA = {
     title: "Двигун | Двигуни",
     addingNew: "Створення нового двигуна",
     displacement: "Об'єм, куб. см.",
-    injectionType: {
-      title: "Система впорскування",
+    injectionType: "Система впорскування",
+    injectionTypes: {
       direct: "Безпосереднє впорскування",
       distributed: "Розподілене впорскування",
       mono: "Моновпорскування",
+      combined: "Кобміноване",
     },
-    fuelType: {
-      title: "Тип палива",
+    fuelType: "Тип палива",
+    fuelTypes: {
       gas: "Бензин",
       dt: "Дизель",
       lpg: "Гаc",
     },
     pistonsQuantity: "Кількість циліндрів",
-    pistonsPlacement: {
-      title: "Розположення циліндрів",
+    pistonsPlacement: "Розположення циліндрів",
+    pistonsPlacements: {
       R: "Рядне",
       V: "V-подібне",
       W: "W-подібне",

@@ -16,7 +16,7 @@
           :on-update:value="inputHandler('displacement')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.injectionType.title')">
+      <n-form-item :label="t('vehicle.engine.injectionType')">
         <n-select
           :value="engine.injection"
           :options="injectionTypes"
@@ -35,7 +35,7 @@
       <n-form-item :label="t('vehicle.manufactureIndex')">
         <n-input :on-update:value="inputHandler('manufactureIndex')" />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.fuelType.title')">
+      <n-form-item :label="t('vehicle.engine.fuelType')">
         <n-select
           :value="engine.fuelType"
           :options="fuelTypes"
@@ -50,7 +50,7 @@
           :on-update:value="inputHandler('pistons')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.engine.pistonsPlacement.title')">
+      <n-form-item :label="t('vehicle.engine.pistonsPlacement')">
         <n-select
           :value="engine.pistonsPlacement"
           :options="pistonsPlacement"
@@ -171,6 +171,7 @@ import {
   EDIT_ENGINE,
 } from "@/store/modules/carEditor/engine/actionTypes";
 import apiClient from "@/helpers/apiClient";
+import { vehicleRU as vehicleWordings } from "@/i18n/vehicle";
 
 const store = useStore();
 const { t } = useI18n();
@@ -195,19 +196,23 @@ const closeModal = (val) => {
   store.commit(carEditorNamespace(UPDATE_ENGINE_MODAL_OPEN), val);
 };
 
-const injectionTypes = ["direct", "distributed", "mono"].map((type) => ({
+const injectionTypes = Object.keys(vehicleWordings.engine.injectionTypes).map(
+  (type) => ({
+    value: type,
+    label: t(`vehicle.engine.injectionTypes.${type}`),
+  })
+);
+
+const fuelTypes = Object.keys(vehicleWordings.engine.fuelTypes).map((type) => ({
   value: type,
-  label: t(`vehicle.engine.injectionType.${type}`),
+  label: t(`vehicle.engine.fuelTypes.${type}`),
 }));
 
-const fuelTypes = ["gas", "dt", "lpg"].map((type) => ({
-  value: type,
-  label: t(`vehicle.engine.fuelType.${type}`),
-}));
-
-const pistonsPlacement = ["R", "V", "W", "H"].map((placement) => ({
+const pistonsPlacement = Object.keys(
+  vehicleWordings.engine.pistonsPlacements
+).map((placement) => ({
   value: placement,
-  label: t(`vehicle.engine.pistonsPlacement.${placement}`),
+  label: t(`vehicle.engine.pistonsPlacements.${placement}`),
 }));
 
 const engine = computed(() => store.state.carEditor.engine.engine);
