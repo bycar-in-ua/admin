@@ -13,7 +13,17 @@ export default {
       car: (state) => state.carEditor.car,
     }),
     title() {
-      return `${this.car.brand.displayName} ${this.car.model} ${this.car.year}`;
+      let title = "";
+
+      title += this.car.brand.displayName + " ";
+
+      title += this.car.model + " ";
+
+      title += this.car.yearFrom + " ";
+
+      if (this.car.yearTo) title += "- " + this.car.yearTo;
+
+      return title;
     },
   },
   components: {
