@@ -169,10 +169,8 @@ export default {
       const response = await apiClient.uploadFiles("/upload-brand-logo", [
         file,
       ]);
-      setTimeout(() => {
-        updateFieldAction("logo", response[0]);
-        isImageLoading.value = false;
-      }, 2000);
+      updateFieldAction("logo", response[0]);
+      isImageLoading.value = false;
     };
 
     const formUploadHandler = async ({ file }) => {
