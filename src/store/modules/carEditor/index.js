@@ -14,6 +14,7 @@ import {
   SAVE_CAR_IMAGES,
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
+  DELETE_POWER_UNIT,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -25,6 +26,7 @@ import {
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
 import { SET_OPTIONS } from "./options/actionTypes";
+import { prepareCar } from "@/helpers/preparers";
 
 export const carEditorNamespace = (action) => `carEditor/${action}`;
 
@@ -57,7 +59,7 @@ export const carEditor = {
       const car = await apiClient.get(`/vehicles/${carId}`);
       commit("updateFetched", true);
       dispatch(SET_OPTIONS, car.complectations);
-      commit(UPDATE_CAR, car);
+      commit(UPDATE_CAR, prepareCar(car));
     },
     async [SAVE_CAR]({ state, commit, getters }) {
       try {
@@ -69,7 +71,7 @@ export const carEditor = {
             options: getters["getOptionsByComplectations"][cmpl.id] || [],
           })),
         });
-        commit(UPDATE_CAR, updatedCar);
+        commit(UPDATE_CAR, prepareCar(updatedCar));
       } finally {
         commit("updateFetching", false);
       }
@@ -118,6 +120,18 @@ export const carEditor = {
         "complectations",
         state.car.complectations.filter(
           (complectation) => complectation.id !== complectationId
+        ),
+      ]);
+    },
+    async [DELETE_POWER_UNIT](
+      { commit, state },
+      [powerUnit, complectationIndex]
+    ) {
+      await apiClient.delete(`/power-units/${powerUnit.id}`, powerUnit);
+      commit(UPDATE_CAR_FIELD, [
+        `complectations[${complectationIndex}].powerUnits`,
+        state.car.complectations[complectationIndex].powerUnits.filter(
+          (unit) => unit.id !== powerUnit.id
         ),
       ]);
     },

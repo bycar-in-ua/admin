@@ -1,29 +1,3 @@
-// DEPRECATED
-// export const prepareCar = (car) => {
-//   const fields = [
-//     "status",
-//     "model",
-//     "year",
-//     "description",
-//     "dimensionL",
-//     "dimensionW",
-//     "dimensionH",
-//     "clearance",
-//     "wheelbase",
-//     "curbWeight",
-//     "fullWeight",
-//     "numberOfSeats",
-//     "gasTankVolume",
-//     "trunkVolume",
-//   ];
-//   const preparedCar = {};
-
-//   fields.forEach((field) => {
-//     preparedCar[field] = car[field];
-//   });
-//   return preparedCar;
-// };
-
 export const prepareOption = (option) => {
   return {
     label: option.displayName,
@@ -49,4 +23,14 @@ export const prepareOptionIdsByCategoties = (acc, cur) => {
     acc[cur.category.id].push(cur.id);
   }
   return acc;
+};
+
+export const prepareCar = (car) => {
+  car.complectations.sort((a, b) => a.id - b.id);
+
+  for (let i = 0; i < car.complectations.length; i++) {
+    car.complectations[i].powerUnits.sort((a, b) => a.id - b.id);
+  }
+
+  return car;
 };

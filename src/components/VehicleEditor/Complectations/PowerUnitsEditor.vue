@@ -2,9 +2,9 @@
   <n-collapse>
     <n-collapse-item
       v-for="(powerUnit, index) in complectation.powerUnits"
-      :key="index"
+      :key="powerUnit.id"
       :title="getPowerUnitName(powerUnit)"
-      :name="index"
+      :name="powerUnit.id"
     >
       <n-form class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <n-form-item :label="t('vehicle.engine.title')">
@@ -80,6 +80,17 @@
           />
         </n-form-item>
       </n-form>
+      <div class="flex justify-end my-2">
+        <n-button
+          type="error"
+          @click="deleteHandler(powerUnit)"
+          :loading="isFetching"
+          :disabled="isFetching"
+        >
+          <template #icon> <CloseSharp /> </template>
+          {{ t("vehicle.powerUnits.delete") }}
+        </n-button>
+      </div>
     </n-collapse-item>
   </n-collapse>
 </template>
@@ -90,7 +101,7 @@ export default {
 </script>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineProps, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -100,9 +111,15 @@ import {
   NFormItem,
   NInputNumber,
   NSelect,
+  NButton,
+  useNotification,
 } from "naive-ui";
+import { CloseSharp } from "@vicons/ionicons5";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SET_POWER_UNIT_OPTION } from "@/store/modules/carEditor/actionTypes";
+import {
+  DELETE_POWER_UNIT,
+  SET_POWER_UNIT_OPTION,
+} from "@/store/modules/carEditor/actionTypes";
 
 const props = defineProps({
   complectation: Object,
@@ -111,6 +128,9 @@ const props = defineProps({
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
+
+const isFetching = ref(false);
 
 const engines = computed(() => store.state.carEditor.car.engines);
 const transmissions = computed(() => store.state.carEditor.car.transmissions);
@@ -122,18 +142,29 @@ const engineOptions = engines.value.map((engine) => ({
 
 const transmissionOptions = transmissions.value.map((transmission) => ({
   label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${t(
-    "vehicle.transmission.gearbox." + transmission?.gearbox?.type
+    "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
   )}`,
   value: transmission.id,
 }));
 
-const getPowerUnitName = (powerUnit) =>
-  [
-    powerUnit.engine?.displayName,
-    powerUnit.transmission?.drive,
-    powerUnit.transmission?.gearbox?.numberOfGears,
-    t("vehicle.transmission.gearbox." + powerUnit.transmission?.gearbox?.type),
-  ].join(" ");
+const getPowerUnitName = (powerUnit) => {
+  let title = "";
+
+  if (powerUnit.engine.displayName) title += powerUnit.engine.displayName + " ";
+
+  if (powerUnit.transmission.drive) title += powerUnit.transmission.drive + " ";
+
+  if (powerUnit.transmission.gearbox?.numberOfGears)
+    title += powerUnit.transmission.gearbox.numberOfGears + " ";
+
+  if (powerUnit.transmission.gearbox?.type)
+    title += t(
+      "vehicle.transmission.gearbox.types." +
+        powerUnit.transmission?.gearbox?.type
+    );
+
+  return title;
+};
 
 const getSelectedItem = (itemType, itemId) => {
   switch (itemType) {
@@ -164,5 +195,27 @@ const inputHandler = (field, powerUnitIndex) => (value) => {
     field,
     value,
   ]);
+};
+
+const deleteHandler = async (powerUnit) => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(carEditorNamespace(DELETE_POWER_UNIT), [
+      powerUnit,
+
+      props.complectationIndex,
+    ]);
+    notification.success({
+      title: "Uspeh",
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: "Ne USPEH",
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
 };
 </script>
