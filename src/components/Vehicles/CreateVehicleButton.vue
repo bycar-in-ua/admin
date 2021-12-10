@@ -72,7 +72,7 @@ export default {
 </script>
 
 <script setup>
-import { computed, ref, inject } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -91,6 +91,7 @@ import {
   NInput,
   NInputNumber,
   NInputGroup,
+  useNotification,
 } from "naive-ui";
 
 const rules = {
@@ -115,7 +116,7 @@ const rules = {
 const store = useStore();
 const router = useRouter();
 const { t } = useI18n();
-const showNotification = inject("showNotification");
+const notification = useNotification();
 
 const types = computed(() => store.state.library.types);
 const brands = computed(() => store.state.brands.all);
@@ -148,7 +149,7 @@ const submitHandler = async () => {
     const newVehicle = await apiClient.post("/vehicles", formModel.value);
     router.push({ name: "EditVehicle", params: { id: newVehicle.id } });
   } catch (error) {
-    showNotification("error", {
+    notification.error({
       title: t("notifications.error.title.default"),
       content: t("notifications.vehicle.creating.error"),
     });

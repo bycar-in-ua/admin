@@ -22,11 +22,12 @@ import { NDataTable, NButton, NTag, NPagination } from "naive-ui";
 import { useStore } from "vuex";
 import { FETCH_CARS } from "@/store/modules/cars/actionTypes";
 import { getStatusTag } from "@/helpers/postStatuses";
+import { prepareCarTitle } from "@/helpers/preparers";
 
 const createData = (cars) =>
   cars.items.map((car) => ({
     key: car.id,
-    name: car.displayName,
+    name: prepareCarTitle(car),
     status: car.status,
   }));
 

@@ -24,12 +24,16 @@ export default {
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { FETCH_CAR } from "@/store/modules/carEditor/actionTypes";
+import {
+  FETCH_CAR,
+  PURGE_CAR_EDITOR,
+} from "@/store/modules/carEditor/actionTypes";
 
-import { NScrollbar } from "naive-ui";
+import { NScrollbar, useDialog } from "naive-ui";
 import SideColumn from "./SideColumn";
 import VehicleTitle from "./VehicleTitle";
 import DescriptionEditor from "./DescriptionEditor";
@@ -46,10 +50,34 @@ import {
 } from "@/store/modules/library/actionTypes";
 
 const store = useStore();
-const route = useRoute();
-store.dispatch(carEditorNamespace(FETCH_CAR), route.params.id);
+const router = useRouter();
+const { t } = useI18n();
+const dialog = useDialog();
+
+store.dispatch(
+  carEditorNamespace(FETCH_CAR),
+  router.currentRoute.value.params.id
+);
 store.dispatch(FETCH_OPTION_CATEGORIES);
 store.dispatch(FETCH_OPTIONS);
 
 const isFetched = computed(() => store.state.carEditor.isFetched);
+const isEdited = computed(() => store.state.carEditor.isEdited);
+
+onBeforeRouteLeave((to, from) => {
+  if (isEdited.value) {
+    dialog.warning({
+      title: t("notifications.confirmations.title"),
+      content: t("notifications.vehicle.beforeLeaveEditor.message"),
+      positiveText: t("notifications.vehicle.beforeLeaveEditor.positiveAnswer"),
+      negativeText: t("notifications.vehicle.beforeLeaveEditor.negativeAnswer"),
+      onPositiveClick: () => {
+        store.dispatch(carEditorNamespace(PURGE_CAR_EDITOR));
+        router.push(to);
+      },
+    });
+    return false;
+  }
+  store.dispatch(carEditorNamespace(PURGE_CAR_EDITOR));
+});
 </script>

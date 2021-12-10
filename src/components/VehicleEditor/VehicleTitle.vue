@@ -5,6 +5,7 @@
 <script>
 import { mapState } from "vuex";
 import { NH3 } from "naive-ui";
+import { prepareCarTitle } from "@/helpers/preparers";
 
 export default {
   name: "VehicleTitle",
@@ -13,17 +14,7 @@ export default {
       car: (state) => state.carEditor.car,
     }),
     title() {
-      let title = "";
-
-      title += this.car.brand.displayName + " ";
-
-      title += this.car.model + " ";
-
-      title += this.car.yearFrom + " ";
-
-      if (this.car.yearTo) title += "- " + this.car.yearTo;
-
-      return title;
+      return prepareCarTitle(this.car);
     },
   },
   components: {

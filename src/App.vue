@@ -6,14 +6,16 @@
     :theme="theme"
   >
     <n-loading-bar-provider>
-      <n-notification-provider>
-        <app-layout v-if="isUserFetched">
-          <router-view :key="locale" />
-        </app-layout>
-        <div v-else class="h-screen flex justify-center items-center">
-          <n-spin :size="100" />
-        </div>
-      </n-notification-provider>
+      <n-dialog-provider>
+        <n-notification-provider>
+          <app-layout v-if="isUserFetched">
+            <router-view :key="locale" />
+          </app-layout>
+          <div v-else class="h-screen flex justify-center items-center">
+            <n-spin :size="100" />
+          </div>
+        </n-notification-provider>
+      </n-dialog-provider>
     </n-loading-bar-provider>
   </n-config-provider>
 </template>
@@ -35,6 +37,7 @@ import {
   darkTheme,
   NLoadingBarProvider,
   NNotificationProvider,
+  NDialogProvider,
   NSpin,
 } from "naive-ui";
 import colors from "./colors";

@@ -26,13 +26,3 @@ export default {
   },
 };
 </script>
-
-<script setup>
-import { provide } from "vue";
-import { useNotification } from "naive-ui";
-const notification = useNotification();
-
-provide("showNotification", (type, options) => {
-  notification[type]({ duration: 7000, ...options });
-});
-</script>

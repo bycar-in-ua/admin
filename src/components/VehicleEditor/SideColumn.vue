@@ -65,7 +65,7 @@ export default {
 </script>
 
 <script setup>
-import { h, computed, inject } from "vue";
+import { h, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 
@@ -83,6 +83,8 @@ import {
   NInputGroup,
   NImage,
   NSpin,
+  useNotification,
+  useLoadingBar,
 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
 import { statuses } from "@/helpers/postStatuses";
@@ -90,7 +92,8 @@ import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
-const showNotification = inject("showNotification");
+const notification = useNotification();
+const loading = useLoadingBar();
 
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
@@ -134,18 +137,21 @@ const updateCarField = (field) => (val) =>
 
 const saveAction = async () => {
   try {
+    loading.start();
     await store.dispatch(carEditorNamespace(SAVE_CAR));
-    showNotification("success", {
+    notification.success({
       title: t("notifications.vehicle.saving.success"),
       duration: 3000,
     });
   } catch (error) {
-    showNotification("error", {
+    notification.error({
       title: t("notifications.error.title.default"),
       content: t("notifications.vehicle.saving.error"),
       description: error.message,
       duration: undefined,
     });
+  } finally {
+    loading.finish();
   }
 };
 </script>

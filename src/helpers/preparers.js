@@ -34,3 +34,17 @@ export const prepareCar = (car) => {
 
   return car;
 };
+
+export const prepareCarTitle = (car) => {
+  let title = "";
+
+  title += car.brand.displayName + " ";
+
+  title += car.model + " ";
+
+  title += car.yearFrom + " ";
+
+  if (car.yearTo) title += "- " + car.yearTo;
+
+  return title;
+};
