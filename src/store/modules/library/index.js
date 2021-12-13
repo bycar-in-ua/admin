@@ -11,6 +11,7 @@ import {
   CREATE_NEW_COLOR,
   DELETE_COLOR,
   CHANGE_OPTION_CATEGORY,
+  UPDATE_COLOR,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
 import images from "./images";
@@ -75,6 +76,11 @@ export const library = {
     async [CREATE_NEW_COLOR]({ commit, state }, colorData) {
       const newColor = await apiClient.post("/colors", colorData);
       commit(UPDATE_LIBRARY, ["colors", [...state.colors, newColor]]);
+    },
+    async [UPDATE_COLOR]({ commit }, color) {
+      const uppdatedColor = await apiClient.put(`/colors/${color.id}`, color);
+
+      commit(UPDATE_LIBRARY_ITEM, ["colors", uppdatedColor]);
     },
     async [DELETE_COLOR]({ commit, state }, id) {
       await apiClient.delete(`/colors/${id}`);

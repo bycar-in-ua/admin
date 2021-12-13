@@ -28,10 +28,20 @@
     </n-form-item>
     <div class="flex justify-end">
       <n-button
+        v-if="color.id"
         type="primary"
         :loading="isFetching"
         :disabled="isFetching"
-        @click="submitHandler"
+        @click="updateHandler"
+      >
+        {{ t("save") }}
+      </n-button>
+      <n-button
+        v-else
+        type="primary"
+        :loading="isFetching"
+        :disabled="isFetching"
+        @click="createHandler"
       >
         {{ t("create") }}
       </n-button>
@@ -41,12 +51,19 @@
 
 <script>
 export default {
-  name: "AddNewColor",
+  name: "ColorForm",
 };
 </script>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from "vue";
+import {
+  ref,
+  computed,
+  inject,
+  onMounted,
+  onBeforeUnmount,
+  defineProps,
+} from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -63,14 +80,35 @@ import ColorCard from "../ColorCard";
 import { ArchiveOutline } from "@vicons/ionicons5";
 import { colorsRU } from "@/i18n/colors";
 import apiClient from "@/helpers/apiClient";
-import { CREATE_NEW_COLOR } from "@/store/modules/library/actionTypes";
+import {
+  CREATE_NEW_COLOR,
+  UPDATE_COLOR,
+} from "@/store/modules/library/actionTypes";
 import useClipboard from "@/hooks/useClipboard";
+
+/**
+ * @typedef ColorFormProps
+ * @type {Object}
+ * @property {Number || null} id
+ * @property {String || null} name
+ * @property {String || null} closestShade
+ * @property {String || null} reference
+ *
+ * Color props
+ * @param {ColorFormProps} color
+ */
+const props = defineProps({
+  color: {
+    type: Object,
+    requierd: true,
+  },
+});
 
 const store = useStore();
 const { t } = useI18n();
 const { getImage } = useClipboard();
 
-const toggleAdding = inject("toggleAddingNewColor");
+const toggleColorFormShowing = inject("toggleColorForm");
 
 const carBrand = computed(() => store.state.carEditor.car.brand);
 
@@ -81,11 +119,30 @@ const colorItems = Object.keys(colorsRU.shades).map((color) => ({
 
 const isFetching = ref(false);
 
-const formModel = ref({
-  name: "",
-  closestShade: null,
-  reference: null,
-});
+const formModel = ref(props.color);
+
+const createHandler = async () => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(CREATE_NEW_COLOR, {
+      ...formModel.value,
+      brandIdentity: carBrand.value,
+    });
+    toggleColorFormShowing(false);
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const updateHandler = async () => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(UPDATE_COLOR, formModel.value);
+    toggleColorFormShowing(false);
+  } finally {
+    isFetching.value = false;
+  }
+};
 
 const uploader = async (file) => {
   try {
@@ -99,19 +156,6 @@ const uploader = async (file) => {
 
 const formColorUploadHandler = async ({ file }) => {
   await uploader(file.file);
-};
-
-const submitHandler = async () => {
-  try {
-    isFetching.value = true;
-    await store.dispatch(CREATE_NEW_COLOR, {
-      ...formModel.value,
-      brandIdentity: carBrand.value,
-    });
-    toggleAdding(false);
-  } finally {
-    isFetching.value = false;
-  }
 };
 
 async function pasteListener(e) {

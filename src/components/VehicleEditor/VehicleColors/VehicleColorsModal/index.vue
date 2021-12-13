@@ -8,18 +8,23 @@
   >
     <div class="flex justify-end mb-4">
       <n-button
-        v-if="isAddingNew"
+        v-if="isColorsFormShowing"
         type="primary"
         size="medium"
-        @click="isAddingNew = false"
+        @click="discardColorForm"
       >
         {{ t("discard") }}
       </n-button>
-      <n-button v-else type="primary" size="medium" @click="isAddingNew = true">
+      <n-button
+        v-else
+        type="primary"
+        size="medium"
+        @click="isColorsFormShowing = true"
+      >
         {{ t("colors.addNew") }}
       </n-button>
     </div>
-    <AddNewColor v-if="isAddingNew" />
+    <ColorForm v-if="isColorsFormShowing" :color="colorRef" />
     <ColorsList v-else />
   </n-modal>
 </template>
@@ -40,16 +45,42 @@ export default {
 </script>
 
 <script setup>
-import { ref, provide } from "vue";
+import { ref, computed, provide } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NModal, NButton } from "naive-ui";
 import ColorsList from "./ColorsList";
-import AddNewColor from "./AddNewColor";
+import ColorForm from "./ColorForm";
+import { FETCH_COLORS } from "@/store/modules/library/actionTypes";
 
+const store = useStore();
 const { t } = useI18n();
 
-const isAddingNew = ref(false);
-const toggleAdding = (val) => (isAddingNew.value = val);
+const car = computed(() => store.state.carEditor.car);
 
-provide("toggleAddingNewColor", toggleAdding);
+store.dispatch(FETCH_COLORS, car.value.brand.id);
+
+const colorTemplate = {
+  id: null,
+  name: "",
+  closestShade: null,
+  reference: null,
+};
+
+const isColorsFormShowing = ref(false);
+const colorRef = ref(colorTemplate);
+
+const toggleColorForm = (val, editableColor = false) => {
+  if (editableColor) {
+    colorRef.value = editableColor;
+  }
+  isColorsFormShowing.value = val;
+};
+
+const discardColorForm = () => {
+  colorRef.value = colorTemplate;
+  isColorsFormShowing.value = false;
+};
+
+provide("toggleColorForm", toggleColorForm);
 </script>
