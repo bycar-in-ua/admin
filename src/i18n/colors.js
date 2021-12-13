@@ -13,6 +13,7 @@ export const colorsRU = {
     green: "Зеленый",
     yellow: "Желтый",
     orange: "Оранжеый",
+    brown: "Коричневый",
   },
 };
 
@@ -31,5 +32,6 @@ export const colorsUA = {
     green: "Зелений",
     yellow: "Жовтий",
     orange: "Поамаранчевий",
+    brown: "Коричневий",
   },
 };

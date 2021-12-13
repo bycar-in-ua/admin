@@ -26,22 +26,34 @@ export default {
 
 <script setup>
 import { ref } from "vue";
-import { NPopconfirm, NInput } from "naive-ui";
+import { NPopconfirm, NInput, useNotification } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
 
 const isFetching = ref(false);
 
 const newOptCatName = ref("");
 
 const createOptionCategory = async () => {
-  isFetching.value = true;
-  await store.dispatch(CREATE_OPTION_CATEGORY, newOptCatName.value);
-  newOptCatName.value = "";
-  isFetching.value = false;
+  try {
+    isFetching.value = true;
+    await store.dispatch(CREATE_OPTION_CATEGORY, newOptCatName.value);
+    newOptCatName.value = "";
+    notification.success({
+      title: t("notifications.success.title.default"),
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+    });
+  } finally {
+    isFetching.value = false;
+  }
 };
 </script>
