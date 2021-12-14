@@ -5,6 +5,7 @@ export const complectationRU = {
   enterName: "Введите название комплектации",
   delete: "Удалить комплектацию",
   base: "Базовая комплектация",
+  copyOptions: "Скопировать опции из другой комплектации",
 };
 
 export const complectationUA = {
@@ -14,4 +15,5 @@ export const complectationUA = {
   enterName: "Введіть назву комплектації",
   delete: "Видалити комплектацію",
   base: "Базова комплектація",
+  copyOptions: "Зкопіювати опції з іншої комплектації",
 };

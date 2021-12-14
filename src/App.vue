@@ -71,6 +71,8 @@ const newDarkTheme = {
   },
 };
 
+document.title = "Admin | bycar.in.ua";
+
 const theme = ref(memory.get("darkTheme", false) === "1" ? newDarkTheme : null);
 
 const themeSwitcher = () => {

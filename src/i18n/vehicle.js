@@ -329,7 +329,7 @@ export const vehicleUA = {
     trunkVolume: "Об'єм багажника, л",
   },
   transmission: {
-    title: "Трансиміссія | Трансиміссії",
+    title: "Трансимісія | Трансмісії",
     addingNew: "Створення нової трансміссії",
     drive: "Привод",
     driveType: {

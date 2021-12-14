@@ -1,6 +1,6 @@
 import { prepareOptionIdsByCategoties } from "@/helpers/preparers";
 import { UPDATE_IS_EDITED } from "../mutationTypes";
-import { CHANGE_OPTIONS, SET_OPTIONS } from "./actionTypes";
+import { CHANGE_OPTIONS } from "./actionTypes";
 import {
   UPDATE_ALL_OPTIONS,
   UPDATE_OPTIONS_BY_CATEGORY,
@@ -8,7 +8,13 @@ import {
 export const options = {
   state: () => ({}),
   actions: {
-    [SET_OPTIONS]({ commit }, complectations) {
+    [CHANGE_OPTIONS]({ commit }, [complectationId, catId, options]) {
+      commit(UPDATE_IS_EDITED, true);
+      commit(UPDATE_OPTIONS_BY_CATEGORY, [complectationId, catId, options]);
+    },
+  },
+  mutations: {
+    [UPDATE_ALL_OPTIONS](state, complectations) {
       let options = {};
 
       complectations.forEach((complectation) => {
@@ -20,16 +26,7 @@ export const options = {
         });
       });
 
-      commit(UPDATE_ALL_OPTIONS, options);
-    },
-    [CHANGE_OPTIONS]({ commit }, [complectationId, catId, options]) {
-      commit(UPDATE_IS_EDITED, true);
-      commit(UPDATE_OPTIONS_BY_CATEGORY, [complectationId, catId, options]);
-    },
-  },
-  mutations: {
-    [UPDATE_ALL_OPTIONS](state, val) {
-      Object.assign(state, val);
+      Object.assign(state, options);
     },
     [UPDATE_OPTIONS_BY_CATEGORY](state, [complectationId, catId, options]) {
       state[complectationId][catId] = options;

@@ -15,6 +15,7 @@ import {
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
   DELETE_POWER_UNIT,
+  COPY_OPTIONS,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -25,9 +26,14 @@ import {
 } from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
-import { SET_OPTIONS } from "./options/actionTypes";
 import { prepareCar } from "@/helpers/preparers";
+import { UPDATE_ALL_OPTIONS } from "./options/mutationTypes";
 
+/**
+ *
+ * @param {string} action
+ * @returns {string} Action name with namespace
+ */
 export const carEditorNamespace = (action) => `carEditor/${action}`;
 
 const carInitialState = {
@@ -55,10 +61,10 @@ export const carEditor = {
   }),
   modules: { engine, transmission, options },
   actions: {
-    async [FETCH_CAR]({ commit, dispatch }, carId) {
+    async [FETCH_CAR]({ commit }, carId) {
       const car = await apiClient.get(`/vehicles/${carId}`);
       commit("updateFetched", true);
-      dispatch(SET_OPTIONS, car.complectations);
+      commit(UPDATE_ALL_OPTIONS, car.complectations);
       commit(UPDATE_CAR, prepareCar(car));
     },
     async [SAVE_CAR]({ state, commit, getters }) {
@@ -76,7 +82,7 @@ export const carEditor = {
         commit("updateFetching", false);
       }
     },
-    async [CREATE_NEW_COMPLECTATION]({ commit, state, dispatch }, name) {
+    async [CREATE_NEW_COMPLECTATION]({ commit, state }, name) {
       const newComplectation = await apiClient.post("/complectations", {
         displayName: name,
         vehicle: state.car.id,
@@ -85,7 +91,7 @@ export const carEditor = {
         "complectations",
         [...state.car.complectations, newComplectation],
       ]);
-      dispatch(SET_OPTIONS, state.car.complectations);
+      commit(UPDATE_ALL_OPTIONS, state.car.complectations);
     },
     async [CHANGE_COMPLECTATION_NAME](
       { commit, state },
@@ -134,6 +140,22 @@ export const carEditor = {
           (unit) => unit.id !== powerUnit.id
         ),
       ]);
+    },
+    [COPY_OPTIONS](
+      { commit, state },
+      [targetComplectationIndex, referenceComplectationId]
+    ) {
+      const referenceComplectation = state.car.complectations.find(
+        (cmpl) => cmpl.id === referenceComplectationId
+      );
+
+      if (referenceComplectation && referenceComplectation.options) {
+        commit(UPDATE_CAR_FIELD, [
+          `complectations[${targetComplectationIndex}].options`,
+          referenceComplectation.options,
+        ]);
+        commit(UPDATE_ALL_OPTIONS, state.car.complectations);
+      }
     },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },

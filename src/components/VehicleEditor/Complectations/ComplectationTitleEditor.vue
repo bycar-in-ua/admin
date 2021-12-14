@@ -11,31 +11,41 @@
       <n-button type="success" ghost :title="t('save')" @click="handleSave">
         <template #icon>
           <n-icon>
-            <CheckmarkSharp />
+            <Checkmark />
           </n-icon>
         </template>
       </n-button>
       <n-button type="error" ghost :title="t('discard')" @click="handleDismiss">
         <template #icon>
           <n-icon>
-            <CloseSharp />
+            <Close />
           </n-icon>
         </template>
       </n-button>
     </n-button-group>
-    <n-button
-      v-else
-      type="primary"
-      ghost
-      :title="t('complectations.edit')"
-      @click="handleEditClick"
-    >
-      <template #icon>
-        <n-icon>
-          <PencilSharp />
-        </n-icon>
-      </template>
-    </n-button>
+    <div v-else class="grid grid-cols-2 gap-4">
+      <n-button
+        type="primary"
+        ghost
+        :title="t('complectations.edit')"
+        @click="handleEditClick"
+      >
+        <template #icon>
+          <n-icon>
+            <Pencil />
+          </n-icon>
+        </template>
+      </n-button>
+      <n-popselect :options="complectationsOptions" @update:value="copyHandler">
+        <n-button type="primary" ghost :title="t('complectations.copyOptions')">
+          <template #icon>
+            <n-icon>
+              <Copy />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-popselect>
+    </div>
   </div>
 </template>
 <script>
@@ -45,13 +55,16 @@ export default {
 </script>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { CHANGE_COMPLECTATION_NAME } from "@/store/modules/carEditor/actionTypes";
-import { NInput, NButton, NButtonGroup, NIcon } from "naive-ui";
-import { PencilSharp, CheckmarkSharp, CloseSharp } from "@vicons/ionicons5";
+import {
+  CHANGE_COMPLECTATION_NAME,
+  COPY_OPTIONS,
+} from "@/store/modules/carEditor/actionTypes";
+import { NInput, NButton, NButtonGroup, NIcon, NPopselect } from "naive-ui";
+import { Pencil, Checkmark, Close, Copy } from "@vicons/ionicons5";
 
 const props = defineProps({
   complectation: {
@@ -70,6 +83,21 @@ const { t } = useI18n();
 const isEdit = ref(false);
 const inputRef = ref(null);
 const fieldModel = ref(props.complectation.displayName);
+
+const complectationsOptions = computed(() =>
+  store.state.carEditor.car.complectations.map((cmpl) => ({
+    label: cmpl.displayName,
+    value: cmpl.id,
+    disabled: cmpl.id === props.complectation.id,
+  }))
+);
+
+const copyHandler = (referenceComplectationId) => {
+  store.dispatch(carEditorNamespace(COPY_OPTIONS), [
+    props.complectationIndex,
+    referenceComplectationId,
+  ]);
+};
 
 const handleEditClick = () => {
   isEdit.value = true;

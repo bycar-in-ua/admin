@@ -242,11 +242,13 @@ const updateAction = async () => {
     await store.dispatch(carEditorNamespace(EDIT_ENGINE));
     notification.success({
       title: t("notifications.success.title.default"),
+      duration: 3000,
     });
   } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
+      duration: 5000,
     });
   }
 };
