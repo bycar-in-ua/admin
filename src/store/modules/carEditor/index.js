@@ -15,7 +15,7 @@ import {
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
   DELETE_POWER_UNIT,
-  COPY_OPTIONS,
+  COPY_COMPLECTATION_DATA,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -141,7 +141,7 @@ export const carEditor = {
         ),
       ]);
     },
-    [COPY_OPTIONS](
+    [COPY_COMPLECTATION_DATA](
       { commit, state },
       [targetComplectationIndex, referenceComplectationId]
     ) {
@@ -155,6 +155,13 @@ export const carEditor = {
           referenceComplectation.options,
         ]);
         commit(UPDATE_ALL_OPTIONS, state.car.complectations);
+        commit(UPDATE_CAR_FIELD, [
+          `complectations[${targetComplectationIndex}].powerUnits`,
+          referenceComplectation.powerUnits.map((unit) => ({
+            ...unit,
+            id: undefined,
+          })),
+        ]);
       }
     },
     [SET_COMPLECTATION_OPTIONS](

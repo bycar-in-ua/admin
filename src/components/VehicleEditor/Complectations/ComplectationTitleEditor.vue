@@ -61,7 +61,7 @@ import { useI18n } from "vue-i18n";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
   CHANGE_COMPLECTATION_NAME,
-  COPY_OPTIONS,
+  COPY_COMPLECTATION_DATA,
 } from "@/store/modules/carEditor/actionTypes";
 import { NInput, NButton, NButtonGroup, NIcon, NPopselect } from "naive-ui";
 import { Pencil, Checkmark, Close, Copy } from "@vicons/ionicons5";
@@ -93,7 +93,7 @@ const complectationsOptions = computed(() =>
 );
 
 const copyHandler = (referenceComplectationId) => {
-  store.dispatch(carEditorNamespace(COPY_OPTIONS), [
+  store.dispatch(carEditorNamespace(COPY_COMPLECTATION_DATA), [
     props.complectationIndex,
     referenceComplectationId,
   ]);
