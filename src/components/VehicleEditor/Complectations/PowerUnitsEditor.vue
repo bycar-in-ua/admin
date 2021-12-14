@@ -136,7 +136,7 @@ const engines = computed(() => store.state.carEditor.car.engines);
 const transmissions = computed(() => store.state.carEditor.car.transmissions);
 
 const engineOptions = engines.value.map((engine) => ({
-  label: engine.displayName,
+  label: engine.displayName + ` ${engine.power} hp`,
   value: engine.id,
 }));
 

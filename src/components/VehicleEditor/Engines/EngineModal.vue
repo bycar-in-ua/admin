@@ -134,12 +134,24 @@
     </n-form>
     <template #action>
       <div class="text-right">
-        <n-button v-if="isEdit" type="primary" @click="updateAction">
+        <n-button
+          v-if="isEdit"
+          type="primary"
+          @click="updateAction"
+          :disabled="isFetching"
+          :loading="isFetching"
+        >
           {{ t("update") }}
         </n-button>
-        <n-button v-else type="primary" @click="createAction">{{
-          t("create")
-        }}</n-button>
+        <n-button
+          v-else
+          type="primary"
+          @click="createAction"
+          :disabled="isFetching"
+          :loading="isFetching"
+        >
+          {{ t("create") }}
+        </n-button>
       </div>
     </template>
   </n-modal>
@@ -178,6 +190,7 @@ const { t } = useI18n();
 const notification = useNotification();
 
 const tradenames = ref([]);
+const isFetching = ref(false);
 
 onMounted(async () => {
   const res = await apiClient.get("/engines/tradenames");
@@ -222,24 +235,17 @@ const inputHandler = (field) => (val) => {
 };
 
 const createAction = async () => {
-  try {
-    await store.dispatch(carEditorNamespace(CREATE_NEW_ENGINE));
-    notification.success({
-      title: t("notifications.success.title.default"),
-      duration: 3000,
-    });
-  } catch (error) {
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: error.message,
-      duration: 5000,
-    });
-  }
+  await saveHelper(CREATE_NEW_ENGINE);
 };
 
 const updateAction = async () => {
+  await saveHelper(EDIT_ENGINE);
+};
+
+const saveHelper = async (action) => {
   try {
-    await store.dispatch(carEditorNamespace(EDIT_ENGINE));
+    isFetching.value = true;
+    await store.dispatch(carEditorNamespace(action));
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,
@@ -250,6 +256,8 @@ const updateAction = async () => {
       description: error.message,
       duration: 5000,
     });
+  } finally {
+    isFetching.value = false;
   }
 };
 </script>
