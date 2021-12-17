@@ -30,13 +30,14 @@ export default {
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import { NButton } from "naive-ui";
+import { NButton, useNotification } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
 import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
 import useClipboard from "@/hooks/useClipboard";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
 const { getImages } = useClipboard();
 
 const isUploading = ref(false);
@@ -56,8 +57,16 @@ const uploader = async (files) => {
     const uploadImages = await apiClient.uploadFiles("/upload", files);
     const newImages = await apiClient.post("/images", uploadImages);
     store.dispatch(FETCH_IMAGES);
+    notification.success({
+      title: t("images.save.success"),
+      duration: 3000,
+    });
   } catch (error) {
     console.log(error);
+    notification.error({
+      title: t("notifications.error.title.default"),
+      duration: 5000,
+    });
   } finally {
     isUploading.value = false;
   }

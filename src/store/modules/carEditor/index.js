@@ -47,8 +47,8 @@ const powerUnitEmptyTemplte = {
   speedUp100: null,
   maxSpeed: null,
   consumption: { city: null, highway: null, mixed: null },
-  engine: { id: null },
-  transmission: { id: null },
+  engine: null,
+  transmission: null,
 };
 
 export const carEditor = {

@@ -90,6 +90,8 @@ export const vehicleRU = {
       distributed: "Распределенный впрыск",
       mono: "Моновпрыск",
       combined: "Комбинированный",
+      unitInjectors: "Насос-форсунки",
+      commonRail: "Коммон-рейл",
     },
     fuelType: "Тип топлива",
     fuelTypes: {
@@ -289,6 +291,8 @@ export const vehicleUA = {
       distributed: "Розподілене впорскування",
       mono: "Моновпорскування",
       combined: "Кобміноване",
+      unitInjectors: "Насос-форсунки",
+      commonRail: "Комон-рейл",
     },
     fuelType: "Тип палива",
     fuelTypes: {

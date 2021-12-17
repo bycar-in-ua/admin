@@ -75,6 +75,7 @@ import {
   NIcon,
   NUpload,
   NUploadDragger,
+  useNotification,
 } from "naive-ui";
 import ColorCard from "../ColorCard";
 import { ArchiveOutline } from "@vicons/ionicons5";
@@ -105,6 +106,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const notification = useNotification();
 const { t } = useI18n();
 const { getImage } = useClipboard();
 
@@ -129,6 +131,16 @@ const createHandler = async () => {
       brandIdentity: carBrand.value,
     });
     toggleColorFormShowing(false);
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
   } finally {
     isFetching.value = false;
   }
@@ -139,6 +151,16 @@ const updateHandler = async () => {
     isFetching.value = true;
     await store.dispatch(UPDATE_COLOR, formModel.value);
     toggleColorFormShowing(false);
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
   } finally {
     isFetching.value = false;
   }
@@ -149,6 +171,16 @@ const uploader = async (file) => {
     isFetching.value = true;
     const colorImageLink = await apiClient.uploadFiles("/upload-color", [file]);
     formModel.value.reference = colorImageLink[0];
+    notification.success({
+      title: t("images.save.success"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
   } finally {
     isFetching.value = false;
   }

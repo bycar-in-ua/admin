@@ -10,14 +10,14 @@
         <n-form-item :label="t('vehicle.engine.title')">
           <n-select
             :options="engineOptions"
-            :value="powerUnit.engine.id"
+            :value="powerUnit.engine"
             :on-update:value="selectHandler('engine', index)"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.powerUnits.transmission')">
           <n-select
             :options="transmissionOptions"
-            :value="powerUnit.transmission.id"
+            :value="powerUnit.transmission"
             :on-update:value="selectHandler('transmission', index)"
           />
         </n-form-item>
@@ -148,35 +148,25 @@ const transmissionOptions = transmissions.value.map((transmission) => ({
 }));
 
 const getPowerUnitName = (powerUnit) => {
+  const engine = engines.value.find((e) => e.id === powerUnit.engine);
+  const transmission = transmissions.value.find(
+    (t) => t.id === powerUnit.transmission
+  );
+
   let title = "";
 
-  if (powerUnit.engine.displayName) title += powerUnit.engine.displayName + " ";
+  if (engine && engine.displayName) title += engine.displayName + " ";
 
-  if (powerUnit.transmission.drive) title += powerUnit.transmission.drive + " ";
+  if (transmission) {
+    title += transmission.drive + " ";
 
-  if (powerUnit.transmission.gearbox?.numberOfGears)
-    title += powerUnit.transmission.gearbox.numberOfGears + " ";
+    title += transmission.gearbox.numberOfGears + " ";
 
-  if (powerUnit.transmission.gearbox?.type)
     title += t(
-      "vehicle.transmission.gearbox.types." +
-        powerUnit.transmission?.gearbox?.type
+      "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
     );
-
-  return title;
-};
-
-const getSelectedItem = (itemType, itemId) => {
-  switch (itemType) {
-    case "engine":
-      return engines.value.find((engine) => engine.id === itemId);
-    case "transmission":
-      return transmissions.value.find(
-        (transmission) => transmission.id === itemId
-      );
-    default:
-      return {};
   }
+  return title;
 };
 
 const selectHandler = (field, powerUnitIndex) => (value) => {
@@ -184,7 +174,7 @@ const selectHandler = (field, powerUnitIndex) => (value) => {
     props.complectationIndex,
     powerUnitIndex,
     field,
-    getSelectedItem(field, value),
+    value,
   ]);
 };
 
@@ -206,12 +196,13 @@ const deleteHandler = async (powerUnit) => {
       props.complectationIndex,
     ]);
     notification.success({
-      title: "Uspeh",
+      title: t("notifications.success.title.default"),
       duration: 3000,
     });
   } catch (error) {
     notification.error({
-      title: "Ne USPEH",
+      title: t("notifications.error.title.default"),
+      description: error.message,
       duration: 5000,
     });
   } finally {
