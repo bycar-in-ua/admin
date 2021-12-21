@@ -1,13 +1,6 @@
 <template>
   <div
-    class="
-      my-4
-      grid grid-cols-2
-      md:grid-cols-4
-      xl:grid-cols-6
-      2xl:grid-cols-8
-      gap-4
-    "
+    class="my-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4"
   >
     <n-card
       v-for="brand in brands"

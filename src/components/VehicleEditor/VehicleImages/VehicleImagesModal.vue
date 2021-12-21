@@ -12,17 +12,7 @@
     />
     <div
       v-if="isFetching"
-      class="
-        absolute
-        left-0
-        right-0
-        top-0
-        bottom-0
-        flex
-        justify-center
-        items-center
-        bg-gray-600 bg-opacity-50
-      "
+      class="absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-gray-600 bg-opacity-50"
     >
       <n-spin size="medium" />
     </div>

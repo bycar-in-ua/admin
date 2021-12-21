@@ -12,14 +12,7 @@
       />
       <n-icon
         size="30"
-        class="
-          icon
-          cursor-pointer
-          left-0
-          top-0
-          hover:text-primary
-          transition-all
-        "
+        class="icon cursor-pointer left-0 top-0 hover:text-primary transition-all"
         @click="closeHandler"
         :title="t('delete') + ': ' + color?.name"
       >
@@ -28,14 +21,7 @@
       <n-icon
         v-if="editable"
         size="30"
-        class="
-          icon
-          cursor-pointer
-          right-0
-          top-0
-          hover:text-primary
-          transition-all
-        "
+        class="icon cursor-pointer right-0 top-0 hover:text-primary transition-all"
         @click="editAction(color)"
         :title="t('edit') + ': ' + color?.name"
       >
@@ -43,18 +29,7 @@
       </n-icon>
       <div
         v-if="isFetching"
-        class="
-          absolute
-          left-0
-          top-0
-          right-0
-          bottom-0
-          flex
-          justify-center
-          items-center
-          bg-primary-light bg-opacity-30
-          rounded-full
-        "
+        class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-primary-light bg-opacity-30 rounded-full"
       >
         <n-spin size="medium" />
       </div>

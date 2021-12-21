@@ -5,17 +5,7 @@
     </n-icon>
     <div
       v-if="isDeleting"
-      class="
-        absolute
-        left-0
-        top-0
-        right-0
-        bottom-0
-        flex
-        justify-center
-        items-center
-        bg-red-500 bg-opacity-50
-      "
+      class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-red-500 bg-opacity-50"
     >
       <n-spin size="medium" stroke="red" />
     </div>

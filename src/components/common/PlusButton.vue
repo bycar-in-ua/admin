@@ -1,17 +1,6 @@
 <template>
   <div
-    class="
-      shadow-lg
-      rounded
-      border border-gray-300
-      flex
-      justify-center
-      items-center
-      cursor-pointer
-      transition-all
-      hover:bg-gray-300
-      p-8
-    "
+    class="shadow-lg rounded border border-gray-300 flex justify-center items-center cursor-pointer transition-all hover:bg-gray-300 p-8"
     @click="props.callback"
   >
     <n-icon size="40" :color="colors.primary.lighten1">

@@ -45,7 +45,27 @@
           :on-update:value="inputHandler('discDiameter')"
         />
       </n-form-item>
-
+      <n-form-item
+        :label="t('vehicle.generalCharacteristics.manufactureCountry')"
+      >
+        <n-input
+          :value="car.manufactureCountry"
+          :on-update:value="inputHandler('manufactureCountry')"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.generalCharacteristics.euroncap')">
+        <n-rate
+          allow-half
+          :value="car.euroncap"
+          :on-update:value="inputHandler('euroncap')"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.generalCharacteristics.euroncapLink')">
+        <n-input
+          :value="car.euroncapLink"
+          :on-update:value="inputHandler('euroncapLink')"
+        />
+      </n-form-item>
       <n-divider class="sm:col-span-2 md:col-span-3">
         {{ t("vehicle.generalCharacteristics.dimensions.title") }}
       </n-divider>
@@ -132,6 +152,8 @@ import {
   NForm,
   NFormItem,
   NInputNumber,
+  NInput,
+  NRate,
   NSelect,
 } from "naive-ui";
 import { carEditorNamespace } from "@/store/modules/carEditor";

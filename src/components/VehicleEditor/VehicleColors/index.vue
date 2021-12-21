@@ -1,13 +1,7 @@
 <template>
   <n-card :title="t('colors.title', 2)" class="my-4 shadow">
     <div
-      class="
-        grid grid-cols-3
-        sm:grid-cols-4
-        md:grid-cols-5
-        xl:grid-cols-6
-        gap-4
-      "
+      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
     >
       <ColorCard
         v-for="color in colors"
