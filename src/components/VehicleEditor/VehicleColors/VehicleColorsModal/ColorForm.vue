@@ -208,3 +208,9 @@ onBeforeUnmount(() => {
   window.removeEventListener("paste", pasteListener);
 });
 </script>
+
+<style>
+.n-upload--dragger-inside .n-upload-trigger {
+  display: block;
+}
+</style>

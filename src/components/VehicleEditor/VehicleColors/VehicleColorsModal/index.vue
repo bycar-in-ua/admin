@@ -68,17 +68,15 @@ const colorTemplate = {
 };
 
 const isColorsFormShowing = ref(false);
-const colorRef = ref(colorTemplate);
+const colorRef = ref({ ...colorTemplate });
 
-const toggleColorForm = (val, editableColor = false) => {
-  if (editableColor) {
-    colorRef.value = editableColor;
-  }
+const toggleColorForm = (val, editableColor = colorTemplate) => {
+  colorRef.value = { ...editableColor };
   isColorsFormShowing.value = val;
 };
 
 const discardColorForm = () => {
-  colorRef.value = colorTemplate;
+  colorRef.value = { ...colorTemplate };
   isColorsFormShowing.value = false;
 };
 

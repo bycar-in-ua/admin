@@ -7,7 +7,7 @@
       :collapsed-width="64"
       :width="240"
       :collapsed="collapsed"
-      show-trigger
+      show-trigger="bar"
       @collapse="collapsed = true"
       @expand="collapsed = false"
       :style="navStyle"
