@@ -53,19 +53,59 @@
           :on-update:value="inputHandler('manufactureCountry')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.generalCharacteristics.euroncap')">
+      <n-form-item :label="t('vehicle.generalCharacteristics.crashTestsRate')">
         <n-rate
           allow-half
-          :value="car.euroncap"
-          :on-update:value="inputHandler('euroncap')"
+          :value="car.crashTestsRate"
+          :on-update:value="inputHandler('crashTestsRate')"
         />
+        <n-icon
+          size="24"
+          :title="t('clear')"
+          class="cursor-pointer hover:text-red-400 transition-all"
+          @click="inputHandler('crashTestsRate')(null)"
+        >
+          <Close />
+        </n-icon>
       </n-form-item>
-      <n-form-item :label="t('vehicle.generalCharacteristics.euroncapLink')">
+      <n-form-item
+        :label="t('vehicle.generalCharacteristics.crashTestsRateLink')"
+      >
         <n-input
-          :value="car.euroncapLink"
-          :on-update:value="inputHandler('euroncapLink')"
+          :value="car.crashTestsRateLink"
+          :on-update:value="inputHandler('crashTestsRateLink')"
         />
       </n-form-item>
+
+      <n-form-item :label="t('vehicle.generalCharacteristics.warantyYears')">
+        <n-input-number
+          :value="car.warantyYears"
+          :on-update:value="inputHandler('warantyYears')"
+        />
+      </n-form-item>
+      <n-form-item
+        :label="t('vehicle.generalCharacteristics.warantyYearsPaintwork')"
+      >
+        <n-input-number
+          :value="car.warantyYearsPaintwork"
+          :on-update:value="inputHandler('warantyYearsPaintwork')"
+        />
+      </n-form-item>
+      <n-form-item
+        :label="t('vehicle.generalCharacteristics.warantyYearsCorroison')"
+      >
+        <n-input-number
+          :value="car.warantyYearsCorroison"
+          :on-update:value="inputHandler('warantyYearsCorroison')"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.generalCharacteristics.warantyMileage')">
+        <n-input-number
+          :value="car.warantyMileage"
+          :on-update:value="inputHandler('warantyMileage')"
+        />
+      </n-form-item>
+
       <n-divider class="sm:col-span-2 md:col-span-3">
         {{ t("vehicle.generalCharacteristics.dimensions.title") }}
       </n-divider>
@@ -155,7 +195,9 @@ import {
   NInput,
   NRate,
   NSelect,
+  NIcon,
 } from "naive-ui";
+import { Close } from "@vicons/ionicons5";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
 import { vehicleRU as vehicleTranslations } from "@/i18n/vehicle";

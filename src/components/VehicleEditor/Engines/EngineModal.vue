@@ -327,10 +327,12 @@ const fuelTypes = Object.keys(vehicleWordings.engine.fuelTypes).map((type) => ({
   label: t(`vehicle.engine.fuelTypes.${type}`),
 }));
 
-const turboTypes = ["Twin Turbo", "Biturbo"].map((t) => ({
-  value: t,
-  label: t,
-}));
+const turboTypes = Object.keys(vehicleWordings.engine.turboTypes).map(
+  (turbo) => ({
+    value: turbo,
+    label: t(`vehicle.engine.turboTypes.${turbo}`),
+  })
+);
 
 const pistonsPlacement = Object.keys(
   vehicleWordings.engine.pistonsPlacements
