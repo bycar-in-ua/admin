@@ -20,7 +20,6 @@
       <n-upload
         :on-change="formUploadHandler"
         :show-file-list="false"
-        list-type="image-card"
         class="mb-4"
       >
         <n-upload-dragger class="relative">
