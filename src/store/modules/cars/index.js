@@ -1,6 +1,6 @@
 import apiClient from "@/helpers/apiClient";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
-import { FETCH_CARS } from "./actionTypes";
+import { FETCH_CARS, DUPLICATE_CAR } from "./actionTypes";
 import { UPDATE_CARS, UPDATE_CARS_META } from "./mutationTypes";
 
 export const cars = {
@@ -20,6 +20,15 @@ export const cars = {
         commit(UPDATE_CARS, cars.items);
         commit(UPDATE_CARS_META, cars.meta);
       } finally {
+        commit("updateFetching", false);
+      }
+    },
+    async [DUPLICATE_CAR]({ commit, dispatch }, targetCarId) {
+      try {
+        commit("updateFetching", true);
+        await apiClient.post(`/vehicles/duplicate/${targetCarId}`);
+        dispatch(FETCH_CARS);
+      } catch (e) {
         commit("updateFetching", false);
       }
     },
