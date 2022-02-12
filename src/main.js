@@ -10,8 +10,8 @@ import { getCookie } from "./helpers/cookieHelpers";
 
 const i18n = createI18n({
   legacy: false,
-  locale: getCookie("lang") || "ua",
-  fallbackLocale: "ua",
+  locale: getCookie("lang") || "ru",
+  fallbackLocale: "ru",
   messages,
 });
 
