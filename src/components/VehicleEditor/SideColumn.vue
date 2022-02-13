@@ -1,5 +1,5 @@
 <template>
-  <n-form :model="car" :rules="rules">
+  <n-form :model="car" :rules="rules" ref="formRef">
     <div class="text-right mb-4">
       <n-button type="primary" @click="saveAction" :disabled="!isEdited">
         <template v-if="isFetching">
@@ -32,7 +32,7 @@
         :placeholder="t('vehicle.enterModel')"
       />
     </n-form-item>
-    <n-form-item :label="t('vehicle.modelYear')" path="year">
+    <n-form-item :label="t('vehicle.modelYear')">
       <n-input-group>
         <n-input-number
           class="w-full"
@@ -55,6 +55,24 @@
         :on-update:value="updateCarField('bodyName')"
       />
     </n-form-item>
+    <n-form-item :label="t('vehicle.slug')" path="slug">
+      <n-input
+        type="text"
+        :value="car.slug"
+        :on-update:value="updateCarField('slug')"
+      >
+        <template #suffix>
+          <n-popover trigger="hover">
+            <template #trigger>
+              <n-icon size="20" class="cursor-help">
+                <InformationCircleOutline />
+              </n-icon>
+            </template>
+            {{ t("vehicle.slugDescription") }}
+          </n-popover>
+        </template>
+      </n-input>
+    </n-form-item>
   </n-form>
 </template>
 
@@ -65,14 +83,13 @@ export default {
 </script>
 
 <script setup>
-import { h, computed } from "vue";
+import { h, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-
-import { yearValidator } from "@/helpers/validators";
+import { yearValidator, slugValidator } from "@/helpers/validators";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
-
+import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
   NButton,
   NForm,
@@ -83,6 +100,8 @@ import {
   NInputGroup,
   NImage,
   NSpin,
+  NPopover,
+  NIcon,
   useNotification,
   useLoadingBar,
 } from "naive-ui";
@@ -94,6 +113,8 @@ const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();
 const loading = useLoadingBar();
+
+const formRef = ref(null);
 
 const car = computed(() => store.state.carEditor.car);
 const isEdited = computed(() => store.state.carEditor.isEdited);
@@ -127,8 +148,11 @@ const rules = {
   },
   year: {
     required: true,
-    message: "Поле Год не может быть пустым",
     validator: yearValidator,
+  },
+  slug: {
+    required: true,
+    validator: slugValidator,
   },
 };
 
@@ -137,6 +161,7 @@ const updateCarField = (field) => (val) =>
 
 const saveAction = async () => {
   try {
+    await formRef.value.validate();
     loading.start();
     await store.dispatch(carEditorNamespace(SAVE_CAR));
     notification.success({

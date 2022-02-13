@@ -3,6 +3,7 @@ export const notificationsRU = {
     title: {
       default: "Упс! Что-то пошло не так =(",
     },
+    empty: "Это поле не может быть пустым",
   },
   success: {
     title: {
@@ -36,6 +37,7 @@ export const notificationsUA = {
     title: {
       default: "Упс! Щось пішло не так =(",
     },
+    empty: "Це поле не може бути пустим",
   },
   success: {
     title: {

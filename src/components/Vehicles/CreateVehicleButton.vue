@@ -53,6 +53,20 @@
         <n-form-item :label="t('vehicle.bodyName')">
           <n-input v-model:value="formModel.bodyName" type="text" />
         </n-form-item>
+        <n-form-item :label="t('vehicle.slug')" path="slug">
+          <n-input v-model:value="formModel.slug" type="text">
+            <template #suffix>
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <n-icon size="20" class="cursor-help">
+                    <InformationCircleOutline />
+                  </n-icon>
+                </template>
+                {{ t("vehicle.slugDescription") }}
+              </n-popover>
+            </template>
+          </n-input>
+        </n-form-item>
       </n-form>
       <template #action>
         <div class="text-right">
@@ -76,12 +90,11 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-
 import apiClient from "@/helpers/apiClient";
-import { yearValidator } from "@/helpers/validators";
+import { yearValidator, slugValidator } from "@/helpers/validators";
 import { brandNamespace } from "@/store/modules/brands";
 import { FETCH_BRANDS } from "@/store/modules/brands/actionTypes";
-
+import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
   NButton,
   NModal,
@@ -91,6 +104,8 @@ import {
   NInput,
   NInputNumber,
   NInputGroup,
+  NIcon,
+  NPopover,
   useNotification,
 } from "naive-ui";
 
@@ -110,6 +125,10 @@ const rules = {
   yearFrom: {
     required: true,
     validator: yearValidator,
+  },
+  slug: {
+    required: true,
+    validator: slugValidator,
   },
 };
 
@@ -135,6 +154,7 @@ const formModel = ref({
   yearFrom: null,
   yearTo: null,
   bodyName: null,
+  slug: null,
 });
 
 const createOptions = (options) =>
