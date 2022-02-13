@@ -1,14 +1,21 @@
 <template>
   <div class="flex my-4">
     <n-button
-      v-if="selectable"
+      v-if="selectable && discardable"
       type="primary"
+      class="mr-4"
       @click="setUnselectable"
       :disabled="isFetching"
     >
       {{ t("discard") }}
     </n-button>
-    <n-button v-else type="primary" ghost @click="setSelectable">
+    <n-button
+      v-if="!selectable"
+      class="mr-4"
+      type="primary"
+      ghost
+      @click="setSelectable"
+    >
       {{ t("choose", 2) }}
     </n-button>
 
@@ -21,7 +28,7 @@
     <template v-if="selectedImages.length">
       <n-button
         type="error"
-        class="mx-4"
+        class="mr-4"
         :disabled="isFetching"
         :loading="isFetching"
         @click="deleteHandler"
@@ -65,6 +72,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  discardable: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const setSelectable = inject("setImagesSelectable");
@@ -76,7 +87,10 @@ const isFetching = ref(false);
 const deleteHandler = async () => {
   try {
     isFetching.value = true;
-    await apiClient.delete("/images", props.selectedImages);
+    await apiClient.delete(
+      "/images",
+      props.selectedImages.map((image) => image.id)
+    );
     store.dispatch(FETCH_IMAGES);
     setUnselectable();
   } finally {

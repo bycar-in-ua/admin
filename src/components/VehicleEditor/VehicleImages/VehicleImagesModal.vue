@@ -58,7 +58,7 @@ const toolbarActions = [
       NButton,
       {
         type: "primary",
-        class: "ml-4",
+        class: "mr-4",
       },
       t("vehicle.images.saveVehicleImages")
     ),
@@ -67,7 +67,7 @@ const toolbarActions = [
         isFetching.value = true;
         await store.dispatch(
           carEditorNamespace(SAVE_CAR_IMAGES),
-          selectedImages
+          selectedImages.map((image) => image.id)
         );
         props.toggleCallback(false);
       } finally {

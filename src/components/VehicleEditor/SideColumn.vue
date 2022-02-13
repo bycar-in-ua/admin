@@ -73,7 +73,36 @@
         </template>
       </n-input>
     </n-form-item>
+    <p>
+      {{ t("vehicle.featureImage") }}
+    </p>
+    <div
+      class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer"
+      @click="setModalOpen(true)"
+      style="min-height: 100px"
+    >
+      <img
+        v-if="car.featureImage"
+        :src="cdnLink(car.featureImage.path, 300)"
+        preview-disabled
+        height="180"
+      />
+    </div>
   </n-form>
+  <n-modal
+    :show="showImageModal"
+    @update:show="setModalOpen"
+    preset="card"
+    class="max-w-6xl"
+  >
+    <Images
+      :is-selectable="true"
+      :single-selection="true"
+      :discardable="false"
+      :toolbar-actions="toolbarActions"
+      :preselected-images="[car.featureImage ? car.featureImage : false]"
+    />
+  </n-modal>
 </template>
 
 <script>
@@ -86,6 +115,7 @@ export default {
 import { h, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
+import Images from "@/components/Images";
 import { yearValidator, slugValidator } from "@/helpers/validators";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
@@ -102,6 +132,7 @@ import {
   NSpin,
   NPopover,
   NIcon,
+  NModal,
   useNotification,
   useLoadingBar,
 } from "naive-ui";
@@ -114,6 +145,7 @@ const { t } = useI18n();
 const notification = useNotification();
 const loading = useLoadingBar();
 
+const showImageModal = ref(false);
 const formRef = ref(null);
 
 const car = computed(() => store.state.carEditor.car);
@@ -130,6 +162,7 @@ const renderBrandLabel = (option) => {
     return h("div", { className: "flex items-center" }, [
       h(NImage, {
         src: cdnLink(option.value.logo, 100),
+        previewDisabled: true,
         objectFit: "contain",
         height: 27,
         width: 27,
@@ -179,4 +212,26 @@ const saveAction = async () => {
     loading.finish();
   }
 };
+
+const setModalOpen = (val) => {
+  showImageModal.value = val;
+};
+
+const toolbarActions = [
+  {
+    component: h(
+      NButton,
+      {
+        type: "primary",
+        class: "mr-4",
+      },
+      t("save")
+    ),
+    clickCallback: async (selectedImages) => {
+      updateCarField("featureImage")(selectedImages[0]);
+      setModalOpen(false);
+      await saveAction();
+    },
+  },
+];
 </script>

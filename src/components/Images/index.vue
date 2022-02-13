@@ -3,6 +3,7 @@
     :selectable="selectable"
     :selected-images="selectedImages"
     :additional-actions="toolbarActions"
+    :discardable="discardable"
   />
   <div
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-4"
@@ -20,7 +21,7 @@
           :key="image.id"
           :image="image"
           :selectable="selectable"
-          :selected="selectedImages.includes(image.id)"
+          :selected="selectedImagesIds.includes(image.id)"
         />
       </template>
     </n-image-group>
@@ -61,6 +62,14 @@ const props = defineProps({
     default: false,
     requierd: false,
   },
+  discardable: {
+    type: Boolean,
+    default: true,
+  },
+  singleSelection: {
+    type: Boolean,
+    default: false,
+  },
   preselectedImages: {
     type: Array,
     default: () => [],
@@ -76,6 +85,9 @@ store.dispatch(FETCH_IMAGES);
 const selectable = ref(props.isSelectable);
 
 const selectedImages = ref(props.preselectedImages);
+const selectedImagesIds = computed(() =>
+  selectedImages.value.map((image) => image.id)
+);
 
 const handlePagination = (page) => {
   store.dispatch(FETCH_IMAGES, page);
@@ -90,13 +102,17 @@ provide("setImagesUnselectable", () => {
   selectedImages.value = [];
 });
 
-provide("addImageToSelection", (imageId) => {
-  selectedImages.value.push(imageId);
+provide("addImageToSelection", (image) => {
+  if (props.singleSelection) {
+    selectedImages.value = [image];
+    return;
+  }
+  selectedImages.value.push(image);
 });
 
-provide("removeImageFromSelection", (imageId) => {
+provide("removeImageFromSelection", (image) => {
   selectedImages.value = selectedImages.value.filter(
-    (item) => item !== imageId
+    (item) => item.id !== image.id
   );
 });
 
