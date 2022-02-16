@@ -57,6 +57,13 @@ import { NImageGroup, NPagination, NSkeleton, NEmpty } from "naive-ui";
 import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
 
 const props = defineProps({
+  vuexAction: {
+    type: String,
+    default: FETCH_IMAGES,
+  },
+  actionPayload: {
+    default: 1,
+  },
   isSelectable: {
     type: Boolean,
     default: false,
@@ -80,7 +87,7 @@ const props = defineProps({
 const store = useStore();
 const { t } = useI18n();
 
-store.dispatch(FETCH_IMAGES);
+store.dispatch(props.vuexAction, props.actionPayload);
 
 const selectable = ref(props.isSelectable);
 

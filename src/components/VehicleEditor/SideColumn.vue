@@ -101,6 +101,8 @@
       :discardable="false"
       :toolbar-actions="toolbarActions"
       :preselected-images="[car.featureImage ? car.featureImage : false]"
+      :vuex-action="SET_IMAGES"
+      :action-payload="car.images"
     />
   </n-modal>
 </template>
@@ -139,7 +141,7 @@ import {
 import { cdnLink } from "@/helpers/cdn";
 import { statuses } from "@/helpers/postStatuses";
 import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
-
+import { SET_IMAGES } from "@/store/modules/library/images/actionTypes";
 const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();

@@ -1,6 +1,6 @@
 import apiClient from "@/helpers/apiClient";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
-import { FETCH_IMAGES } from "./actionTypes";
+import { FETCH_IMAGES, SET_IMAGES } from "./actionTypes";
 import {
   UPDATE_IMAGES,
   UPDATE_IMAGES_FETCHING,
@@ -24,6 +24,10 @@ export const images = {
       } finally {
         commit(UPDATE_IMAGES_FETCHING, false);
       }
+    },
+    [SET_IMAGES]({ commit }, images) {
+      commit(UPDATE_IMAGES, images);
+      commit(UPDATE_IMAGES_META, { currentPage: 1, totalPages: null });
     },
   },
   mutations: {
