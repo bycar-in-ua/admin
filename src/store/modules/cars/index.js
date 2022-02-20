@@ -16,7 +16,7 @@ export const cars = {
     async [FETCH_CARS]({ commit }, page = 1) {
       try {
         commit("updateFetching", true);
-        const cars = await apiClient.get(`/vehicles?page=${page}`);
+        const cars = await apiClient.get(`/vehicles/all?page=${page}`);
         commit(UPDATE_CARS, cars.items);
         commit(UPDATE_CARS_META, cars.meta);
       } finally {
