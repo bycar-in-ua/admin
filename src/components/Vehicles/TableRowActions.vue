@@ -35,7 +35,7 @@ const router = useRouter();
 const store = useStore();
 
 const editAction = () => {
-  router.push({ name: "EditVehicle", params: { id: props.rowData.key } });
+  router.push({ name: "EditVehicle", params: { slug: props.rowData.slug } });
 };
 
 const duplicateAction = () => {

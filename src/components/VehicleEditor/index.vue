@@ -56,7 +56,7 @@ const dialog = useDialog();
 
 store.dispatch(
   carEditorNamespace(FETCH_CAR),
-  router.currentRoute.value.params.id
+  router.currentRoute.value.params.slug
 );
 store.dispatch(FETCH_OPTION_CATEGORIES);
 store.dispatch(FETCH_OPTIONS);

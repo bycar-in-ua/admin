@@ -24,7 +24,7 @@ export default {
 
 <script setup>
 import { computed, h } from "vue";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { NDataTable, NTag, NPagination } from "naive-ui";
 import { useStore } from "vuex";
@@ -34,7 +34,7 @@ import { prepareCarTitle } from "@/helpers/preparers";
 import TableRowActions from "./TableRowActions";
 
 const store = useStore();
-const router = useRouter();
+// const router = useRouter();
 const { t } = useI18n();
 
 store.dispatch(FETCH_CARS);
@@ -46,51 +46,87 @@ const cars = computed(() => store.state.cars);
 const createData = (cars) =>
   cars.items.map((car) => ({
     key: car.id,
+    slug: car.slug,
     name: prepareCarTitle(car),
     status: car.status,
   }));
 
-const createColumns = ({ editCallback }) => {
-  return [
-    // {
-    //   type: "selection",
-    // },
-    {
-      title: t("vehicle.table.cols.name"),
-      key: "name",
-    },
-    {
-      title: t("vehicle.table.cols.status"),
-      key: "status",
-      render(row) {
-        return h(
-          NTag,
-          {
-            type: getStatusTag(row.status),
-          },
-          {
-            default: t("vehicle.status." + row.status),
-          }
-        );
-      },
-    },
-    {
-      title: t("vehicle.table.cols.actions"),
-      key: "actions",
-      render(row) {
-        return h(TableRowActions, {
-          rowData: row,
-        });
-      },
-    },
-  ];
-};
+// const createColumns = ({ editCallback }) => {
+//   return [
+//     // {
+//     //   type: "selection",
+//     // },
+//     {
+//       title: t("vehicle.table.cols.name"),
+//       key: "name",
+//     },
+//     {
+//       title: t("vehicle.table.cols.status"),
+//       key: "status",
+//       render(row) {
+//         return h(
+//           NTag,
+//           {
+//             type: getStatusTag(row.status),
+//           },
+//           {
+//             default: t("vehicle.status." + row.status),
+//           }
+//         );
+//       },
+//     },
+//     {
+//       title: t("vehicle.table.cols.actions"),
+//       key: "actions",
+//       render(row) {
+//         return h(TableRowActions, {
+//           rowData: row,
+//         });
+//       },
+//     },
+//   ];
+// };
 
-const columns = createColumns({
-  editCallback(rowData) {
-    router.push({ name: "EditVehicle", params: { id: rowData.key } });
+// const columns = createColumns({
+//   editCallback(rowData) {
+//     console.log(rowData, router);
+//     // router.push({ name: "EditVehicle", params: { slug: rowData.key } });
+//   },
+// });
+
+const columns = [
+  // {
+  //   type: "selection",
+  // },
+  {
+    title: t("vehicle.table.cols.name"),
+    key: "name",
   },
-});
+  {
+    title: t("vehicle.table.cols.status"),
+    key: "status",
+    render(row) {
+      return h(
+        NTag,
+        {
+          type: getStatusTag(row.status),
+        },
+        {
+          default: t("vehicle.status." + row.status),
+        }
+      );
+    },
+  },
+  {
+    title: t("vehicle.table.cols.actions"),
+    key: "actions",
+    render(row) {
+      return h(TableRowActions, {
+        rowData: row,
+      });
+    },
+  },
+];
 
 // const handleCheck = (rowKeys) => {
 //   selectedRows.value = rowKeys;
