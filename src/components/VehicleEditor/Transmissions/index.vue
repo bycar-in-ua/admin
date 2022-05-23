@@ -4,7 +4,7 @@
     size="small"
     class="my-4 shadow"
   >
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="editors-cards-grid">
       <n-card
         v-for="transmission in transmissions"
         :key="transmission.id"

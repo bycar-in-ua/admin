@@ -1,6 +1,7 @@
 import engine from "./engine";
 import transmission from "./transmission";
 import options from "./options";
+import complectation from "./complectation";
 
 import apiClient from "@/helpers/apiClient";
 import {
@@ -9,13 +10,11 @@ import {
   SAVE_CAR,
   CREATE_NEW_COMPLECTATION,
   SET_COMPLECTATION_OPTIONS,
-  CHANGE_COMPLECTATION_NAME,
   SET_POWER_UNIT_OPTION,
   SAVE_CAR_IMAGES,
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
   DELETE_POWER_UNIT,
-  COPY_COMPLECTATION_DATA,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -59,7 +58,7 @@ export const carEditor = {
     isFetching: false,
     isEdited: false,
   }),
-  modules: { engine, transmission, options },
+  modules: { engine, transmission, complectation, options },
   actions: {
     async [FETCH_CAR]({ commit }, carId) {
       const car = await apiClient.get(`/vehicles/${carId}`);
@@ -92,19 +91,6 @@ export const carEditor = {
         [...state.car.complectations, newComplectation],
       ]);
       commit(UPDATE_ALL_OPTIONS, state.car.complectations);
-    },
-    async [CHANGE_COMPLECTATION_NAME](
-      { commit, state },
-      [complectationIndex, name]
-    ) {
-      const targetComplectation = state.car.complectations[complectationIndex];
-      await apiClient.put(`/complectations/${targetComplectation.id}`, {
-        displayName: name,
-      });
-      commit(UPDATE_CAR_FIELD, [
-        `complectations[${complectationIndex}].displayName`,
-        name,
-      ]);
     },
     async [SAVE_CAR_IMAGES]({ state, commit }, imagesIds) {
       const carImages = await apiClient.put(
@@ -141,29 +127,29 @@ export const carEditor = {
         ),
       ]);
     },
-    [COPY_COMPLECTATION_DATA](
-      { commit, state },
-      [targetComplectationIndex, referenceComplectationId]
-    ) {
-      const referenceComplectation = state.car.complectations.find(
-        (cmpl) => cmpl.id === referenceComplectationId
-      );
+    // [COPY_COMPLECTATION_DATA](
+    //   { commit, state },
+    //   [targetComplectationIndex, referenceComplectationId]
+    // ) {
+    //   const referenceComplectation = state.car.complectations.find(
+    //     (cmpl) => cmpl.id === referenceComplectationId
+    //   );
 
-      if (referenceComplectation && referenceComplectation.options) {
-        commit(UPDATE_CAR_FIELD, [
-          `complectations[${targetComplectationIndex}].options`,
-          referenceComplectation.options,
-        ]);
-        commit(UPDATE_ALL_OPTIONS, state.car.complectations);
-        commit(UPDATE_CAR_FIELD, [
-          `complectations[${targetComplectationIndex}].powerUnits`,
-          referenceComplectation.powerUnits.map((unit) => ({
-            ...unit,
-            id: undefined,
-          })),
-        ]);
-      }
-    },
+    //   if (referenceComplectation && referenceComplectation.options) {
+    //     commit(UPDATE_CAR_FIELD, [
+    //       `complectations[${targetComplectationIndex}].options`,
+    //       referenceComplectation.options,
+    //     ]);
+    //     commit(UPDATE_ALL_OPTIONS, state.car.complectations);
+    //     commit(UPDATE_CAR_FIELD, [
+    //       `complectations[${targetComplectationIndex}].powerUnits`,
+    //       referenceComplectation.powerUnits.map((unit) => ({
+    //         ...unit,
+    //         id: undefined,
+    //       })),
+    //     ]);
+    //   }
+    // },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },
       [complectationIndex, optionIds]

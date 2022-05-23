@@ -68,10 +68,7 @@ const memory = useMemory();
 
 const { t } = useI18n();
 
-const navBgImage = memory.get(
-  "navBgImage",
-  "https://images.drive.ru/i/0/5e95a4eeec05c42d5e000028.jpg"
-);
+const navBgImage = memory.get("navBgImage", "");
 
 const navStyle = {
   background: `linear-gradient(

@@ -86,6 +86,7 @@
         :src="cdnLink(car.featureImage.path, 300)"
         preview-disabled
         height="180"
+        class="w-full"
       />
     </div>
   </n-form>

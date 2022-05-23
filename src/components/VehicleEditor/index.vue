@@ -1,6 +1,6 @@
 <template>
   <div v-if="isFetched" class="flex relative">
-    <n-scrollbar class="pr-6 mr-1" style="flex: 0 0 75%; max-height: 85vh">
+    <n-scrollbar class="pr-6 mr-1" style="flex: 0 0 75%; max-height: 86vh">
       <VehicleTitle />
       <DescriptionEditor />
       <GeneralOptions />
