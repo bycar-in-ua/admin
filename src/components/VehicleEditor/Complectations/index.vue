@@ -72,11 +72,11 @@ const newComplectationName = ref("");
 const showModal = ref(false);
 
 const openEditModal = (complectation) => {
-  showModal.value = true;
   store.dispatch(
     carEditorNamespace(OPEN_COMPLECTATION_EDIT_MODAL),
     complectation
   );
+  showModal.value = true;
 };
 
 const createComplectation = async () => {

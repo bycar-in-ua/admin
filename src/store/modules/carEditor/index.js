@@ -60,8 +60,8 @@ export const carEditor = {
   }),
   modules: { engine, transmission, complectation, options },
   actions: {
-    async [FETCH_CAR]({ commit }, carId) {
-      const car = await apiClient.get(`/vehicles/${carId}`);
+    async [FETCH_CAR]({ commit }, carSlug) {
+      const car = await apiClient.get(`/vehicles/${carSlug}/for-edit`);
       commit("updateFetched", true);
       commit(UPDATE_ALL_OPTIONS, car.complectations);
       commit(UPDATE_CAR, prepareCar(car));
@@ -127,29 +127,6 @@ export const carEditor = {
         ),
       ]);
     },
-    // [COPY_COMPLECTATION_DATA](
-    //   { commit, state },
-    //   [targetComplectationIndex, referenceComplectationId]
-    // ) {
-    //   const referenceComplectation = state.car.complectations.find(
-    //     (cmpl) => cmpl.id === referenceComplectationId
-    //   );
-
-    //   if (referenceComplectation && referenceComplectation.options) {
-    //     commit(UPDATE_CAR_FIELD, [
-    //       `complectations[${targetComplectationIndex}].options`,
-    //       referenceComplectation.options,
-    //     ]);
-    //     commit(UPDATE_ALL_OPTIONS, state.car.complectations);
-    //     commit(UPDATE_CAR_FIELD, [
-    //       `complectations[${targetComplectationIndex}].powerUnits`,
-    //       referenceComplectation.powerUnits.map((unit) => ({
-    //         ...unit,
-    //         id: undefined,
-    //       })),
-    //     ]);
-    //   }
-    // },
     [SET_COMPLECTATION_OPTIONS](
       { rootState, commit },
       [complectationIndex, optionIds]

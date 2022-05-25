@@ -16,11 +16,11 @@ export const prepareOptionsByCategoties = (acc, cur) => {
 };
 
 export const prepareOptionIdsByCategoties = (acc, cur) => {
-  if (acc[cur.category]) {
-    acc[cur.category].push(cur.id);
+  if (acc[cur.categoryId]) {
+    acc[cur.categoryId].push(cur.id);
   } else {
-    acc[cur.category] = [];
-    acc[cur.category].push(cur.id);
+    acc[cur.categoryId] = [];
+    acc[cur.categoryId].push(cur.id);
   }
   return acc;
 };
@@ -46,3 +46,6 @@ export const prepareCarTitle = (car) => {
 
   return title;
 };
+
+export const flatObject = (obj) =>
+  Object.entries(obj).flatMap((item) => item[1]);

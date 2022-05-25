@@ -34,7 +34,9 @@ export const library = {
       commit(UPDATE_LIBRARY, ["options", options]);
     },
     async [FETCH_OPTION_CATEGORIES]({ commit }) {
-      const optionCategories = await apiClient.get("/option-categories");
+      const optionCategories = await apiClient.get(
+        "/option-categories/with-options"
+      );
       commit(UPDATE_LIBRARY, ["optionCategories", optionCategories]);
     },
     async [CREATE_OPTION]({ commit, state }, [category, displayName]) {
