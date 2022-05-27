@@ -8,16 +8,18 @@
       >
         <template #action>
           <div class="flex flex-wrap justify-between">
-            <a href="#delete-complectation" class="text-red-500">
-              {{ t("delete") }}
-            </a>
-            <a
-              href="#edit-complectation"
-              class="text-primary"
-              @click.prevent="openEditModal(complectation)"
+            <n-button
+              type="error"
+              quaternary
+              @click="deleteComplectation(complectation.id)"
+              :disabled="isDeleting"
             >
+              {{ t("delete") }}
+            </n-button>
+
+            <n-button quaternary @click="openEditModal(complectation)">
               {{ t("edit") }}
-            </a>
+            </n-button>
           </div>
         </template>
       </n-card>
@@ -59,20 +61,25 @@ export default {
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import { NCard, NPopconfirm, NInput } from "naive-ui";
+import { NCard, NPopconfirm, NInput, NButton, useNotification } from "naive-ui";
 import ComplectationModal from "./ComplectationModal";
 import PlusButton from "@/components/common/PlusButton";
 import { carEditorNamespace } from "@/store/modules/carEditor";
-import { CREATE_NEW_COMPLECTATION } from "@/store/modules/carEditor/actionTypes";
+import {
+  CREATE_NEW_COMPLECTATION,
+  DELETE_COMPLECTATION,
+} from "@/store/modules/carEditor/complectation/actionTypes";
 import { OPEN_COMPLECTATION_EDIT_MODAL } from "@/store/modules/carEditor/complectation/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
 
 const complectations = computed(() => store.state.carEditor.car.complectations);
 
 const newComplectationName = ref("");
 const showModal = ref(false);
+const isDeleting = ref(false);
 
 const openEditModal = (complectation) => {
   store.dispatch(
@@ -88,5 +95,24 @@ const createComplectation = async () => {
     newComplectationName.value
   );
   newComplectationName.value = "";
+};
+
+const deleteComplectation = async (cmplId) => {
+  try {
+    isDeleting.value = true;
+    await store.dispatch(carEditorNamespace(DELETE_COMPLECTATION), cmplId);
+    notification.success({
+      title: t("notifications.complectation.deleting.success"),
+      duration: 5000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  } finally {
+    isDeleting.value = false;
+  }
 };
 </script>

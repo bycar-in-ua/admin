@@ -196,6 +196,7 @@ const optionsCopyHandler = (referenceComplectationId) => {
     carEditorNamespace(COPY_COMPLECTATION_DATA),
     referenceComplectationId
   );
+  recalcOptions();
 };
 
 const createPowerUnit = async () => {
@@ -208,22 +209,6 @@ const createPowerUnit = async () => {
     powerUnitFetching.value = false;
   }
 };
-
-function prepareOptionsForSaving() {
-  const options = [];
-
-  for (const [catId, optionsIds] of Object.entries(
-    optionsTransferModelValue.value
-  )) {
-    optionCategories.value[catId].options.forEach((op) => {
-      if (optionsIds.includes(op.id)) {
-        options.push(op);
-      }
-    });
-  }
-
-  return options;
-}
 
 const saveHandler = async () => {
   try {
@@ -272,16 +257,36 @@ const deleteHandler = async () => {
 };
 
 const afterModalEnter = () => {
-  optionsTransferModelValue.value = complectation.value.options.reduce(
-    prepareOptionIdsByCategoties,
-    {}
-  );
+  recalcOptions();
 };
 
 const afterModalClose = () => {
   store.dispatch(carEditorNamespace(CLEAN_UP_COMPLECTATION));
   optionsTransferModelValue.value = {};
 };
+
+function prepareOptionsForSaving() {
+  const options = [];
+
+  for (const [catId, optionsIds] of Object.entries(
+    optionsTransferModelValue.value
+  )) {
+    optionCategories.value[catId].options.forEach((op) => {
+      if (optionsIds.includes(op.id)) {
+        options.push(op);
+      }
+    });
+  }
+
+  return options;
+}
+
+function recalcOptions() {
+  optionsTransferModelValue.value = complectation.value.options.reduce(
+    prepareOptionIdsByCategoties,
+    {}
+  );
+}
 </script>
 
 <style lang="scss">

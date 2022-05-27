@@ -7,6 +7,7 @@ import {
   CREATE_NEW_POWER_UNIT,
   SAVE_COMPLECTATION,
   DELETE_COMPLECTATION,
+  CREATE_NEW_COMPLECTATION,
 } from "./actionTypes";
 import {
   UPDATE_COMPLECTATION,
@@ -41,16 +42,8 @@ const complectation = {
 
       if (referenceComplectation && referenceComplectation.options) {
         commit(UPDATE_COMPLECTATION_FIELD, [
-          `options`,
+          "options",
           referenceComplectation.options,
-        ]);
-        // commit(UPDATE_ALL_OPTIONS, state.car.complectations);
-        commit(UPDATE_COMPLECTATION_FIELD, [
-          `powerUnits`,
-          referenceComplectation.powerUnits.map((unit) => ({
-            ...unit,
-            id: undefined,
-          })),
         ]);
       }
     },
@@ -58,6 +51,16 @@ const complectation = {
       commit(UPDATE_COMPLECTATION_FIELD, [
         `powerUnits[${powerUnitIndex}][${field}]`,
         value,
+      ]);
+    },
+    async [CREATE_NEW_COMPLECTATION]({ commit, rootState }, name) {
+      const newComplectation = await apiClient.post("/complectations", {
+        displayName: name,
+        vehicle: rootState.carEditor.car.id,
+      });
+      commit(UPDATE_CAR_FIELD, [
+        "complectations",
+        [...rootState.carEditor.car.complectations, newComplectation],
       ]);
     },
     async [CREATE_NEW_POWER_UNIT]({ commit, state }) {
@@ -89,8 +92,8 @@ const complectation = {
 
       commit(UPDATE_CAR_FIELD, [
         "complectations",
-        rootState.carEditor.car.complectations.filter((compl) =>
-          compl.id == updatedComplectation.id ? updatedComplectation : compl
+        rootState.carEditor.car.complectations.map((cmpl) =>
+          cmpl.id == updatedComplectation.id ? updatedComplectation : cmpl
         ),
       ]);
     },

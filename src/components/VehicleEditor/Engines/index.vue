@@ -22,20 +22,13 @@
         </n-table>
         <template #action>
           <div class="flex flex-wrap justify-between">
-            <a
-              href="#"
-              class="text-red-500"
-              @click.prevent="deleteEngine(engine.id)"
-            >
+            <n-button type="error" quaternary @click="deleteEngine(engine.id)">
               {{ t("delete") }}
-            </a>
-            <a
-              href="#"
-              class="text-primary"
-              @click.prevent="openEditModal(engine)"
-            >
+            </n-button>
+
+            <n-button quaternary @click="openEditModal(engine)">
               {{ t("edit") }}
-            </a>
+            </n-button>
           </div>
         </template>
       </n-card>
@@ -57,7 +50,7 @@ import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import EngineModal from "./EngineModal";
 import PlusButton from "@/components/common/PlusButton";
-import { NCard, NTable } from "naive-ui";
+import { NCard, NTable, NButton } from "naive-ui";
 import {
   DELETE_ENGINE,
   OPEN_CREATE_ENGINE_MODAL,

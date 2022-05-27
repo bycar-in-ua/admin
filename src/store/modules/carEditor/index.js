@@ -7,7 +7,6 @@ import {
   FETCH_CAR,
   PURGE_CAR_EDITOR,
   SAVE_CAR,
-  CREATE_NEW_COMPLECTATION,
   SAVE_CAR_IMAGES,
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
@@ -63,16 +62,6 @@ export const carEditor = {
       } finally {
         commit("updateFetching", false);
       }
-    },
-    async [CREATE_NEW_COMPLECTATION]({ commit, state }, name) {
-      const newComplectation = await apiClient.post("/complectations", {
-        displayName: name,
-        vehicle: state.car.id,
-      });
-      commit(UPDATE_CAR_FIELD, [
-        "complectations",
-        [...state.car.complectations, newComplectation],
-      ]);
     },
     async [SAVE_CAR_IMAGES]({ state, commit }, imagesIds) {
       const carImages = await apiClient.put(
