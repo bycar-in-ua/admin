@@ -27,6 +27,16 @@ export const notificationsRU = {
       negativeAnswer: "Остаться и сохранить",
     },
   },
+  powerUnit: {
+    deleting: {
+      success: "Силовая установка удалена",
+    },
+  },
+  complectation: {
+    saving: {
+      success: "Комплектация успешно сохранена",
+    },
+  },
   confirmations: {
     title: "Подтвердите действие",
   },
@@ -59,6 +69,16 @@ export const notificationsUA = {
         "Схоже не зберегли якісь зміни. Якщо ви підете зі сторінки зараз, вони можуть бути втрачені на завжди. Ви впевнені, що хочете залишити сторінку?",
       positiveAnswer: "Так, піти без збереження",
       negativeAnswer: "Лишитись та зберегти",
+    },
+  },
+  powerUnit: {
+    deleting: {
+      success: "Силовий агрегат видалено",
+    },
+  },
+  complectation: {
+    saving: {
+      success: "Комплектацію успішно збережено",
     },
   },
   confirmations: {

@@ -29,6 +29,7 @@
         </n-button>
       </n-popselect>
     </div>
+
     <n-divider>{{ t("options.title") }}</n-divider>
 
     <n-collapse accordion>
@@ -62,21 +63,28 @@
         </n-icon>
       </add-new-option-category>
     </div>
+
     <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
-    <!-- <power-units-editor
-      :complectation="complectation"
-      :complectationIndex="index"
-    /> -->
-    <div class="px-8 pt-6">
-      <n-icon
-        size="40"
-        :color="colors.primary.lighten1"
+
+    <power-units-editor
+      :power-units="complectation.powerUnits"
+      v-model:expanded-names="expandedPowerUnit"
+    />
+
+    <div class="pt-6">
+      <n-button
+        tertiary
+        @click="createPowerUnit"
+        :loading="powerUnitFetching"
         :title="t('vehicle.powerUnits.addNew')"
-        class="cursor-pointer"
-        @click="createPowerUnit(index)"
       >
-        <add-circle-outline />
-      </n-icon>
+        <template #icon>
+          <n-icon>
+            <add-circle-outline />
+          </n-icon>
+        </template>
+        {{ t("vehicle.powerUnits.addNew") }}
+      </n-button>
     </div>
     <n-divider />
     <div class="flex mb-4">
@@ -95,6 +103,7 @@
           size="medium"
           @click="deleteHandler(complectation.id)"
           class="mr-auto"
+          :loading="isFetching"
         >
           <template #icon> <CloseSharp /> </template>
           {{ t("complectations.delete") }}
@@ -103,7 +112,8 @@
           type="primary"
           size="medium"
           class="ml-4"
-          :disabled="!isEdited"
+          :loading="isFetching"
+          @click="saveHandler"
         >
           {{ t("save") }}
         </n-button>
@@ -122,6 +132,8 @@ export default {
 </script>
 
 <script setup>
+/* eslint-disable no-unused-vars */
+
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
@@ -136,27 +148,35 @@ import {
   NCollapse,
   NCollapseItem,
   NTransfer,
+  useNotification,
 } from "naive-ui";
 import { AddCircleOutline, CloseSharp, Copy } from "@vicons/ionicons5";
 import AddNewOption from "@/components/common/AddNewOption.vue";
-// import PowerUnitsEditor from "./PowerUnitsEditor";
+import PowerUnitsEditor from "./PowerUnitsEditor";
 import colors from "@/colors";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
   COPY_COMPLECTATION_DATA,
   CLEAN_UP_COMPLECTATION,
+  CREATE_NEW_POWER_UNIT,
+  SAVE_COMPLECTATION,
 } from "@/store/modules/carEditor/complectation/actionTypes";
 import { UPDATE_COMPLECTATION_FIELD } from "@/store/modules/carEditor/complectation/mutationTypes";
 import {
   prepareOptionIdsByCategoties,
   prepareOption,
+  flatObject,
 } from "@/helpers/preparers";
 
 const store = useStore();
 const { t } = useI18n();
+const notification = useNotification();
 
 const isEdited = ref(false);
+const isFetching = ref(false);
 const optionsTransferModelValue = ref({});
+const expandedPowerUnit = ref(null);
+const powerUnitFetching = ref(false);
 
 const complectation = computed(() => store.state.carEditor.complectation);
 const optionCategories = computed(() => store.state.library.optionCategories);
@@ -184,12 +204,63 @@ const optionsCopyHandler = (referenceComplectationId) => {
   isEdited.value = true;
 };
 
+const createPowerUnit = async () => {
+  try {
+    powerUnitFetching.value = true;
+    expandedPowerUnit.value = await store.dispatch(
+      carEditorNamespace(CREATE_NEW_POWER_UNIT)
+    );
+  } finally {
+    powerUnitFetching.value = false;
+  }
+};
+
 const baseCheckHandler = (cmplId) => {
   console.log(cmplId);
 };
 
 const deleteHandler = (cmplId) => {
   console.log(cmplId);
+};
+
+function prepareOptionsForSaving() {
+  const options = [];
+
+  for (const [catId, optionsIds] of Object.entries(
+    optionsTransferModelValue.value
+  )) {
+    optionCategories.value
+      .find((optCat) => optCat.id == catId)
+      ?.options.forEach((op) => {
+        if (optionsIds.includes(op.id)) {
+          options.push(op);
+        }
+      });
+  }
+
+  return options;
+}
+
+const saveHandler = async () => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(
+      carEditorNamespace(SAVE_COMPLECTATION),
+      prepareOptionsForSaving()
+    );
+    notification.success({
+      title: t("notifications.complectation.saving.success"),
+      duration: 5000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
 };
 
 const afterModalEnter = () => {

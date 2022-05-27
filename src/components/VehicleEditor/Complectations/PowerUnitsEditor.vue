@@ -1,7 +1,7 @@
 <template>
-  <n-collapse>
+  <n-collapse accordion v-model:expanded-names="expandedNames">
     <n-collapse-item
-      v-for="(powerUnit, index) in complectation.powerUnits"
+      v-for="(powerUnit, index) in powerUnits"
       :key="powerUnit.id"
       :title="getPowerUnitName(powerUnit)"
       :name="powerUnit.id"
@@ -10,15 +10,15 @@
         <n-form-item :label="t('vehicle.engine.title')">
           <n-select
             :options="engineOptions"
-            :value="powerUnit.engine"
-            :on-update:value="selectHandler('engine', index)"
+            :value="powerUnit.engineId"
+            :on-update:value="selectHandler('engineId', index)"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.powerUnits.transmission')">
           <n-select
             :options="transmissionOptions"
-            :value="powerUnit.transmission"
-            :on-update:value="selectHandler('transmission', index)"
+            :value="powerUnit.transmissionId"
+            :on-update:value="selectHandler('transmissionId', index)"
           />
         </n-form-item>
         <n-form-item :label="t('price')">
@@ -97,11 +97,20 @@
 <script>
 export default {
   name: "PowerUnitsEditor",
+  data: () => ({
+    expandedNames: null,
+  }),
+  props: {
+    powerUnits: {
+      type: Array,
+      requierd: true,
+    },
+  },
 };
 </script>
 
 <script setup>
-import { defineProps, computed, ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -117,14 +126,9 @@ import {
 import { CloseSharp } from "@vicons/ionicons5";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
-  DELETE_POWER_UNIT,
   SET_POWER_UNIT_OPTION,
-} from "@/store/modules/carEditor/actionTypes";
-
-const props = defineProps({
-  complectation: Object,
-  complectationIndex: Number,
-});
+  DELETE_POWER_UNIT,
+} from "@/store/modules/carEditor/complectation/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
@@ -132,26 +136,24 @@ const notification = useNotification();
 
 const isFetching = ref(false);
 
-const engines = computed(() => store.state.carEditor.car.engines);
-const transmissions = computed(() => store.state.carEditor.car.transmissions);
+const enginesMapById = computed(
+  () => store.getters[carEditorNamespace("enginesMapById")]
+);
+const transmissionsMapById = computed(
+  () => store.getters[carEditorNamespace("transmissionsMapById")]
+);
 
-const engineOptions = engines.value.map((engine) => ({
-  label: engine.displayName + ` ${engine.power} hp`,
-  value: engine.id,
-}));
+const engineOptions = computed(
+  () => store.getters[carEditorNamespace("getEnginesOptions")]
+);
 
-const transmissionOptions = transmissions.value.map((transmission) => ({
-  label: `${transmission.drive} - ${transmission?.gearbox?.numberOfGears} ${t(
-    "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
-  )}`,
-  value: transmission.id,
-}));
+const transmissionOptions = computed(() =>
+  store.getters[carEditorNamespace("getTransmissionsOptions")](t)
+);
 
 const getPowerUnitName = (powerUnit) => {
-  const engine = engines.value.find((e) => e.id === powerUnit.engine);
-  const transmission = transmissions.value.find(
-    (t) => t.id === powerUnit.transmission
-  );
+  const engine = enginesMapById.value.get(powerUnit.engineId);
+  const transmission = transmissionsMapById.value.get(powerUnit.transmissionId);
 
   let title = "";
 
@@ -171,7 +173,6 @@ const getPowerUnitName = (powerUnit) => {
 
 const selectHandler = (field, powerUnitIndex) => (value) => {
   store.dispatch(carEditorNamespace(SET_POWER_UNIT_OPTION), [
-    props.complectationIndex,
     powerUnitIndex,
     field,
     value,
@@ -180,7 +181,6 @@ const selectHandler = (field, powerUnitIndex) => (value) => {
 
 const inputHandler = (field, powerUnitIndex) => (value) => {
   store.dispatch(carEditorNamespace(SET_POWER_UNIT_OPTION), [
-    props.complectationIndex,
     powerUnitIndex,
     field,
     value,
@@ -190,13 +190,9 @@ const inputHandler = (field, powerUnitIndex) => (value) => {
 const deleteHandler = async (powerUnit) => {
   try {
     isFetching.value = true;
-    await store.dispatch(carEditorNamespace(DELETE_POWER_UNIT), [
-      powerUnit,
-
-      props.complectationIndex,
-    ]);
+    await store.dispatch(carEditorNamespace(DELETE_POWER_UNIT), powerUnit);
     notification.success({
-      title: t("notifications.success.title.default"),
+      title: t("notifications.powerUnit.deleting.success"),
       duration: 3000,
     });
   } catch (error) {

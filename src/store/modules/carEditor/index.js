@@ -1,6 +1,5 @@
 import engine from "./engine";
 import transmission from "./transmission";
-import options from "./options";
 import complectation from "./complectation";
 
 import apiClient from "@/helpers/apiClient";
@@ -9,12 +8,9 @@ import {
   PURGE_CAR_EDITOR,
   SAVE_CAR,
   CREATE_NEW_COMPLECTATION,
-  SET_COMPLECTATION_OPTIONS,
-  SET_POWER_UNIT_OPTION,
   SAVE_CAR_IMAGES,
   SAVE_CAR_COLORS,
   DELETE_COMPLECTATION,
-  DELETE_POWER_UNIT,
 } from "./actionTypes";
 import {
   UPDATE_CAR,
@@ -26,7 +22,6 @@ import {
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
 import { prepareCar } from "@/helpers/preparers";
-import { UPDATE_ALL_OPTIONS } from "./options/mutationTypes";
 
 /**
  *
@@ -58,12 +53,11 @@ export const carEditor = {
     isFetching: false,
     isEdited: false,
   }),
-  modules: { engine, transmission, complectation, options },
+  modules: { engine, transmission, complectation },
   actions: {
     async [FETCH_CAR]({ commit }, carSlug) {
       const car = await apiClient.get(`/vehicles/${carSlug}/for-edit`);
       commit("updateFetched", true);
-      commit(UPDATE_ALL_OPTIONS, car.complectations);
       commit(UPDATE_CAR, prepareCar(car));
     },
     async [SAVE_CAR]({ state, commit, getters }) {
@@ -90,7 +84,6 @@ export const carEditor = {
         "complectations",
         [...state.car.complectations, newComplectation],
       ]);
-      commit(UPDATE_ALL_OPTIONS, state.car.complectations);
     },
     async [SAVE_CAR_IMAGES]({ state, commit }, imagesIds) {
       const carImages = await apiClient.put(
@@ -113,38 +106,6 @@ export const carEditor = {
         state.car.complectations.filter(
           (complectation) => complectation.id !== complectationId
         ),
-      ]);
-    },
-    async [DELETE_POWER_UNIT](
-      { commit, state },
-      [powerUnit, complectationIndex]
-    ) {
-      await apiClient.delete(`/power-units/${powerUnit.id}`, powerUnit);
-      commit(UPDATE_CAR_FIELD, [
-        `complectations[${complectationIndex}].powerUnits`,
-        state.car.complectations[complectationIndex].powerUnits.filter(
-          (unit) => unit.id !== powerUnit.id
-        ),
-      ]);
-    },
-    [SET_COMPLECTATION_OPTIONS](
-      { rootState, commit },
-      [complectationIndex, optionIds]
-    ) {
-      commit(UPDATE_CAR_FIELD, [
-        `complectations[${complectationIndex}].options`,
-        optionIds.map((optionId) =>
-          rootState.library.options.find((option) => option.id === optionId)
-        ),
-      ]);
-    },
-    [SET_POWER_UNIT_OPTION](
-      { commit },
-      [complectationIndex, powerUnitIndex, field, value]
-    ) {
-      commit(UPDATE_CAR_FIELD, [
-        `complectations[${complectationIndex}].powerUnits[${powerUnitIndex}][${field}]`,
-        value,
       ]);
     },
     [PURGE_CAR_EDITOR]({ commit }) {
@@ -185,6 +146,41 @@ export const carEditor = {
   getters: {
     getCarImagesIds(state) {
       return state.car.images.map((image) => image.id);
+    },
+    getEnginesOptions(state) {
+      return state.car.engines.map((engine) => ({
+        label: engine.displayName + ` ${engine.power} hp`,
+        value: engine.id,
+      }));
+    },
+    getTransmissionsOptions(state) {
+      return (t) =>
+        state.car.transmissions.map((transmission) => ({
+          label: `${transmission.drive} - ${
+            transmission?.gearbox?.numberOfGears
+          } ${t(
+            "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
+          )}`,
+          value: transmission.id,
+        }));
+    },
+    enginesMapById(state) {
+      const engines = new Map();
+
+      for (const engine of state.car.engines) {
+        engines.set(engine.id, engine);
+      }
+
+      return engines;
+    },
+    transmissionsMapById(state) {
+      const transmissions = new Map();
+
+      for (const transmission of state.car.transmissions) {
+        transmissions.set(transmission.id, transmission);
+      }
+
+      return transmissions;
     },
   },
 };
