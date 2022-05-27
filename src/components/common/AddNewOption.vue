@@ -1,5 +1,10 @@
 <template>
-  <n-form :inline="true" :class="formClass" :show-feedback="showFeedback">
+  <n-form
+    :inline="true"
+    :class="formClass"
+    :show-feedback="showFeedback"
+    :disabled="isFetching"
+  >
     <n-form-item
       :label="t('options.addNew')"
       path="optionName"
@@ -8,7 +13,12 @@
       <n-input v-model:value="optionName" :placeholder="t('enter')" />
     </n-form-item>
     <n-form-item>
-      <n-button type="primary" :disabled="!optionName" @click="submitHandler">
+      <n-button
+        type="primary"
+        :disabled="!optionName"
+        @click="submitHandler"
+        :loading="isFetching"
+      >
         {{ t("add") }}
       </n-button>
     </n-form-item>
@@ -44,9 +54,15 @@ const props = defineProps({
 });
 
 const optionName = ref("");
+const isFetching = ref(false);
 
 const submitHandler = async () => {
-  await store.dispatch(CREATE_OPTION, [props.categoryId, optionName.value]);
-  optionName.value = "";
+  try {
+    isFetching.value = true;
+    await store.dispatch(CREATE_OPTION, [props.categoryId, optionName.value]);
+    optionName.value = "";
+  } finally {
+    isFetching.value = false;
+  }
 };
 </script>

@@ -43,7 +43,10 @@
       </n-popconfirm>
     </div>
   </n-card>
-  <complectation-modal v-model:show="showModal" />
+  <complectation-modal
+    v-model:show="showModal"
+    @close-modal="showModal = false"
+  />
 </template>
 
 <script>

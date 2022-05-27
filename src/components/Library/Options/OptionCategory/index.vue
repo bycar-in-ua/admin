@@ -29,7 +29,7 @@
     <n-scrollbar class="max-h-48 pr-3">
       <n-list>
         <OptionCategoryListItem
-          v-for="option in options"
+          v-for="option in optionCategory.options"
           :key="option.id"
           :option="option"
           :category="optionCategory"
@@ -62,11 +62,10 @@ import OptionCategoryListItem from "./OptionCategoryListItem";
 import OptionEditor from "./OptionEditor";
 import AddNewOption from "@/components/common/AddNewOption";
 import apiClient from "@/helpers/apiClient";
-import { UPDATE_LIBRARY_ITEM } from "@/store/modules/library/mutationTypes";
+import { UPDATE_OPTION_CATEGORY } from "@/store/modules/library/options/mutationTypes";
 
 const props = defineProps({
   optionCategory: Object,
-  options: Array,
   openDeleteDrawer: Function,
 });
 
@@ -84,7 +83,10 @@ const hadnleSave = async (val) => {
       displayName: val,
     }
   );
-  store.commit(UPDATE_LIBRARY_ITEM, ["optionCategories", updatedOptCat]);
+  store.commit(UPDATE_OPTION_CATEGORY, [
+    props.optionCategory.id,
+    updatedOptCat,
+  ]);
   isEdit.value = false;
   isFetching.value = false;
 };

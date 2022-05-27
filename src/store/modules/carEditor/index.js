@@ -16,8 +16,6 @@ import {
   UPDATE_CAR,
   UPDATE_CAR_FIELD,
   UPDATE_IS_EDITED,
-  PUSH_NEW_POWER_UNIT,
-  SET_DEFAULT_COMPLECTATION,
 } from "./mutationTypes";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
 import { set } from "lodash";
@@ -34,15 +32,6 @@ const carInitialState = {
   engines: [],
   transmissions: [],
   complectations: [],
-};
-
-const powerUnitEmptyTemplte = {
-  price: null,
-  speedUp100: null,
-  maxSpeed: null,
-  consumption: { city: null, highway: null, mixed: null },
-  engine: null,
-  transmission: null,
 };
 
 export const carEditor = {
@@ -124,21 +113,6 @@ export const carEditor = {
     },
     [UPDATE_IS_EDITED](state, status) {
       state.isEdited = status;
-    },
-    [PUSH_NEW_POWER_UNIT](state, complectationIndex) {
-      state.car.complectations[complectationIndex].powerUnits.push({
-        ...powerUnitEmptyTemplte,
-      });
-    },
-    [SET_DEFAULT_COMPLECTATION](state, complectationId) {
-      state.isEdited = true;
-      state.car.complectations.forEach((cmpl) => {
-        if (cmpl.id === complectationId) {
-          cmpl.base = true;
-          return;
-        }
-        cmpl.base = false;
-      });
     },
     ...createFetchingMutation("updateFetched", "isFetched"),
     ...createFetchingMutation("updateFetching", "isFetching"),

@@ -1,10 +1,9 @@
 <template>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
     <OptionCategory
-      v-for="optionCategory in optionCategories"
+      v-for="optionCategory in Object.values(optionCategories)"
       :key="optionCategory.id"
       :option-category="optionCategory"
-      :options="optionsByCategories[optionCategory.id]"
       :open-delete-drawer="openDrawer"
     />
   </div>
@@ -51,10 +50,12 @@ import { useI18n } from "vue-i18n";
 import { NDrawer, NDrawerContent, NButton, NDivider, NIcon } from "naive-ui";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import colors from "@/colors";
-import { FETCH_OPTION_CATEGORIES } from "@/store/modules/library/options/actionTypes";
+import {
+  FETCH_OPTION_CATEGORIES,
+  DELETE_OPTION_CATEGORY,
+} from "@/store/modules/library/options/actionTypes";
 import OptionCategory from "./OptionCategory";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory";
-import apiClient from "@/helpers/apiClient";
 
 const store = useStore();
 const { t } = useI18n();
@@ -73,8 +74,7 @@ const openDrawer = (targetCategoryId) => {
 const hadleDelete = async () => {
   try {
     isFetching.value = true;
-    await apiClient.delete(`/option-categories/${targetCategory.value}`);
-    store.dispatch(FETCH_OPTION_CATEGORIES);
+    await store.dispatch(DELETE_OPTION_CATEGORY, targetCategory.value);
     targetCategory.value = null;
     showDrawer.value = false;
   } finally {
@@ -82,8 +82,5 @@ const hadleDelete = async () => {
   }
 };
 
-const optionCategories = computed(() => store.state.library.optionCategories);
-const optionsByCategories = computed(
-  () => store.getters.getOptionsByCategories
-);
+const optionCategories = computed(() => store.state.library.options.categories);
 </script>

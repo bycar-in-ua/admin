@@ -6,6 +6,7 @@ import {
   DELETE_POWER_UNIT,
   CREATE_NEW_POWER_UNIT,
   SAVE_COMPLECTATION,
+  DELETE_COMPLECTATION,
 } from "./actionTypes";
 import {
   UPDATE_COMPLECTATION,
@@ -90,6 +91,15 @@ const complectation = {
         "complectations",
         rootState.carEditor.car.complectations.filter((compl) =>
           compl.id == updatedComplectation.id ? updatedComplectation : compl
+        ),
+      ]);
+    },
+    async [DELETE_COMPLECTATION]({ commit, rootState }, cmplId) {
+      await apiClient.delete(`/complectations/${cmplId}`);
+      commit(UPDATE_CAR_FIELD, [
+        "complectations",
+        rootState.carEditor.car.complectations.filter(
+          (cmpl) => cmpl.id !== cmplId
         ),
       ]);
     },

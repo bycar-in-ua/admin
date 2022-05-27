@@ -1,6 +1,6 @@
 <template>
   <n-modal
-    v-model:show="show"
+    :show="show"
     :on-after-enter="afterModalEnter"
     :on-after-leave="afterModalClose"
     preset="card"
@@ -92,7 +92,7 @@
         :label="t('complectations.base')"
         class="mr-auto"
         :checked="complectation.base"
-        :on-update:checked="baseCheckHandler(complectation.id)"
+        :on-update:checked="complectationFieldUpdateHandler('base')"
       />
     </div>
 
@@ -101,7 +101,7 @@
         <n-button
           type="error"
           size="medium"
-          @click="deleteHandler(complectation.id)"
+          @click="deleteHandler"
           class="mr-auto"
           :loading="isFetching"
         >
@@ -125,14 +125,11 @@
 <script>
 export default {
   name: "ComplectationModal",
-  data: () => ({
-    show: false,
-  }),
 };
 </script>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, defineEmits } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -158,6 +155,7 @@ import {
   CLEAN_UP_COMPLECTATION,
   CREATE_NEW_POWER_UNIT,
   SAVE_COMPLECTATION,
+  DELETE_COMPLECTATION,
 } from "@/store/modules/carEditor/complectation/actionTypes";
 import { UPDATE_COMPLECTATION_FIELD } from "@/store/modules/carEditor/complectation/mutationTypes";
 import {
@@ -165,11 +163,11 @@ import {
   prepareOption,
 } from "@/helpers/preparers";
 
+const emit = defineEmits();
 const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();
 
-const isEdited = ref(false);
 const isFetching = ref(false);
 const optionsTransferModelValue = ref({});
 const expandedPowerUnit = ref(null);
@@ -191,7 +189,6 @@ const getOptions = (options = []) =>
 
 const complectationFieldUpdateHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_COMPLECTATION_FIELD), [field, val]);
-  isEdited.value = true;
 };
 
 const optionsCopyHandler = (referenceComplectationId) => {
@@ -199,7 +196,6 @@ const optionsCopyHandler = (referenceComplectationId) => {
     carEditorNamespace(COPY_COMPLECTATION_DATA),
     referenceComplectationId
   );
-  isEdited.value = true;
 };
 
 const createPowerUnit = async () => {
@@ -211,14 +207,6 @@ const createPowerUnit = async () => {
   } finally {
     powerUnitFetching.value = false;
   }
-};
-
-const baseCheckHandler = (cmplId) => {
-  console.log(cmplId);
-};
-
-const deleteHandler = (cmplId) => {
-  console.log(cmplId);
 };
 
 function prepareOptionsForSaving() {
@@ -248,6 +236,30 @@ const saveHandler = async () => {
       title: t("notifications.complectation.saving.success"),
       duration: 5000,
     });
+    emit("close-modal");
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const deleteHandler = async () => {
+  try {
+    isFetching.value = true;
+    await store.dispatch(
+      carEditorNamespace(DELETE_COMPLECTATION),
+      complectation.value.id
+    );
+    notification.success({
+      title: t("notifications.complectation.deleting.success"),
+      duration: 5000,
+    });
+    emit("close-modal");
   } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),

@@ -2,14 +2,14 @@
   <n-list-item>
     <OptionEditor
       v-if="isEdit"
-      :value="option.label"
+      :value="option.displayName"
       :positive-click="hadnleSave"
       :swap-click="handleSwap"
       :negative-click="hadleClose"
       :loading="isFetching"
     />
     <div v-else class="flex justify-between items-center">
-      {{ option.label }}
+      {{ option.displayName }}
       <n-icon
         class="cursor-pointer ml-auto"
         @click="isEdit = true"
@@ -57,7 +57,7 @@ import { NListItem, NIcon, NPopselect, useNotification } from "naive-ui";
 import { Pencil, Close, SwapVertical } from "@vicons/ionicons5";
 import OptionEditor from "./OptionEditor";
 import apiClient from "@/helpers/apiClient";
-import { UPDATE_LIBRARY_ITEM } from "@/store/modules/library/mutationTypes";
+import { UPDATE_SPECIFIC_OPTION } from "@/store/modules/library/options/mutationTypes";
 import {
   CHANGE_OPTION_CATEGORY,
   DELETE_OPTION,
@@ -76,25 +76,22 @@ const isEdit = ref(false);
 const isFetching = ref(false);
 
 const categoryOptions = computed(
-  () => store.state.library.optionCategories
-).value.map((cat) => ({
-  value: cat.id,
-  label: cat.displayName,
-}));
+  () => store.getters.getOptionCategoriesForSelect
+);
 
 const hadnleSave = async (val) => {
   isFetching.value = true;
-  const updatedOption = await apiClient.put(`/options/${props.option.value}`, {
+  const updatedOption = await apiClient.put(`/options/${props.option.id}`, {
     displayName: val,
   });
-  store.commit(UPDATE_LIBRARY_ITEM, ["options", updatedOption]);
+  store.commit(UPDATE_SPECIFIC_OPTION, [props.category.id, updatedOption]);
   isEdit.value = false;
   isFetching.value = false;
 };
 
 const handleDelete = async () => {
   isFetching.value = true;
-  await store.dispatch(DELETE_OPTION, props.option.value);
+  await store.dispatch(DELETE_OPTION, props.option.id);
   isFetching.value = false;
 };
 

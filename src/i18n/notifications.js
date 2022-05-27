@@ -36,6 +36,9 @@ export const notificationsRU = {
     saving: {
       success: "Комплектация успешно сохранена",
     },
+    deleting: {
+      success: "Комплектация успешно удалена",
+    },
   },
   confirmations: {
     title: "Подтвердите действие",
@@ -79,6 +82,9 @@ export const notificationsUA = {
   complectation: {
     saving: {
       success: "Комплектацію успішно збережено",
+    },
+    deleting: {
+      success: "Комплектація успішно видалена",
     },
   },
   confirmations: {
