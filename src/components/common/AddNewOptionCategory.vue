@@ -29,7 +29,7 @@ import { ref } from "vue";
 import { NPopconfirm, NInput, useNotification } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
-import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/actionTypes";
+import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/options/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();
@@ -46,11 +46,13 @@ const createOptionCategory = async () => {
     newOptCatName.value = "";
     notification.success({
       title: t("notifications.success.title.default"),
+      duration: 3000,
     });
   } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
+      duration: 5000,
     });
   } finally {
     isFetching.value = false;

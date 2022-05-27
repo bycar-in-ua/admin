@@ -34,7 +34,7 @@
 
     <n-collapse accordion>
       <n-collapse-item
-        v-for="category in optionCategories"
+        v-for="category in Object.values(optionCategories)"
         :key="category.id"
         :title="category.displayName"
         :name="category.id"
@@ -51,16 +51,16 @@
       </n-collapse-item>
     </n-collapse>
 
-    <div class="px-8 pt-6">
+    <div class="pt-6">
       <add-new-option-category>
-        <n-icon
-          size="40"
-          :color="colors.primary.lighten1"
-          :title="t('options.addCategory')"
-          class="cursor-pointer"
-        >
-          <add-circle-outline />
-        </n-icon>
+        <n-button tertiary :title="t('options.addCategory')">
+          <template #icon>
+            <n-icon>
+              <add-circle-outline />
+            </n-icon>
+          </template>
+          {{ t("options.addCategory") }}
+        </n-button>
       </add-new-option-category>
     </div>
 
@@ -132,8 +132,6 @@ export default {
 </script>
 
 <script setup>
-/* eslint-disable no-unused-vars */
-
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
@@ -152,8 +150,8 @@ import {
 } from "naive-ui";
 import { AddCircleOutline, CloseSharp, Copy } from "@vicons/ionicons5";
 import AddNewOption from "@/components/common/AddNewOption.vue";
+import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
 import PowerUnitsEditor from "./PowerUnitsEditor";
-import colors from "@/colors";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
   COPY_COMPLECTATION_DATA,
@@ -165,7 +163,6 @@ import { UPDATE_COMPLECTATION_FIELD } from "@/store/modules/carEditor/complectat
 import {
   prepareOptionIdsByCategoties,
   prepareOption,
-  flatObject,
 } from "@/helpers/preparers";
 
 const store = useStore();
@@ -179,7 +176,7 @@ const expandedPowerUnit = ref(null);
 const powerUnitFetching = ref(false);
 
 const complectation = computed(() => store.state.carEditor.complectation);
-const optionCategories = computed(() => store.state.library.optionCategories);
+const optionCategories = computed(() => store.state.library.options.categories);
 
 const complectationsForCopy = computed(() =>
   store.state.carEditor.car.complectations.map((cmpl) => ({
@@ -189,7 +186,8 @@ const complectationsForCopy = computed(() =>
   }))
 );
 
-const getOptions = (options) => options.map((option) => prepareOption(option));
+const getOptions = (options = []) =>
+  options.map((option) => prepareOption(option));
 
 const complectationFieldUpdateHandler = (field) => (val) => {
   store.commit(carEditorNamespace(UPDATE_COMPLECTATION_FIELD), [field, val]);
@@ -229,13 +227,11 @@ function prepareOptionsForSaving() {
   for (const [catId, optionsIds] of Object.entries(
     optionsTransferModelValue.value
   )) {
-    optionCategories.value
-      .find((optCat) => optCat.id == catId)
-      ?.options.forEach((op) => {
-        if (optionsIds.includes(op.id)) {
-          options.push(op);
-        }
-      });
+    optionCategories.value[catId].options.forEach((op) => {
+      if (optionsIds.includes(op.id)) {
+        options.push(op);
+      }
+    });
   }
 
   return options;

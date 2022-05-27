@@ -61,7 +61,7 @@ import { UPDATE_LIBRARY_ITEM } from "@/store/modules/library/mutationTypes";
 import {
   CHANGE_OPTION_CATEGORY,
   DELETE_OPTION,
-} from "@/store/modules/library/actionTypes";
+} from "@/store/modules/library/options/actionTypes";
 
 const props = defineProps({
   option: Object,

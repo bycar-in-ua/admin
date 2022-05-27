@@ -25,7 +25,7 @@ import { ref, defineProps } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NForm, NFormItem, NInput, NButton } from "naive-ui";
-import { CREATE_OPTION } from "@/store/modules/library/actionTypes";
+import { CREATE_OPTION } from "@/store/modules/library/options/actionTypes";
 
 const store = useStore();
 const { t } = useI18n();

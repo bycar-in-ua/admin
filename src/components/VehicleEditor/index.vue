@@ -44,10 +44,7 @@ import Transmissions from "./Transmissions";
 import VehicleImages from "./VehicleImages";
 import VehicleColors from "./VehicleColors";
 import VahicleEditorSkeleton from "./Skeleton";
-import {
-  FETCH_OPTIONS,
-  FETCH_OPTION_CATEGORIES,
-} from "@/store/modules/library/actionTypes";
+import { FETCH_OPTION_CATEGORIES } from "@/store/modules/library/options/actionTypes";
 
 const store = useStore();
 const router = useRouter();
@@ -59,7 +56,6 @@ store.dispatch(
   router.currentRoute.value.params.slug
 );
 store.dispatch(FETCH_OPTION_CATEGORIES);
-store.dispatch(FETCH_OPTIONS);
 
 const isFetched = computed(() => store.state.carEditor.isFetched);
 const isEdited = computed(() => store.state.carEditor.isEdited);

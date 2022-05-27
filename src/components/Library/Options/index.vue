@@ -51,10 +51,7 @@ import { useI18n } from "vue-i18n";
 import { NDrawer, NDrawerContent, NButton, NDivider, NIcon } from "naive-ui";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import colors from "@/colors";
-import {
-  FETCH_OPTIONS,
-  FETCH_OPTION_CATEGORIES,
-} from "@/store/modules/library/actionTypes";
+import { FETCH_OPTION_CATEGORIES } from "@/store/modules/library/options/actionTypes";
 import OptionCategory from "./OptionCategory";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory";
 import apiClient from "@/helpers/apiClient";
@@ -63,7 +60,6 @@ const store = useStore();
 const { t } = useI18n();
 
 store.dispatch(FETCH_OPTION_CATEGORIES);
-store.dispatch(FETCH_OPTIONS);
 
 const showDrawer = ref(false);
 const isFetching = ref(false);
@@ -79,7 +75,6 @@ const hadleDelete = async () => {
     isFetching.value = true;
     await apiClient.delete(`/option-categories/${targetCategory.value}`);
     store.dispatch(FETCH_OPTION_CATEGORIES);
-    store.dispatch(FETCH_OPTIONS);
     targetCategory.value = null;
     showDrawer.value = false;
   } finally {
