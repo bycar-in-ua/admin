@@ -1,6 +1,6 @@
 import apiClient from "@/helpers/apiClient";
 import { createFetchingMutation } from "@/helpers/fetchingMutationProvider";
-import { FETCH_CARS, DUPLICATE_CAR } from "./actionTypes";
+import { FETCH_CARS, DUPLICATE_CAR, DELETE_CARS } from "./actionTypes";
 import { UPDATE_CARS, UPDATE_CARS_META } from "./mutationTypes";
 
 export const cars = {
@@ -19,6 +19,8 @@ export const cars = {
         const cars = await apiClient.get(`/vehicles/all?page=${page}`);
         commit(UPDATE_CARS, cars.items);
         commit(UPDATE_CARS_META, cars.meta);
+      } catch (e) {
+        throw Error(e);
       } finally {
         commit("updateFetching", false);
       }
@@ -29,6 +31,23 @@ export const cars = {
         await apiClient.post(`/vehicles/duplicate/${targetCarId}`);
         dispatch(FETCH_CARS);
       } catch (e) {
+        throw Error(e);
+      } finally {
+        commit("updateFetching", false);
+      }
+    },
+    /**
+     * @param {string} type Type of deleting 'soft' | 'hard'
+     * @param {number[]} carsIds Id`s for deleting
+     */
+    async [DELETE_CARS]({ commit, dispatch }, [type, carsIds]) {
+      try {
+        commit("updateFetching", true);
+        await apiClient.delete(`/vehicles/${type}`, carsIds);
+        await dispatch(FETCH_CARS);
+      } catch (e) {
+        throw Error(e);
+      } finally {
         commit("updateFetching", false);
       }
     },

@@ -31,6 +31,8 @@ const carInitialState = {
   engines: [],
   transmissions: [],
   complectations: [],
+  images: [],
+  colors: [],
 };
 
 export const carEditor = {
