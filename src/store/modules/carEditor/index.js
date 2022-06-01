@@ -48,16 +48,13 @@ export const carEditor = {
       commit("updateFetched", true);
       commit(UPDATE_CAR, prepareCar(car));
     },
-    async [SAVE_CAR]({ state, commit, getters }) {
+    async [SAVE_CAR]({ state, commit }) {
       try {
         commit("updateFetching", true);
-        const updatedCar = await apiClient.put(`/vehicles/${state.car.id}`, {
-          ...state.car,
-          complectations: state.car.complectations.map((cmpl) => ({
-            ...cmpl,
-            options: getters["getOptionsByComplectations"][cmpl.id] || [],
-          })),
-        });
+        const updatedCar = await apiClient.put(
+          `/vehicles/${state.car.id}`,
+          state.car
+        );
         commit(UPDATE_CAR, prepareCar(updatedCar));
       } finally {
         commit("updateFetching", false);
