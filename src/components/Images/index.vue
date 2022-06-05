@@ -82,6 +82,10 @@ const props = defineProps({
     default: () => [],
   },
   toolbarActions: Array,
+  cdnPathToSave: {
+    type: String,
+    default: "",
+  },
 });
 
 const store = useStore();
@@ -122,6 +126,8 @@ provide("removeImageFromSelection", (image) => {
     (item) => item.id !== image.id
   );
 });
+
+provide("cdnPathToSave", props.cdnPathToSave);
 
 const images = computed(() => store.state.library.images);
 </script>

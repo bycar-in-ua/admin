@@ -144,6 +144,9 @@ export const carEditor = {
 
       return transmissions;
     },
+    getCarBrandName(state) {
+      return state.car?.brand?.name || "";
+    },
   },
 };
 

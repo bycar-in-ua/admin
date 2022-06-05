@@ -9,6 +9,7 @@
       :is-selectable="true"
       :toolbar-actions="toolbarActions"
       :preselected-images="existingImages"
+      :cdn-path-to-save="carBrandName"
     />
     <div
       v-if="isFetching"
@@ -50,6 +51,9 @@ const { t } = useI18n();
 const isFetching = ref(false);
 const existingImages = computed(
   () => store.getters[carEditorNamespace("getCarImagesIds")]
+);
+const carBrandName = computed(
+  () => store.getters[carEditorNamespace("getCarBrandName")]
 );
 
 const toolbarActions = [

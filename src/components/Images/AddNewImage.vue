@@ -27,7 +27,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, inject } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NButton, useNotification } from "naive-ui";
@@ -40,6 +40,8 @@ const { t } = useI18n();
 const notification = useNotification();
 const { getImages } = useClipboard();
 
+const cdnPathToSave = inject("cdnPathToSave");
+
 const isUploading = ref(false);
 
 const fileInput = ref();
@@ -49,12 +51,13 @@ const handleClick = () => {
 };
 
 /**
- * @param { File[] } files
+ * @param {Array.<File>} files
+ * @param {string} pathTosave
  */
 const uploader = async (files) => {
   try {
     isUploading.value = true;
-    const uploadImages = await apiClient.uploadFiles(files);
+    const uploadImages = await apiClient.uploadFiles(files, cdnPathToSave);
     const newImages = await apiClient.post("/images", uploadImages);
     store.dispatch(FETCH_IMAGES);
     notification.success({
