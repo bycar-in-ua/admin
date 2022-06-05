@@ -156,9 +156,7 @@ export default {
 
     const uploader = async (file) => {
       isImageLoading.value = true;
-      const response = await apiClient.uploadFiles("/upload-brand-logo", [
-        file,
-      ]);
+      const response = await apiClient.uploadFiles([file], "brands");
       updateFieldAction("logo", response[0]);
       isImageLoading.value = false;
     };

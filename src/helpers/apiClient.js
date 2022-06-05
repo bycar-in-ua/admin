@@ -64,13 +64,19 @@ export const remove = async (path, body) => {
   }
 };
 
-export const uploadFiles = async (path, files) => {
+/**
+ * @param {Array.<File>} files Files to uploa
+ * @param {string} path Path to save images
+ * @returns {Array.<string>} Array of saved files pathes
+ */
+export const uploadFiles = async (files, path = "") => {
   try {
     const formData = new FormData();
     for (let index = 0; index < files.length; index++) {
       formData.append(files[index].name, files[index]);
     }
-    const response = await fetch(CDN_URL + path, {
+    formData.append("path", path);
+    const response = await fetch(`${CDN_URL}/upload`, {
       method: "POST",
       body: formData,
     });

@@ -29,7 +29,6 @@ const navBgImage = memory.get("navBgImage", null);
 
 const uploadHandler = async (options) => {
   const response = await apiClient.uploadFiles(
-    "/upload",
     options.fileList.map((fileInfo) => fileInfo.file)
   );
   memory.set("navBgImage", cdnLink(response[0], 0, 1920));

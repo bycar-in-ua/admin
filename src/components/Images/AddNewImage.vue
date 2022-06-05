@@ -54,7 +54,7 @@ const handleClick = () => {
 const uploader = async (files) => {
   try {
     isUploading.value = true;
-    const uploadImages = await apiClient.uploadFiles("/upload", files);
+    const uploadImages = await apiClient.uploadFiles(files);
     const newImages = await apiClient.post("/images", uploadImages);
     store.dispatch(FETCH_IMAGES);
     notification.success({

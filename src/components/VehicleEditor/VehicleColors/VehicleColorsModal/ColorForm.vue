@@ -169,7 +169,7 @@ const updateHandler = async () => {
 const uploader = async (file) => {
   try {
     isFetching.value = true;
-    const colorImageLink = await apiClient.uploadFiles("/upload-color", [file]);
+    const colorImageLink = await apiClient.uploadFiles([file], "colors");
     formModel.value.reference = colorImageLink[0];
     notification.success({
       title: t("images.save.success"),
