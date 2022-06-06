@@ -230,10 +230,16 @@ const toolbarActions = [
       },
       t("save")
     ),
-    clickCallback: async (selectedImages) => {
-      updateCarField("featureImage")(selectedImages[0]);
-      setModalOpen(false);
-      await saveAction();
+    clickCallback: async (selectedImagesIds) => {
+      try {
+        const selectedImage = store.state.library.images.items.find(
+          (image) => image.id == selectedImagesIds[0]
+        );
+        updateCarField("featureImage")(selectedImage);
+        await saveAction();
+      } finally {
+        setModalOpen(false);
+      }
     },
   },
 ];
