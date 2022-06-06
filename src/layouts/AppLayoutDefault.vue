@@ -68,18 +68,22 @@ const memory = useMemory();
 
 const { t } = useI18n();
 
-const navBgImage = memory.get("navBgImage", "");
+const navBgImage = memory.get(
+  "navBgImage",
+  "https://images.unsplash.com/photo-1654447398834-4168622aab14?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80"
+);
 
 const navStyle = {
   background: `linear-gradient(
       0deg,
       rgba(3, 1, 40, 0.5) 0%,
-      rgba(14, 15, 114, 0.5) 47%,
-      rgba(28, 10, 134, 0.4)
+      rgba(28, 10, 134, 0.4),
+      rgba(14, 15, 114, 0.5) 47%
     ),
     url("${navBgImage}")`,
   backgroundSize: "cover",
-  backgroundPositionX: "-38%",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
 };
 </script>
 
