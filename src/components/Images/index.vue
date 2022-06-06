@@ -21,7 +21,7 @@
           :key="image.id"
           :image="image"
           :selectable="selectable"
-          :selected="selectedImagesIds.includes(image.id)"
+          :selected="selectedImages.includes(image.id)"
         />
       </template>
     </n-image-group>
@@ -95,10 +95,7 @@ store.dispatch(props.vuexAction, props.actionPayload);
 
 const selectable = ref(props.isSelectable);
 
-const selectedImages = ref(props.preselectedImages);
-const selectedImagesIds = computed(() =>
-  selectedImages.value.map((image) => image.id)
-);
+const selectedImages = ref([...props.preselectedImages]);
 
 const handlePagination = (page) => {
   store.dispatch(FETCH_IMAGES, page);
@@ -113,17 +110,17 @@ provide("setImagesUnselectable", () => {
   selectedImages.value = [];
 });
 
-provide("addImageToSelection", (image) => {
+provide("addImageToSelection", (imageId) => {
   if (props.singleSelection) {
-    selectedImages.value = [image];
+    selectedImages.value = [imageId];
     return;
   }
-  selectedImages.value.push(image);
+  selectedImages.value.push(imageId);
 });
 
-provide("removeImageFromSelection", (image) => {
+provide("removeImageFromSelection", (imageId) => {
   selectedImages.value = selectedImages.value.filter(
-    (item) => item.id !== image.id
+    (item) => item !== imageId
   );
 });
 

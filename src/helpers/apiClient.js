@@ -87,10 +87,32 @@ export const uploadFiles = async (files, path = "") => {
   }
 };
 
+/**
+ *
+ * @param {Array.<string>} files
+ * @returns {Propmise.<Object>}
+ */
+export const deleteFiles = async (files) => {
+  try {
+    const response = await fetch(`${CDN_URL}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(files),
+    });
+    await validateResponse(response);
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export default {
   get,
   post,
   put,
   uploadFiles,
+  deleteFiles,
   delete: remove,
 };

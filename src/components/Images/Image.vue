@@ -45,9 +45,9 @@ const unselectImage = inject("removeImageFromSelection");
 
 const clickHandler = () => {
   if (props.selected) {
-    unselectImage(props.image);
+    unselectImage(props.image.id);
     return;
   }
-  selectImage(props.image);
+  selectImage(props.image.id);
 };
 </script>

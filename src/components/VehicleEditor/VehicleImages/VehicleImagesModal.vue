@@ -71,7 +71,7 @@ const toolbarActions = [
         isFetching.value = true;
         await store.dispatch(
           carEditorNamespace(SAVE_CAR_IMAGES),
-          selectedImages.map((image) => image.id)
+          selectedImages
         );
         props.toggleCallback(false);
       } finally {

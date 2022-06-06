@@ -48,7 +48,9 @@ export default {
 </script>
 
 <script setup>
-import { inject, defineProps, ref, provide } from "vue";
+/* eslint-disable no-unused-vars */
+
+import { inject, defineProps, ref, provide, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import AddNewImage from "./AddNewImage";
@@ -87,10 +89,14 @@ const isFetching = ref(false);
 const deleteHandler = async () => {
   try {
     isFetching.value = true;
-    await apiClient.delete(
-      "/images",
-      props.selectedImages.map((image) => image.id)
-    );
+
+    const imagesToDelete = store.state.library.images.items
+      .filter((image) => props.selectedImages.includes(image.id))
+      .map((image) => image.path);
+
+    await apiClient.delete("/images", props.selectedImages);
+    await apiClient.deleteFiles(imagesToDelete);
+
     store.dispatch(FETCH_IMAGES);
     setUnselectable();
   } finally {
