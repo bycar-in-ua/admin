@@ -35,7 +35,6 @@ const newEngineBoilerplate = {
   torque: null,
   torqueRPMfrom: null,
   torqueRPMto: null,
-  electric: null,
   electricEnginesQuantity: null,
   electricEnginesPLacement: null,
   electricPower: null,
