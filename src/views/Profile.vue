@@ -10,6 +10,9 @@ import NavBgUpload from "@/components/Profile/NavBgUpload";
 
 export default {
   name: "Profile",
+  components: {
+    NavBgUpload,
+  },
   setup() {
     const store = useStore();
 
@@ -18,9 +21,6 @@ export default {
     return {
       profile,
     };
-  },
-  components: {
-    NavBgUpload,
   },
 };
 </script>

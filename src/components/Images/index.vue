@@ -62,6 +62,7 @@ const props = defineProps({
     default: FETCH_IMAGES,
   },
   actionPayload: {
+    type: [String, Number, Object, Array, ],
     default: 1,
   },
   isSelectable: {

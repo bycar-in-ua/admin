@@ -8,8 +8,8 @@
     <n-button
       ghost
       :title="t('discard')"
-      @click="negativeClick"
       :disabled="loading"
+      @click="negativeClick"
     >
       <template #icon>
         <n-icon><Close /></n-icon>
@@ -18,8 +18,8 @@
     <n-button
       ghost
       :title="t('save')"
-      @click="positiveClick(inputModel)"
       :disabled="loading"
+      @click="positiveClick(inputModel)"
     >
       <template #icon>
         <n-icon><Checkmark /></n-icon>
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { NInput, NInputGroup, NButton, NIcon } from "naive-ui";
 import { Checkmark, Close } from "@vicons/ionicons5";

@@ -1,5 +1,9 @@
 <template>
-  <n-card :title="t('vehicle.engine.title', 2)" size="small" class="my-4">
+  <n-card
+    :title="t('vehicle.engine.title', 2)"
+    size="small"
+    class="my-4"
+  >
     <div class="editors-cards-grid">
       <n-card
         v-for="engine in engines"
@@ -8,7 +12,11 @@
         hoverable
         class="shadow"
       >
-        <n-table :bordered="false" :single-line="false" size="small">
+        <n-table
+          :bordered="false"
+          :single-line="false"
+          size="small"
+        >
           <tbody>
             <tr>
               <td>{{ t("vehicle.engine.power") }}</td>
@@ -22,11 +30,18 @@
         </n-table>
         <template #action>
           <div class="flex flex-wrap justify-between">
-            <n-button type="error" quaternary @click="deleteEngine(engine.id)">
+            <n-button
+              type="error"
+              quaternary
+              @click="deleteEngine(engine.id)"
+            >
               {{ t("delete") }}
             </n-button>
 
-            <n-button quaternary @click="openEditModal(engine)">
+            <n-button
+              quaternary
+              @click="openEditModal(engine)"
+            >
               {{ t("edit") }}
             </n-button>
           </div>

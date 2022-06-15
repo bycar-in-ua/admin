@@ -9,12 +9,12 @@
         width="150"
         height="150"
         @click="selectAction(color, selected)"
-      />
+      >
       <n-icon
         size="30"
         class="icon cursor-pointer left-0 top-0 hover:text-primary transition-all"
-        @click="closeHandler"
         :title="t('delete') + ': ' + color?.name"
+        @click="closeHandler"
       >
         <CloseCircleOutline />
       </n-icon>
@@ -22,8 +22,8 @@
         v-if="editable"
         size="30"
         class="icon cursor-pointer right-0 top-0 hover:text-primary transition-all"
-        @click="editAction(color)"
         :title="t('edit') + ': ' + color?.name"
+        @click="editAction(color)"
       >
         <Pencil />
       </n-icon>
@@ -34,7 +34,10 @@
         <n-spin size="medium" />
       </div>
     </div>
-    <n-p class="text-center" v-text="color?.name" />
+    <n-p
+      class="text-center"
+      v-text="color?.name"
+    />
   </div>
 </template>
 
@@ -45,7 +48,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { cdnLink } from "@/helpers/cdn";
 import { NIcon, NSpin, NP } from "naive-ui";

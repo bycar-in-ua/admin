@@ -4,8 +4,8 @@
       v-if="selectable && discardable"
       type="primary"
       class="mr-4"
-      @click="setUnselectable"
       :disabled="isFetching"
+      @click="setUnselectable"
     >
       {{ t("discard") }}
     </n-button>
@@ -20,9 +20,9 @@
     </n-button>
 
     <component
+      :is="action.component"
       v-for="(action, index) in additionalActions"
       :key="index"
-      :is="action.component"
       @click="action.clickCallback(selectedImages)"
     />
     <template v-if="selectedImages.length">
@@ -48,9 +48,7 @@ export default {
 </script>
 
 <script setup>
-/* eslint-disable no-unused-vars */
-
-import { inject, defineProps, ref, provide, computed } from "vue";
+import { inject, ref, provide } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import AddNewImage from "./AddNewImage";

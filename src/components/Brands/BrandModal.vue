@@ -9,11 +9,11 @@
     "
     preset="card"
     class="max-w-xl"
-    :onUpdate:show="onUpdate"
+    :on-update:show="onUpdate"
   >
     <n-form
-      :rules="rules"
       ref="brandForm"
+      :rules="rules"
       :model="brandModel"
       :disablad="isFetching"
     >
@@ -34,19 +34,29 @@
             :src="cdnLink(brand.logo, 300)"
             :alt="brand.name"
             class="h-28 object-contain mx-auto"
-          />
-          <n-icon v-else size="48" :depth="3">
+          >
+          <n-icon
+            v-else
+            size="48"
+            :depth="3"
+          >
             <archive-icon />
           </n-icon>
         </n-upload-dragger>
       </n-upload>
-      <n-form-item label="Название бренда" path="displayName">
+      <n-form-item
+        label="Название бренда"
+        path="displayName"
+      >
         <n-input
           v-model:value="brandModel.displayName"
           placeholder="Введите название"
         />
       </n-form-item>
-      <n-form-item label="Slug" path="name">
+      <n-form-item
+        label="Slug"
+        path="name"
+      >
         <n-input v-model:value="brandModel.name" />
       </n-form-item>
     </n-form>
@@ -55,16 +65,16 @@
         <n-button
           v-if="isEdit"
           type="primary"
-          @click="saveAction"
           :disablad="isFetching"
+          @click="saveAction"
         >
           Сохранить
         </n-button>
         <n-button
           v-else
           type="primary"
-          @click="createAction"
           :disablad="isFetching"
+          @click="createAction"
         >
           Создать
         </n-button>
@@ -103,6 +113,18 @@ import useClipboard from "@/hooks/useClipboard";
 
 export default {
   name: "BrandModal",
+  components: {
+    NModal,
+    NUpload,
+    NUploadDragger,
+    NIcon,
+    ArchiveIcon,
+    NForm,
+    NFormItem,
+    NInput,
+    NButton,
+    NSpin,
+  },
   setup() {
     const store = useStore();
     const { getImage } = useClipboard();
@@ -197,18 +219,6 @@ export default {
       cdnLink,
       isImageLoading,
     };
-  },
-  components: {
-    NModal,
-    NUpload,
-    NUploadDragger,
-    NIcon,
-    ArchiveIcon,
-    NForm,
-    NFormItem,
-    NInput,
-    NButton,
-    NSpin,
   },
 };
 </script>

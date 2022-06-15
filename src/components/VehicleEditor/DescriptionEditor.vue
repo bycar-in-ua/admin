@@ -1,13 +1,13 @@
 <template>
   <editor
-    apiKey="bkij2k10jssrm5ez30czeck0fluycxbi0p1watets0n39u8n"
+    v-model="desriptionModel"
+    api-key="bkij2k10jssrm5ez30czeck0fluycxbi0p1watets0n39u8n"
     :init="{
       height: 400,
       menubar: false,
       skin: darkTheme == '1' ? 'oxide-dark' : '',
       content_css: darkTheme == '1' ? 'dark' : '',
     }"
-    v-model="desriptionModel"
   />
 </template>
 
@@ -21,6 +21,9 @@ import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
 
 export default {
   name: "DescriptionEditor",
+  components: {
+    Editor,
+  },
   setup() {
     const store = useStore();
     const car = computed(() => store.state.carEditor.car);
@@ -41,9 +44,6 @@ export default {
       desriptionModel,
       darkTheme,
     };
-  },
-  components: {
-    Editor,
   },
 };
 </script>

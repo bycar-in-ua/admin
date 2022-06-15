@@ -20,7 +20,11 @@
         :options="complectationsForCopy"
         @update:value="optionsCopyHandler"
       >
-        <n-button type="primary" ghost :title="t('complectations.copyOptions')">
+        <n-button
+          type="primary"
+          ghost
+          :title="t('complectations.copyOptions')"
+        >
           <template #icon>
             <n-icon>
               <Copy />
@@ -40,20 +44,26 @@
         :name="category.id"
       >
         <n-transfer
+          v-model:value="optionsTransferModelValue[category.id]"
           virtual-scroll
           filterable
           :options="getOptions(category.options)"
-          v-model:value="optionsTransferModelValue[category.id]"
           size="large"
           class="options-transfer"
         />
-        <add-new-option :category-id="category.id" form-class="mt-4" />
+        <add-new-option
+          :category-id="category.id"
+          form-class="mt-4"
+        />
       </n-collapse-item>
     </n-collapse>
 
     <div class="pt-6">
       <add-new-option-category>
-        <n-button tertiary :title="t('options.addCategory')">
+        <n-button
+          tertiary
+          :title="t('options.addCategory')"
+        >
           <template #icon>
             <n-icon>
               <add-circle-outline />
@@ -67,16 +77,16 @@
     <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
 
     <power-units-editor
-      :power-units="complectation.powerUnits"
       v-model:expanded-names="expandedPowerUnit"
+      :power-units="complectation.powerUnits"
     />
 
     <div class="pt-6">
       <n-button
         tertiary
-        @click="createPowerUnit"
         :loading="powerUnitFetching"
         :title="t('vehicle.powerUnits.addNew')"
+        @click="createPowerUnit"
       >
         <template #icon>
           <n-icon>
@@ -101,11 +111,13 @@
         <n-button
           type="error"
           size="medium"
-          @click="deleteHandler"
           class="mr-auto"
           :loading="isFetching"
+          @click="deleteHandler"
         >
-          <template #icon> <CloseSharp /> </template>
+          <template #icon>
+            <CloseSharp />
+          </template>
           {{ t("complectations.delete") }}
         </n-button>
         <n-button
@@ -163,7 +175,7 @@ import {
   prepareOption,
 } from "@/helpers/preparers";
 
-const emit = defineEmits();
+const emit = defineEmits(["close-modal"]);
 const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();

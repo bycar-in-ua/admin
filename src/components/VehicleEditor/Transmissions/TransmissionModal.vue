@@ -66,9 +66,11 @@
         />
       </n-form-item>
 
-      <n-h4 class="md:col-span-2 mt-0">{{
-        t("vehicle.transmission.gearbox.abbr")
-      }}</n-h4>
+      <n-h4 class="md:col-span-2 mt-0">
+        {{
+          t("vehicle.transmission.gearbox.abbr")
+        }}
+      </n-h4>
       <n-form-item :label="t('vehicle.transmission.gearbox.type')">
         <n-select
           :value="transmission.gearbox.type"
@@ -113,10 +115,18 @@
     </n-form>
     <template #action>
       <div class="text-right">
-        <n-button v-if="isEdit" type="primary" @click="updateAction">
+        <n-button
+          v-if="isEdit"
+          type="primary"
+          @click="updateAction"
+        >
           {{ t("update") }}
         </n-button>
-        <n-button v-else type="primary" @click="createAction">
+        <n-button
+          v-else
+          type="primary"
+          @click="createAction"
+        >
           {{ t("create") }}
         </n-button>
       </div>

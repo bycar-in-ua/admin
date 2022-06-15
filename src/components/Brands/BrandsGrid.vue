@@ -10,9 +10,15 @@
       @click="openBrandModal(brand)"
     >
       <template #cover>
-        <img :src="cdnLink(brand.logo, 300)" class="h-32 p-2 object-contain" />
+        <img
+          :src="cdnLink(brand.logo, 300)"
+          class="h-32 p-2 object-contain"
+        >
       </template>
-      <n-h3 v-text="brand.displayName" class="text-center mb-0 break-all" />
+      <n-h3
+        class="text-center mb-0 break-all"
+        v-text="brand.displayName"
+      />
     </n-card>
   </div>
 </template>
@@ -28,6 +34,10 @@ import { cdnLink } from "@/helpers/cdn";
 
 export default {
   name: "BrandGrid",
+  components: {
+    NCard,
+    NH3,
+  },
   setup() {
     const store = useStore();
 
@@ -43,10 +53,6 @@ export default {
       openBrandModal,
       cdnLink,
     };
-  },
-  components: {
-    NCard,
-    NH3,
   },
 };
 </script>

@@ -1,22 +1,26 @@
 <template>
   <div class="mb-6 flex">
-    <n-button type="primary" @click="isModalOpen = true" class="mr-auto">
+    <n-button
+      type="primary"
+      class="mr-auto"
+      @click="isModalOpen = true"
+    >
       {{ t("create") }}
     </n-button>
     <template v-if="selectedRows.length">
       <n-button
         type="error"
         class="ml-4"
-        @click="hadleDelete('soft')"
         :loading="cars.isFetching"
+        @click="hadleDelete('soft')"
       >
         {{ t("delete") }}
       </n-button>
       <n-button
         type="error"
         class="ml-4"
-        @click="hadleDelete('hard')"
         :loading="cars.isFetching"
+        @click="hadleDelete('hard')"
       >
         {{ t("hardDelete") }}
       </n-button>
@@ -29,7 +33,10 @@
     :row-key="(row) => row.key"
     @update:checked-row-keys="handleCheck"
   />
-  <div v-if="cars.pageCount > 1" class="flex justify-end my-4">
+  <div
+    v-if="cars.pageCount > 1"
+    class="flex justify-end my-4"
+  >
     <n-pagination
       :page-count="cars.pageCount"
       :page-size="cars.pageSize"

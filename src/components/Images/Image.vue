@@ -5,7 +5,10 @@
     :class="selected ? 'border-primary' : 'border-gray-400'"
     @click="clickHandler"
   >
-    <img :src="cdnLink(image.path, 300, 300)" class="opacity-80" />
+    <img
+      :src="cdnLink(image.path, 300, 300)"
+      class="opacity-80"
+    >
   </div>
   <n-image
     v-else
@@ -21,7 +24,7 @@ export default {
 </script>
 
 <script setup>
-import { defineProps, inject } from "vue";
+import { inject } from "vue";
 import { cdnLink } from "@/helpers/cdn";
 import { NImage } from "naive-ui";
 

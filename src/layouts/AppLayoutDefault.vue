@@ -1,5 +1,9 @@
 <template>
-  <n-layout has-sider sider-position="left" class="h-screen relative">
+  <n-layout
+    has-sider
+    sider-position="left"
+    class="h-screen relative"
+  >
     <n-layout-sider
       :native-scrollbar="false"
       bordered
@@ -8,13 +12,16 @@
       :width="240"
       :collapsed="collapsed"
       show-trigger="bar"
+      :style="navStyle"
       @collapse="collapsed = true"
       @expand="collapsed = false"
-      :style="navStyle"
     >
       <div class="h-12 flex justify-center items-center">
         <router-link :to="{ name: 'Dashboard' }">
-          <a href="/" class="font-bold text-white text-2xl">
+          <a
+            href="/"
+            class="font-bold text-white text-2xl"
+          >
             <template v-if="collapsed"> b </template>
             <template v-else> bycar.in.ua </template>
           </a>
@@ -22,15 +29,22 @@
       </div>
       <side-nav :collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout class="h-full main-content" :native-scrollbar="false">
-      <n-layout-header class="z-10 h-12" position="absolute" bordered>
+    <n-layout
+      class="h-full main-content"
+      :native-scrollbar="false"
+    >
+      <n-layout-header
+        class="z-10 h-12"
+        position="absolute"
+        bordered
+      >
         <top-nav />
       </n-layout-header>
       <n-layout-content class="pt-16 p-8 container mx-auto">
         <n-h2
           v-if="$route.meta.title"
-          v-text="t(...$route.meta.title)"
           strong
+          v-text="t(...$route.meta.title)"
         />
         <slot />
       </n-layout-content>

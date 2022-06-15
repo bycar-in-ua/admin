@@ -8,19 +8,22 @@
         :negative-click="hadleClose"
         :loading="isFetching"
       />
-      <div v-else class="flex items-center">
+      <div
+        v-else
+        class="flex items-center"
+      >
         {{ optionCategory.displayName }}
         <n-icon
           class="title-icon cursor-pointer transition-all ml-auto"
-          @click="isEdit = true"
           :title="t('edit')"
+          @click="isEdit = true"
         >
           <PencilSharp />
         </n-icon>
         <n-icon
           class="title-icon transition-all cursor-pointer ml-2"
-          @click="handleDelete"
           :title="t('delete')"
+          @click="handleDelete"
         >
           <CloseSharp />
         </n-icon>
@@ -53,7 +56,7 @@ export default {
 </script>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { NList, NCard, NIcon, NScrollbar } from "naive-ui";

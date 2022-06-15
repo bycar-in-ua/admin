@@ -1,6 +1,9 @@
 <template>
   <div class="mb-6">
-    <n-button type="primary" @click="openModal">
+    <n-button
+      type="primary"
+      @click="openModal"
+    >
       {{ t("create") }}
     </n-button>
   </div>

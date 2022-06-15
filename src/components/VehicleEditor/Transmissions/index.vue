@@ -16,7 +16,11 @@
         hoverable
         class="shadow"
       >
-        <n-table :bordered="false" :single-line="false" size="small">
+        <n-table
+          :bordered="false"
+          :single-line="false"
+          size="small"
+        >
           <tbody>
             <tr>
               <td>{{ t("vehicle.transmission.drive") }}</td>
@@ -46,7 +50,10 @@
               {{ t("delete") }}
             </n-button>
 
-            <n-button quaternary @click="openEditModal(transmission)">
+            <n-button
+              quaternary
+              @click="openEditModal(transmission)"
+            >
               {{ t("edit") }}
             </n-button>
           </div>

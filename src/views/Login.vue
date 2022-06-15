@@ -2,7 +2,10 @@
   <n-layout>
     <n-layout-content>
       <div class="h-screen grid grid-cols-3 md:grid-cols-3">
-        <div class="login-bg hidden md:block" :style="sideStyles" />
+        <div
+          class="login-bg hidden md:block"
+          :style="sideStyles"
+        />
         <div class="col-span-2 flex justify-center items-center">
           <Login />
         </div>

@@ -1,11 +1,24 @@
 <template>
-  <n-form :model="car" :rules="rules" ref="formRef">
+  <n-form
+    ref="formRef"
+    :model="car"
+    :rules="rules"
+  >
     <div class="text-right mb-4">
-      <n-button type="primary" @click="saveAction" :disabled="!isEdited">
+      <n-button
+        type="primary"
+        :disabled="!isEdited"
+        @click="saveAction"
+      >
         <template v-if="isFetching">
-          <n-spin size="small" stroke="white" />
+          <n-spin
+            size="small"
+            stroke="white"
+          />
         </template>
-        <template v-else> {{ t("save") }} </template>
+        <template v-else>
+          {{ t("save") }}
+        </template>
       </n-button>
     </div>
     <n-form-item :label="t('status')">
@@ -16,15 +29,21 @@
         :on-update:value="updateCarField('status')"
       />
     </n-form-item>
-    <n-form-item :label="t('brand')" required>
+    <n-form-item
+      :label="t('brand')"
+      required
+    >
       <n-select
         size="medium"
         disabled
         :value="car.brand"
-        :renderLabel="renderBrandLabel"
+        :render-label="renderBrandLabel"
       />
     </n-form-item>
-    <n-form-item :label="t('vehicle.model')" path="model">
+    <n-form-item
+      :label="t('vehicle.model')"
+      path="model"
+    >
       <n-input
         type="text"
         :value="car.model"
@@ -55,7 +74,10 @@
         :on-update:value="updateCarField('bodyName')"
       />
     </n-form-item>
-    <n-form-item :label="t('vehicle.slug')" path="slug">
+    <n-form-item
+      :label="t('vehicle.slug')"
+      path="slug"
+    >
       <n-input
         type="text"
         :value="car.slug"
@@ -64,7 +86,10 @@
         <template #suffix>
           <n-popover trigger="hover">
             <template #trigger>
-              <n-icon size="20" class="cursor-help">
+              <n-icon
+                size="20"
+                class="cursor-help"
+              >
                 <InformationCircleOutline />
               </n-icon>
             </template>
@@ -78,8 +103,8 @@
     </p>
     <div
       class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer"
-      @click="setModalOpen(true)"
       style="min-height: 100px"
+      @click="setModalOpen(true)"
     >
       <img
         v-if="car.featureImage"
@@ -87,14 +112,14 @@
         preview-disabled
         height="180"
         class="w-full"
-      />
+      >
     </div>
   </n-form>
   <n-modal
     :show="showImageModal"
-    @update:show="setModalOpen"
     preset="card"
     class="max-w-6xl"
+    @update:show="setModalOpen"
   >
     <Images
       :is-selectable="true"

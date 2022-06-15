@@ -60,7 +60,7 @@ store.dispatch(FETCH_OPTION_CATEGORIES);
 const isFetched = computed(() => store.state.carEditor.isFetched);
 const isEdited = computed(() => store.state.carEditor.isEdited);
 
-onBeforeRouteLeave((to, from) => {
+onBeforeRouteLeave((to) => {
   if (isEdited.value) {
     dialog.warning({
       title: t("notifications.confirmations.title"),

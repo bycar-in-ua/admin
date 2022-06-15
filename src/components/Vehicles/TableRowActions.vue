@@ -1,9 +1,17 @@
 <template>
   <n-space>
-    <n-button type="primary" size="medium" @click="editAction">
+    <n-button
+      type="primary"
+      size="medium"
+      @click="editAction"
+    >
       {{ t("edit") }}
     </n-button>
-    <n-button type="primary" size="medium" @click="duplicateAction">
+    <n-button
+      type="primary"
+      size="medium"
+      @click="duplicateAction"
+    >
       {{ t("duplicate") }}
     </n-button>
   </n-space>
@@ -16,7 +24,6 @@ export default {
 </script>
 
 <script setup>
-import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";

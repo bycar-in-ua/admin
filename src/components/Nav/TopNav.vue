@@ -1,7 +1,11 @@
 <template>
   <div class="flex items-center h-full p-2">
     <div class="flex-grow" />
-    <n-icon size="25" class="mr-2 cursor-pointer" title="Сменить тему">
+    <n-icon
+      size="25"
+      class="mr-2 cursor-pointer"
+      title="Сменить тему"
+    >
       <star-half @click="themeSwitcher" />
     </n-icon>
 
@@ -39,6 +43,7 @@ export default {
     StarHalf,
     LangSwitcher,
   },
+  inject: ["themeSwitcher"],
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -75,6 +80,5 @@ export default {
       selectHandler,
     };
   },
-  inject: ["themeSwitcher"],
 };
 </script>

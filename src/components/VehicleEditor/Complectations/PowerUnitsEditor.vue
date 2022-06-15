@@ -1,5 +1,8 @@
 <template>
-  <n-collapse accordion v-model:expanded-names="expandedNames">
+  <n-collapse
+    v-model:expanded-names="expandedNames"
+    accordion
+  >
     <n-collapse-item
       v-for="(powerUnit, index) in powerUnits"
       :key="powerUnit.id"
@@ -28,7 +31,9 @@
             :value="powerUnit.price"
             :on-update:value="inputHandler('price', index)"
           >
-            <template #prefix> $ </template>
+            <template #prefix>
+              $
+            </template>
           </n-input-number>
         </n-form-item>
 
@@ -42,8 +47,12 @@
             :value="powerUnit.consumption.city"
             :on-update:value="inputHandler('consumption.city', index)"
           >
-            <template #prefix> {{ t("city") }} </template>
-            <template #suffix> {{ t("units.volume") }} </template>
+            <template #prefix>
+              {{ t("city") }}
+            </template>
+            <template #suffix>
+              {{ t("units.volume") }}
+            </template>
           </n-input-number>
           <n-input-number
             class="text-center w-full mx-2"
@@ -51,8 +60,12 @@
             :value="powerUnit.consumption.highway"
             :on-update:value="inputHandler('consumption.highway', index)"
           >
-            <template #prefix> {{ t("highway") }} </template>
-            <template #suffix> {{ t("units.volume") }} </template>
+            <template #prefix>
+              {{ t("highway") }}
+            </template>
+            <template #suffix>
+              {{ t("units.volume") }}
+            </template>
           </n-input-number>
           <n-input-number
             class="text-center w-full mx-2"
@@ -60,8 +73,12 @@
             :value="powerUnit.consumption.mixed"
             :on-update:value="inputHandler('consumption.mixed', index)"
           >
-            <template #prefix> {{ t("mixed") }} </template>
-            <template #suffix> {{ t("units.volume") }} </template>
+            <template #prefix>
+              {{ t("mixed") }}
+            </template>
+            <template #suffix>
+              {{ t("units.volume") }}
+            </template>
           </n-input-number>
         </n-form-item>
 
@@ -83,11 +100,13 @@
       <div class="flex justify-end my-2">
         <n-button
           type="error"
-          @click="deleteHandler(powerUnit)"
           :loading="isFetching"
           :disabled="isFetching"
+          @click="deleteHandler(powerUnit)"
         >
-          <template #icon> <CloseSharp /> </template>
+          <template #icon>
+            <CloseSharp />
+          </template>
           {{ t("vehicle.powerUnits.delete") }}
         </n-button>
       </div>
@@ -97,15 +116,15 @@
 <script>
 export default {
   name: "PowerUnitsEditor",
-  data: () => ({
-    expandedNames: null,
-  }),
   props: {
     powerUnits: {
       type: Array,
       requierd: true,
     },
   },
+  data: () => ({
+    expandedNames: null,
+  }),
 };
 </script>
 

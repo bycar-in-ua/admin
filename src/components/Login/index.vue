@@ -1,35 +1,53 @@
 <template>
-  <n-card :title="t('adminPanelEnter')" class="shadow-lg max-w-lg" loading>
+  <n-card
+    :title="t('adminPanelEnter')"
+    class="shadow-lg max-w-lg"
+    loading
+  >
     <template #header-extra>
       <a href="https://bycar.in.ua/">bycar.in.ua</a>
     </template>
     <n-form
+      ref="loginForm"
       :model="model"
       :rules="rules"
-      ref="loginForm"
       :disabled="isFetching"
     >
-      <n-form-item :label="t('userName')" path="username">
+      <n-form-item
+        :label="t('userName')"
+        path="username"
+      >
         <n-input
+          v-model:value="model.username"
           type="text"
           :placeholder="t('enterUserName')"
-          v-model:value="model.username"
         />
       </n-form-item>
-      <n-form-item :label="t('password')" path="password">
+      <n-form-item
+        :label="t('password')"
+        path="password"
+      >
         <n-input
+          v-model:value="model.password"
           type="password"
           :placeholder="t('enterPassword')"
-          v-model:value="model.password"
         />
       </n-form-item>
     </n-form>
 
     <template #action>
       <div class="text-right">
-        <n-button type="primary" @click="submitHandler">
-          <n-spin v-if="isFetching" stroke="white" />
-          <template v-else> {{ t("login") }} </template>
+        <n-button
+          type="primary"
+          @click="submitHandler"
+        >
+          <n-spin
+            v-if="isFetching"
+            stroke="white"
+          />
+          <template v-else>
+            {{ t("login") }}
+          </template>
         </n-button>
       </div>
     </template>

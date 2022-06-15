@@ -10,13 +10,13 @@
       {{ t("images.upload", 2) }}
     </n-button>
     <input
+      ref="fileInput"
       type="file"
       name="imagesArray"
       class="hidden"
-      ref="fileInput"
       multiple
       @change="uploadHandler"
-    />
+    >
   </form>
 </template>
 
@@ -58,7 +58,7 @@ const uploader = async (files) => {
   try {
     isUploading.value = true;
     const uploadImages = await apiClient.uploadFiles(files, cdnPathToSave);
-    const newImages = await apiClient.post("/images", uploadImages);
+    await apiClient.post("/images", uploadImages);
     store.dispatch(FETCH_IMAGES);
     notification.success({
       title: t("images.save.success"),

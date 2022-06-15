@@ -14,7 +14,12 @@
       editable
     />
   </div>
-  <n-empty v-else size="large" :show-description="false" class="p-4" />
+  <n-empty
+    v-else
+    size="large"
+    :show-description="false"
+    class="p-4"
+  />
   <div class="flex justify-end mt-4">
     <n-button
       type="primary"

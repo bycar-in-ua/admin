@@ -1,13 +1,19 @@
 <template>
   <div class="vehicle-image-card">
-    <n-icon class="vehicle-image-card__delete-icon" @click="deleteHandler">
+    <n-icon
+      class="vehicle-image-card__delete-icon"
+      @click="deleteHandler"
+    >
       <close-circle-outline />
     </n-icon>
     <div
       v-if="isDeleting"
       class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-red-500 bg-opacity-50"
     >
-      <n-spin size="medium" stroke="red" />
+      <n-spin
+        size="medium"
+        stroke="red"
+      />
     </div>
     <n-image
       :src="cdnLink(image.path, 300, 300)"
@@ -18,12 +24,12 @@
 
 <script>
 export default {
-  name: "VehicleImageCard ",
+  name: "VehicleImageCard",
 };
 </script>
 
 <script setup>
-import { ref, defineProps, computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { NIcon, NImage, NSpin } from "naive-ui";
 import { CloseCircleOutline } from "@vicons/ionicons5";

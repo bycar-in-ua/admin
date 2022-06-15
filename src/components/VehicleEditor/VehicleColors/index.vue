@@ -1,5 +1,8 @@
 <template>
-  <n-card :title="t('colors.title', 2)" class="my-4 shadow">
+  <n-card
+    :title="t('colors.title', 2)"
+    class="my-4 shadow"
+  >
     <div
       class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
     >
@@ -12,13 +15,20 @@
     </div>
     <template #action>
       <div class="flex justify-end">
-        <n-button type="primary" size="medium" @click="isModalOpen = true">
+        <n-button
+          type="primary"
+          size="medium"
+          @click="isModalOpen = true"
+        >
           {{ t("colors.add") }}
         </n-button>
       </div>
     </template>
   </n-card>
-  <VehicleColorsModal :show="isModalOpen" :toggle-callback="toggleModal" />
+  <VehicleColorsModal
+    :show="isModalOpen"
+    :toggle-callback="toggleModal"
+  />
 </template>
 
 <script>

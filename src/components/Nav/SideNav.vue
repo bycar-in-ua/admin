@@ -57,6 +57,9 @@ const menuOptions = [
 
 export default {
   name: "SideNav",
+  components: {
+    NMenu,
+  },
   props: {
     collapsed: Boolean,
   },
@@ -87,9 +90,6 @@ export default {
       expandIcon,
       createMenuOptions,
     };
-  },
-  components: {
-    NMenu,
   },
 };
 </script>

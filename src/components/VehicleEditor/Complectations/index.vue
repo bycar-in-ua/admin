@@ -1,5 +1,9 @@
 <template>
-  <n-card :title="t('complectations.title')" size="small" class="my-4 shadow">
+  <n-card
+    :title="t('complectations.title')"
+    size="small"
+    class="my-4 shadow"
+  >
     <div class="editors-cards-grid">
       <n-card
         v-for="complectation in complectations"
@@ -11,13 +15,16 @@
             <n-button
               type="error"
               quaternary
-              @click="deleteComplectation(complectation.id)"
               :disabled="isDeleting"
+              @click="deleteComplectation(complectation.id)"
             >
               {{ t("delete") }}
             </n-button>
 
-            <n-button quaternary @click="openEditModal(complectation)">
+            <n-button
+              quaternary
+              @click="openEditModal(complectation)"
+            >
               {{ t("edit") }}
             </n-button>
           </div>

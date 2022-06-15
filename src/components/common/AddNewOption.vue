@@ -10,14 +10,17 @@
       path="optionName"
       :class="formItemClass"
     >
-      <n-input v-model:value="optionName" :placeholder="t('enter')" />
+      <n-input
+        v-model:value="optionName"
+        :placeholder="t('enter')"
+      />
     </n-form-item>
     <n-form-item>
       <n-button
         type="primary"
         :disabled="!optionName"
-        @click="submitHandler"
         :loading="isFetching"
+        @click="submitHandler"
       >
         {{ t("add") }}
       </n-button>

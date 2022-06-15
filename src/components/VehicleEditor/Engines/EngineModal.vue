@@ -78,7 +78,9 @@
                 :on-update:value="inputHandler('cylinderShutOffNumberFrom')"
                 :disabled="!engine.cylinderShutOffSystem"
               >
-                <template #prefix>{{ t("from") }}:</template>
+                <template #prefix>
+                  {{ t("from") }}:
+                </template>
               </n-input-number>
               <n-input-number
                 :value="engine.cylinderShutOffNumberTo"
@@ -86,7 +88,9 @@
                 :on-update:value="inputHandler('cylinderShutOffNumberTo')"
                 :disabled="!engine.cylinderShutOffSystem"
               >
-                <template #prefix>{{ t("from") }}:</template>
+                <template #prefix>
+                  {{ t("from") }}:
+                </template>
               </n-input-number>
             </n-input-group>
           </n-form-item>
@@ -111,13 +115,17 @@
               :value="engine.powerRPMfrom"
               :on-update:value="inputHandler('powerRPMfrom')"
             >
-              <template #prefix>{{ t("from") }}:</template>
+              <template #prefix>
+                {{ t("from") }}:
+              </template>
             </n-input-number>
             <n-input-number
               :value="engine.powerRPMto"
               :on-update:value="inputHandler('powerRPMto')"
             >
-              <template #prefix>{{ t("to") }}:</template>
+              <template #prefix>
+                {{ t("to") }}:
+              </template>
             </n-input-number>
           </n-input-group>
         </n-form-item>
@@ -134,13 +142,17 @@
               :value="engine.torqueRPMfrom"
               :on-update:value="inputHandler('torqueRPMfrom')"
             >
-              <template #prefix>{{ t("from") }}:</template>
+              <template #prefix>
+                {{ t("from") }}:
+              </template>
             </n-input-number>
             <n-input-number
               :value="engine.torqueRPMto"
               :on-update:value="inputHandler('torqueRPMto')"
             >
-              <template #prefix>{{ t("to") }}:</template>
+              <template #prefix>
+                {{ t("to") }}:
+              </template>
             </n-input-number>
           </n-input-group>
         </n-form-item>
@@ -152,7 +164,10 @@
             :on-update:checked="inputHandler('softHybrid')"
           />
         </div>
-        <n-divider title-placement="left" class="md:col-span-2">
+        <n-divider
+          title-placement="left"
+          class="md:col-span-2"
+        >
           <n-checkbox
             :checked="engine.turbo"
             :label="t('vehicle.engine.turbo')"
@@ -179,7 +194,10 @@
             />
           </n-form-item>
         </div>
-        <n-divider title-placement="left" class="md:col-span-2">
+        <n-divider
+          title-placement="left"
+          class="md:col-span-2"
+        >
           <n-checkbox
             :checked="engine.hybrid"
             :label="t('vehicle.engine.hybrid')"
@@ -241,18 +259,18 @@
         <n-button
           v-if="isEdit"
           type="primary"
-          @click="updateAction"
           :disabled="isFetching"
           :loading="isFetching"
+          @click="updateAction"
         >
           {{ t("update") }}
         </n-button>
         <n-button
           v-else
           type="primary"
-          @click="createAction"
           :disabled="isFetching"
           :loading="isFetching"
+          @click="createAction"
         >
           {{ t("create") }}
         </n-button>

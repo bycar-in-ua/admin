@@ -8,12 +8,15 @@
       :negative-click="hadleClose"
       :loading="isFetching"
     />
-    <div v-else class="flex justify-between items-center">
+    <div
+      v-else
+      class="flex justify-between items-center"
+    >
       {{ option.displayName }}
       <n-icon
         class="cursor-pointer ml-auto"
-        @click="isEdit = true"
         :title="t('edit')"
+        @click="isEdit = true"
       >
         <Pencil />
       </n-icon>
@@ -26,16 +29,16 @@
       >
         <n-icon
           class="cursor-pointer ml-2"
-          @click="() => {}"
           :title="t('options.changeCategory')"
+          @click="() => {}"
         >
           <SwapVertical />
         </n-icon>
       </n-popselect>
       <n-icon
         class="cursor-pointer ml-2"
-        @click="handleDelete"
         :title="t('delete')"
+        @click="handleDelete"
       >
         <Close />
       </n-icon>
@@ -50,7 +53,7 @@ export default {
 </script>
 
 <script setup>
-import { defineProps, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { NListItem, NIcon, NPopselect, useNotification } from "naive-ui";

@@ -19,8 +19,14 @@
       </n-icon>
     </add-new-option-category>
   </n-divider>
-  <n-drawer v-model:show="showDrawer" placement="right">
-    <n-drawer-content :title="t('info.confirmation')" closable>
+  <n-drawer
+    v-model:show="showDrawer"
+    placement="right"
+  >
+    <n-drawer-content
+      :title="t('info.confirmation')"
+      closable
+    >
       {{ t("info.deletingOptionCategory") }}
       <div class="text-right mt-4">
         <n-button
@@ -49,7 +55,7 @@ import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NDrawer, NDrawerContent, NButton, NDivider, NIcon } from "naive-ui";
 import { AddCircleOutline } from "@vicons/ionicons5";
-import colors from "@/colors";
+import colors from "@/colors.json";
 import {
   FETCH_OPTION_CATEGORIES,
   DELETE_OPTION_CATEGORY,

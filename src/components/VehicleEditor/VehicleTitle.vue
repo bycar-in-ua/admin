@@ -9,6 +9,9 @@ import { prepareCarTitle } from "@/helpers/preparers";
 
 export default {
   name: "VehicleTitle",
+  components: {
+    NH3,
+  },
   computed: {
     ...mapState({
       car: (state) => state.carEditor.car,
@@ -16,9 +19,6 @@ export default {
     title() {
       return prepareCarTitle(this.car);
     },
-  },
-  components: {
-    NH3,
   },
 };
 </script>

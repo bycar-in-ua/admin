@@ -7,42 +7,20 @@
       <n-select v-model:value="formModel.closestShade" :options="colorItems" />
     </n-form-item>
     <n-form-item :label="t('colors.title')">
-      <n-upload
-        class="w-full"
-        v-if="!formModel.reference"
-        @change="formColorUploadHandler"
-        :show-file-list="false"
-      >
+      <n-upload v-if="!formModel.reference" class="w-full" :show-file-list="false" @change="formColorUploadHandler">
         <n-upload-dragger>
           <n-icon size="48" :depth="3">
             <archive-outline />
           </n-icon>
         </n-upload-dragger>
       </n-upload>
-      <color-card
-        v-else
-        class="mx-auto"
-        :color="formModel"
-        :close-action="() => (formModel.reference = null)"
-      />
+      <color-card v-else class="mx-auto" :color="formModel" :close-action="() => (formModel.reference = null)" />
     </n-form-item>
     <div class="flex justify-end">
-      <n-button
-        v-if="color.id"
-        type="primary"
-        :loading="isFetching"
-        :disabled="isFetching"
-        @click="updateHandler"
-      >
+      <n-button v-if="color.id" type="primary" :loading="isFetching" :disabled="isFetching" @click="updateHandler">
         {{ t("save") }}
       </n-button>
-      <n-button
-        v-else
-        type="primary"
-        :loading="isFetching"
-        :disabled="isFetching"
-        @click="createHandler"
-      >
+      <n-button v-else type="primary" :loading="isFetching" :disabled="isFetching" @click="createHandler">
         {{ t("create") }}
       </n-button>
     </div>
@@ -56,14 +34,7 @@ export default {
 </script>
 
 <script setup>
-import {
-  ref,
-  computed,
-  inject,
-  onMounted,
-  onBeforeUnmount,
-  defineProps,
-} from "vue";
+import { ref, computed, inject, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
@@ -102,6 +73,7 @@ const props = defineProps({
   color: {
     type: Object,
     requierd: true,
+    default: () => ({})
   },
 });
 

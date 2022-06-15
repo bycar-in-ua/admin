@@ -1,6 +1,12 @@
 <template>
-  <n-dropdown trigger="hover" :options="options" @select="langSwitchHandler">
-    <div class="mr-3 uppercase">{{ currentLocale }}</div>
+  <n-dropdown
+    trigger="hover"
+    :options="options"
+    @select="langSwitchHandler"
+  >
+    <div class="mr-3 uppercase">
+      {{ currentLocale }}
+    </div>
   </n-dropdown>
 </template>
 <script>

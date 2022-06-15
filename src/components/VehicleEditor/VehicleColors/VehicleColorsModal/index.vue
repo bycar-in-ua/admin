@@ -24,7 +24,10 @@
         {{ t("colors.addNew") }}
       </n-button>
     </div>
-    <ColorForm v-if="isColorsFormShowing" :color="colorRef" />
+    <ColorForm
+      v-if="isColorsFormShowing"
+      :color="colorRef"
+    />
     <ColorsList v-else />
   </n-modal>
 </template>

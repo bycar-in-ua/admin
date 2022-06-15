@@ -11,7 +11,10 @@
           <app-layout v-if="isUserFetched">
             <router-view :key="locale" />
           </app-layout>
-          <div v-else class="h-screen flex justify-center items-center">
+          <div
+            v-else
+            class="h-screen flex justify-center items-center"
+          >
             <n-spin :size="100" />
           </div>
         </n-notification-provider>

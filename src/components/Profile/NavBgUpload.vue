@@ -1,8 +1,13 @@
 <template>
   <n-thing title="Настройка фонового изображение навигации">
-    <template #description> Текущее изображение: </template>
+    <template #description>
+      Текущее изображение:
+    </template>
     <div class="">
-      <img :src="navBgImage" class="max-w-3xl" />
+      <img
+        :src="navBgImage"
+        class="max-w-3xl"
+      >
     </div>
     <template #action>
       <n-upload :on-change="uploadHandler">
