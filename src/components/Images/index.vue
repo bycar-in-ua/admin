@@ -48,7 +48,7 @@ export default {
 </script>
 
 <script setup>
-import { computed, ref, provide, defineProps } from "vue";
+import { computed, ref, provide } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import ImagesToolBar from "./ImagesToolBar";
@@ -62,7 +62,7 @@ const props = defineProps({
     default: FETCH_IMAGES,
   },
   actionPayload: {
-    type: [String, Number, Object, Array, ],
+    type: [String, Number, Object, Array],
     default: 1,
   },
   isSelectable: {
