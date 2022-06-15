@@ -200,7 +200,9 @@ import {
 import { Close } from "@vicons/ionicons5";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
-import { vehicleRU as vehicleTranslations } from "@/i18n/vehicle";
+import i18n from "@/i18n";
+
+const vehicleTranslations = i18n.ua.vehicle;
 
 const store = useStore();
 const { t } = useI18n();

@@ -67,9 +67,7 @@
       </n-form-item>
 
       <n-h4 class="md:col-span-2 mt-0">
-        {{
-          t("vehicle.transmission.gearbox.abbr")
-        }}
+        {{ t("vehicle.transmission.gearbox.abbr") }}
       </n-h4>
       <n-form-item :label="t('vehicle.transmission.gearbox.type')">
         <n-select
@@ -115,18 +113,10 @@
     </n-form>
     <template #action>
       <div class="text-right">
-        <n-button
-          v-if="isEdit"
-          type="primary"
-          @click="updateAction"
-        >
+        <n-button v-if="isEdit" type="primary" @click="updateAction">
           {{ t("update") }}
         </n-button>
-        <n-button
-          v-else
-          type="primary"
-          @click="createAction"
-        >
+        <n-button v-else type="primary" @click="createAction">
           {{ t("create") }}
         </n-button>
       </div>
@@ -159,7 +149,9 @@ import {
   CREATE_NEW_TRANSMISSION,
   EDIT_TRANSMISSION,
 } from "@/store/modules/carEditor/transmission/actionTypes";
-import { vehicleRU as vehicleWordings } from "@/i18n/vehicle";
+import i18n from "@/i18n";
+
+const vehicleWordings = i18n.ua.vehicle
 
 const store = useStore();
 const { t } = useI18n();

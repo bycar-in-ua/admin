@@ -3,8 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@common/*": ["./common"]
-    }
+      "@common/*": ["./common/*"]
+    },
+    "resolveJsonModule": true
   },
-  "exclude": [".nuxt", "dist"]
+  "exclude": ["dist"]
 }

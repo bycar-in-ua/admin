@@ -7,20 +7,42 @@
       <n-select v-model:value="formModel.closestShade" :options="colorItems" />
     </n-form-item>
     <n-form-item :label="t('colors.title')">
-      <n-upload v-if="!formModel.reference" class="w-full" :show-file-list="false" @change="formColorUploadHandler">
+      <n-upload
+        v-if="!formModel.reference"
+        class="w-full"
+        :show-file-list="false"
+        @change="formColorUploadHandler"
+      >
         <n-upload-dragger>
           <n-icon size="48" :depth="3">
             <archive-outline />
           </n-icon>
         </n-upload-dragger>
       </n-upload>
-      <color-card v-else class="mx-auto" :color="formModel" :close-action="() => (formModel.reference = null)" />
+      <color-card
+        v-else
+        class="mx-auto"
+        :color="formModel"
+        :close-action="() => (formModel.reference = null)"
+      />
     </n-form-item>
     <div class="flex justify-end">
-      <n-button v-if="color.id" type="primary" :loading="isFetching" :disabled="isFetching" @click="updateHandler">
+      <n-button
+        v-if="color.id"
+        type="primary"
+        :loading="isFetching"
+        :disabled="isFetching"
+        @click="updateHandler"
+      >
         {{ t("save") }}
       </n-button>
-      <n-button v-else type="primary" :loading="isFetching" :disabled="isFetching" @click="createHandler">
+      <n-button
+        v-else
+        type="primary"
+        :loading="isFetching"
+        :disabled="isFetching"
+        @click="createHandler"
+      >
         {{ t("create") }}
       </n-button>
     </div>
@@ -50,7 +72,7 @@ import {
 } from "naive-ui";
 import ColorCard from "../ColorCard";
 import { ArchiveOutline } from "@vicons/ionicons5";
-import { colorsRU } from "@/i18n/colors";
+import i18n from "@/i18n/index.js";
 import apiClient from "@/helpers/apiClient";
 import {
   CREATE_NEW_COLOR,
@@ -73,7 +95,7 @@ const props = defineProps({
   color: {
     type: Object,
     requierd: true,
-    default: () => ({})
+    default: () => ({}),
   },
 });
 
@@ -86,7 +108,7 @@ const toggleColorFormShowing = inject("toggleColorForm");
 
 const carBrand = computed(() => store.state.carEditor.car.brand);
 
-const colorItems = Object.keys(colorsRU.shades).map((color) => ({
+const colorItems = Object.keys(i18n.ua.colors.shades).map((color) => ({
   value: color,
   label: t(`colors.shades.${color}`),
 }));
