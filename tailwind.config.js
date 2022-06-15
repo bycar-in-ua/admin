@@ -1,7 +1,8 @@
-import colors from "./src/colors.js";
+/* eslint-disable no-undef */
+const colors = require("./src/colors.json");
 
-export default {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+module.exports = {
+  content: ["./index.html", "./src/**/*.{vue,js}"],
   darkMode: "media", // or 'media' or 'class'
   corePlugins: {
     preflight: false,
