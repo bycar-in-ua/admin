@@ -31,7 +31,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NForm, NFormItem, NInput, NButton } from "naive-ui";

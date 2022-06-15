@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   primary: {
     default: "#393BE7",
     rgb: "rgb(25, 27, 205)",

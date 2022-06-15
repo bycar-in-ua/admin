@@ -1,8 +1,11 @@
-const colors = require("./src/colors.js");
+import colors from "./src/colors.js";
 
-module.exports = {
-  purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
-  darkMode: false, // or 'media' or 'class'
+export default {
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  darkMode: "media", // or 'media' or 'class'
+  corePlugins: {
+    preflight: false,
+  },
   theme: {
     extend: {
       colors: {

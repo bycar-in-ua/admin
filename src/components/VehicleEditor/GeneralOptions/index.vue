@@ -218,7 +218,7 @@ const createOptions = (field) =>
   }));
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .general-data {
   .n-input-number {
     @apply w-full;

@@ -4,8 +4,8 @@ import router from "./router";
 import store from "./store";
 import { createI18n } from "vue-i18n";
 import messages from "@/i18n/messages";
-import "./assets/tailwind.css";
 import "./assets/global.css";
+import "./assets/tailwind.css";
 import { getCookie } from "./helpers/cookieHelpers";
 
 const i18n = createI18n({

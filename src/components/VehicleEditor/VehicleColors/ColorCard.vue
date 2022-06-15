@@ -91,7 +91,7 @@ const closeHandler = async () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .image-wrapper {
   &:hover {
     .icon {

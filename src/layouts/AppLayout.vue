@@ -5,24 +5,30 @@
 </template>
 
 <script>
-import AppLayoutDefault from "./AppLayoutDefault";
 export default {
   name: "AppLayout",
-  data: () => ({
-    layout: AppLayoutDefault,
-  }),
-  watch: {
-    $route: {
-      immediate: true,
-      async handler(route) {
-        try {
-          const component = await import(`@/layouts/${route.meta.layout}.vue`);
-          this.layout = component?.default || AppLayoutDefault;
-        } catch (e) {
-          this.layout = AppLayoutDefault;
-        }
-      },
-    },
-  },
 };
+</script>
+
+<script setup>
+import { watch, ref, markRaw } from "vue";
+import { useRoute } from "vue-router";
+import AppLayoutDefault from "./AppLayoutDefault.vue";
+import LoginLayout from "./LoginLayout.vue";
+
+const route = useRoute();
+
+const layout = ref();
+
+const layouts = {
+  LoginLayout,
+};
+
+watch(
+  () => route.meta?.layout,
+  (metaLayout) => {
+    layout.value = markRaw(layouts[metaLayout] || AppLayoutDefault);
+  },
+  { immediate: true }
+);
 </script>

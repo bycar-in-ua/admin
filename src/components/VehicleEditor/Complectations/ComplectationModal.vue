@@ -289,7 +289,7 @@ function recalcOptions() {
 }
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .options-transfer {
   &.n-transfer {
     width: 100%;

@@ -87,7 +87,7 @@ const navStyle = {
 };
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .main-content {
   .n-scrollbar-content {
     display: flex;

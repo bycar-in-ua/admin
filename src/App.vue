@@ -40,7 +40,7 @@ import {
   NDialogProvider,
   NSpin,
 } from "naive-ui";
-import colors from "./colors";
+import colors from "./colors.js";
 import AppLayout from "./layouts/AppLayout.vue";
 import { FETCH_VEHICLE_TYPES } from "./store/modules/library/actionTypes";
 import useMemory from "./hooks/useMemory";

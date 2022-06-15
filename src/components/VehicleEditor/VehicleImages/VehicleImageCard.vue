@@ -59,7 +59,7 @@ const deleteHandler = async () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .vehicle-image-card {
   @apply relative;
   &:hover {

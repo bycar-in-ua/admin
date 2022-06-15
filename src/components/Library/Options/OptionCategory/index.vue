@@ -98,7 +98,7 @@ const handleDelete = async () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="postcss">
 .title-icon {
   opacity: 0.2;
   &:hover {
