@@ -1,17 +1,9 @@
 <template>
   <n-space>
-    <n-button
-      type="primary"
-      size="medium"
-      @click="editAction"
-    >
+    <n-button type="primary" size="medium" @click="editAction">
       {{ t("edit") }}
     </n-button>
-    <n-button
-      type="primary"
-      size="medium"
-      @click="duplicateAction"
-    >
+    <n-button type="primary" size="medium" @click="duplicateAction">
       {{ t("duplicate") }}
     </n-button>
   </n-space>
@@ -45,7 +37,9 @@ const editAction = () => {
   router.push({ name: "EditVehicle", params: { slug: props.rowData.slug } });
 };
 
-const duplicateAction = () => {
-  store.dispatch(DUPLICATE_CAR, props.rowData.key);
+const duplicateAction = async () => {
+  const newCar = await store.dispatch(DUPLICATE_CAR, props.rowData.key);
+  console.log(newCar);
+  router.push({ name: "EditVehicle", params: { slug: newCar.slug } });
 };
 </script>

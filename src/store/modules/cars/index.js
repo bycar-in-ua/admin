@@ -25,11 +25,10 @@ export const cars = {
         commit("updateFetching", false);
       }
     },
-    async [DUPLICATE_CAR]({ commit, dispatch }, targetCarId) {
+    async [DUPLICATE_CAR]({ commit }, targetCarId) {
       try {
         commit("updateFetching", true);
-        await apiClient.post(`/vehicles/duplicate/${targetCarId}`);
-        dispatch(FETCH_CARS);
+        return await apiClient.post(`/vehicles/duplicate/${targetCarId}`, {});
       } catch (e) {
         throw Error(e);
       } finally {
