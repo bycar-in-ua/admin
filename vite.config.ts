@@ -15,7 +15,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@common": fileURLToPath(new URL("./common", import.meta.url)),
     },
-    extensions: [".vue", ".js"],
+    extensions: [".vue", ".js", ".ts"],
   },
   server: {
     port: 3010,
