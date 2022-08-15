@@ -5,26 +5,8 @@
     :title="t('vehicle.addNew')"
     class="max-w-xl"
   >
-    <n-form
-      ref="formRef"
-      :model="formModel"
-      :rules="rules"
-    >
-      <n-form-item
-        :label="t('vehicle.type')"
-        path="typeId"
-      >
-        <n-select
-          v-model:value="formModel.typeId"
-          :options="createOptions(types)"
-          size="medium"
-          disabled
-        />
-      </n-form-item>
-      <n-form-item
-        :label="t('brand', 1)"
-        path="brandId"
-      >
+    <n-form ref="formRef" :model="formModel" :rules="rules">
+      <n-form-item :label="t('brand', 1)" path="brandId">
         <n-select
           v-model:value="formModel.brandId"
           :options="createOptions(brands)"
@@ -33,20 +15,14 @@
           filterable
         />
       </n-form-item>
-      <n-form-item
-        :label="t('vehicle.model')"
-        path="model"
-      >
+      <n-form-item :label="t('vehicle.model')" path="model">
         <n-input
           v-model:value="formModel.model"
           type="text"
           :placeholder="t('vehicle.enterModel')"
         />
       </n-form-item>
-      <n-form-item
-        :label="t('vehicle.modelYear')"
-        path="yearFrom"
-      >
+      <n-form-item :label="t('vehicle.modelYear')" path="yearFrom">
         <n-input-group>
           <n-input-number
             v-model:value="formModel.yearFrom"
@@ -63,26 +39,14 @@
         </n-input-group>
       </n-form-item>
       <n-form-item :label="t('vehicle.bodyName')">
-        <n-input
-          v-model:value="formModel.bodyName"
-          type="text"
-        />
+        <n-input v-model:value="formModel.bodyName" type="text" />
       </n-form-item>
-      <n-form-item
-        :label="t('vehicle.slug')"
-        path="slug"
-      >
-        <n-input
-          v-model:value="formModel.slug"
-          type="text"
-        >
+      <n-form-item :label="t('vehicle.slug')" path="slug">
+        <n-input v-model:value="formModel.slug" type="text">
           <template #suffix>
             <n-popover trigger="hover">
               <template #trigger>
-                <n-icon
-                  size="20"
-                  class="cursor-help"
-                >
+                <n-icon size="20" class="cursor-help">
                   <InformationCircleOutline />
                 </n-icon>
               </template>
@@ -94,13 +58,8 @@
     </n-form>
     <template #action>
       <div class="text-right">
-        <n-button
-          type="primary"
-          @click="submitHandler"
-        >
-          {{
-            t("create")
-          }}
+        <n-button type="primary" @click="submitHandler">
+          {{ t("create") }}
         </n-button>
       </div>
     </template>
@@ -138,10 +97,6 @@ import {
 } from "naive-ui";
 
 const rules = {
-  typeId: {
-    required: true,
-    message: "Поле Тип не может быть пустым",
-  },
   brandId: {
     required: true,
     message: "Поле Бренд не может быть пустым",
@@ -172,10 +127,7 @@ store.dispatch(brandNamespace(FETCH_BRANDS));
 
 const formRef = ref(null);
 
-const typeCar = types.value.find((type) => type.name === "car");
-
 const formModel = ref({
-  typeId: typeCar.id,
   brandId: null,
   model: null,
   yearFrom: null,

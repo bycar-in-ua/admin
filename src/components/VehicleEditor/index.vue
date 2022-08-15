@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isFetched" class="flex relative">
-    <n-scrollbar class="pr-6 mr-1" style="flex: 0 0 75%; max-height: 86vh">
+  <div v-if="isFetched" class="flex gap-4 relative">
+    <n-scrollbar class="basis-3/4 pr-4" style="max-height: calc(100vh - 100px);">
       <VehicleTitle />
       <DescriptionEditor />
       <GeneralOptions />
@@ -10,7 +10,7 @@
       <VehicleImages />
       <VehicleColors />
     </n-scrollbar>
-    <SideColumn style="flex: 0 0 24%" />
+    <SideColumn class="basis-1/4" />
   </div>
   <VahicleEditorSkeleton v-else />
 </template>

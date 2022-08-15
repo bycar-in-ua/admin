@@ -1,6 +1,5 @@
 import apiClient from "@/helpers/apiClient";
 import {
-  FETCH_VEHICLE_TYPES,
   FETCH_COLORS,
   CREATE_NEW_COLOR,
   DELETE_COLOR,
@@ -17,10 +16,6 @@ export const library = {
     colors: [],
   }),
   actions: {
-    async [FETCH_VEHICLE_TYPES]({ commit }) {
-      const types = await apiClient.get("/types");
-      commit(UPDATE_LIBRARY, ["types", types]);
-    },
     async [FETCH_COLORS]({ commit }, brandId = "") {
       const colors = await apiClient.get(`/colors/${brandId}`);
       commit(UPDATE_LIBRARY, ["colors", colors]);

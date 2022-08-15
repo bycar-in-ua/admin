@@ -11,10 +11,7 @@
           <app-layout v-if="isUserFetched">
             <router-view :key="locale" />
           </app-layout>
-          <div
-            v-else
-            class="h-screen flex justify-center items-center"
-          >
+          <div v-else class="h-screen flex justify-center items-center">
             <n-spin :size="100" />
           </div>
         </n-notification-provider>
@@ -23,13 +20,14 @@
   </n-config-provider>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "App",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { computed, provide, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
@@ -45,7 +43,6 @@ import {
 } from "naive-ui";
 import colors from "./colors.json";
 import AppLayout from "./layouts/AppLayout.vue";
-import { FETCH_VEHICLE_TYPES } from "./store/modules/library/actionTypes";
 import useMemory from "./hooks/useMemory";
 
 const themeOverrides = {
@@ -89,8 +86,6 @@ const themeSwitcher = () => {
 };
 
 provide("themeSwitcher", themeSwitcher);
-
-store.dispatch(FETCH_VEHICLE_TYPES);
 
 const isUserFetched = computed(() => store.state.auth.isFetched);
 </script>

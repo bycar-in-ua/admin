@@ -1,9 +1,5 @@
 <template>
-  <n-layout
-    has-sider
-    sider-position="left"
-    class="h-screen relative"
-  >
+  <n-layout has-sider sider-position="left" class="h-screen relative">
     <n-layout-sider
       :native-scrollbar="false"
       bordered
@@ -18,10 +14,7 @@
     >
       <div class="h-12 flex justify-center items-center">
         <router-link :to="{ name: 'Dashboard' }">
-          <a
-            href="/"
-            class="font-bold text-white text-2xl"
-          >
+          <a href="/" class="font-bold text-white text-2xl">
             <template v-if="collapsed"> b </template>
             <template v-else> bycar.in.ua </template>
           </a>
@@ -29,15 +22,8 @@
       </div>
       <side-nav :collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout
-      class="h-full main-content"
-      :native-scrollbar="false"
-    >
-      <n-layout-header
-        class="z-10 h-12"
-        position="absolute"
-        bordered
-      >
+    <n-layout class="h-full main-content" :native-scrollbar="false">
+      <n-layout-header class="z-10 h-12" position="absolute" bordered>
         <top-nav />
       </n-layout-header>
       <n-layout-content class="pt-16 p-8 container mx-auto">
@@ -48,9 +34,6 @@
         />
         <slot />
       </n-layout-content>
-      <n-layout-footer class="text-center p-2">
-        <a href="https://bycar.in.ua/">bycar.in.ua</a> {{ t("copiright") }}
-      </n-layout-footer>
     </n-layout>
   </n-layout>
 </template>
@@ -69,7 +52,6 @@ import {
   NLayout,
   NLayoutContent,
   NLayoutHeader,
-  NLayoutFooter,
   NLayoutSider,
   NH2,
 } from "naive-ui";
