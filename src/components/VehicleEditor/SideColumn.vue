@@ -102,16 +102,14 @@
       {{ t("vehicle.featureImage") }}
     </p>
     <div
-      class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer"
-      style="min-height: 100px"
+      class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer flex justify-center"
+      style="min-height: 60px"
       @click="setModalOpen(true)"
     >
       <img
         v-if="car.featureImage"
         :src="cdnLink(car.featureImage.path, 300)"
-        preview-disabled
-        height="180"
-        class="w-full"
+        class="w-full object-cover"
       >
     </div>
   </n-form>
@@ -126,7 +124,7 @@
       :single-selection="true"
       :discardable="false"
       :toolbar-actions="toolbarActions"
-      :preselected-images="[car.featureImage ? car.featureImage : false]"
+      :preselected-images="[car.featureImage ? car.featureImage.id : false]"
       :vuex-action="SET_IMAGES"
       :action-payload="car.images"
     />

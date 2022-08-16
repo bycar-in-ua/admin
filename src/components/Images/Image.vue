@@ -1,19 +1,20 @@
 <template>
   <div
     v-if="selectable"
-    class="border-4 rounded-lg cursor-pointer"
-    :class="selected ? 'border-primary' : 'border-gray-400'"
+    class="overflow-hidden outline-4 outline outline-offset-[-4px] rounded-lg cursor-pointer flex justify-center"
+    :class="selected ? 'outline-primary' : 'outline-gray-400'"
     @click="clickHandler"
   >
     <img
       :src="cdnLink(image.path, 300, 300)"
-      class="opacity-80"
-    >
+      class="w-full object-cover aspect-square"
+    />
   </div>
   <n-image
     v-else
     :src="cdnLink(image.path, 300, 300)"
     :preview-src="cdnLink(image.path)"
+    class="rounded-lg"
   />
 </template>
 
