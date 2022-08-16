@@ -1,0 +1,31 @@
+{
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 13,
+    "parser": "@typescript-eslint/parser",
+    "sourceType": "module"
+  },
+  "env": {
+    "es2021": true,
+    "vue/setup-compiler-macros": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended",
+    "prettier"
+  ],
+  "rules": {
+    "vue/multi-word-component-names": "off",
+    "vue/require-default-prop": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
+      ]
+    }
+  ]
+}

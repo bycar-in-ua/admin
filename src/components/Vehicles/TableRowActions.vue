@@ -9,37 +9,35 @@
   </n-space>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "TableRowActions",
 };
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import { NButton, NSpace } from "naive-ui";
-import { DUPLICATE_CAR } from "@/store/modules/cars/actionTypes";
+import { useCarsStore } from "@/stores/cars.store";
+import { IRowData } from "./VehiclesTable.vue";
 
-const props = defineProps({
-  rowData: {
-    type: Object,
-    requierd: true,
-  },
-});
+interface IProps {
+  rowData: IRowData;
+}
+
+const props = defineProps<IProps>();
 
 const { t } = useI18n();
 const router = useRouter();
-const store = useStore();
+const carsStore = useCarsStore();
 
 const editAction = () => {
   router.push({ name: "EditVehicle", params: { slug: props.rowData.slug } });
 };
 
 const duplicateAction = async () => {
-  const newCar = await store.dispatch(DUPLICATE_CAR, props.rowData.key);
-  console.log(newCar);
+  const newCar = await carsStore.duplicateCar(props.rowData.key);
   router.push({ name: "EditVehicle", params: { slug: newCar.slug } });
 };
 </script>

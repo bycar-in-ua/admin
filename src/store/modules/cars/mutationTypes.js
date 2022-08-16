@@ -1,2 +1,0 @@
-export const UPDATE_CARS = "UPDATE_CARS";
-export const UPDATE_CARS_META = "UPDATE_CARS_META";

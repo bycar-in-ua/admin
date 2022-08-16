@@ -11,13 +11,14 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@/*": ["./src/*"],
-    //   "@common/*": ["./common/*"]
-    // },
-    // "resolveJsonModule": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@common/*": ["./common/*"]
+    },
+    "allowJs": true,
+    "noImplicitAny": false
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["dist"],

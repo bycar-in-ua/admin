@@ -7,6 +7,7 @@ import messages from "@/i18n";
 import "./assets/global.css";
 import "./assets/tailwind.css";
 import { getCookie } from "./helpers/cookieHelpers";
+import { createPinia } from "pinia";
 
 const i18n = createI18n({
   legacy: false,
@@ -15,9 +16,11 @@ const i18n = createI18n({
   messages,
 });
 
+const pinia = createPinia();
 const app = createApp(App);
 
 app.use(router);
+app.use(pinia);
 app.use(store);
 app.use(i18n);
 
