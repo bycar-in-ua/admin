@@ -6,7 +6,7 @@
     :discardable="discardable"
   />
   <div
-    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-4"
+    class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-4"
   >
     <n-image-group>
       <n-skeleton

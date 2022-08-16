@@ -42,7 +42,7 @@ export const useCarsStore = defineStore("cars", {
         this.isFetching = true;
         return await apiClient.post(`/vehicles/duplicate/${targetCarId}`, {});
       } catch (e) {
-        throw Error(e);
+        throw Error();
       } finally {
         this.isFetching = false;
       }
@@ -53,7 +53,7 @@ export const useCarsStore = defineStore("cars", {
         await apiClient.delete(`/vehicles/${type}`, carsIds);
         await this.fetchCars(1);
       } catch (e) {
-        throw Error(e);
+        throw Error();
       } finally {
         this.isFetching = false;
       }
