@@ -21,6 +21,10 @@ module.exports = {
           dark: colors.secondary.darken1,
         },
       },
+      maxHeight: {
+        "1/4": "75vh",
+        "4/5": "80vh",
+      },
     },
   },
   variants: {

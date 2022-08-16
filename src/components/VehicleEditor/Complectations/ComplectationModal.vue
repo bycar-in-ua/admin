@@ -8,104 +8,99 @@
     :title="complectation.displayName"
     class="max-w-5xl"
   >
-    <div class="flex">
-      <n-input
-        :value="complectation.displayName"
-        :on-update:value="complectationFieldUpdateHandler('displayName')"
-        type="text"
-        class="mr-4"
+    <n-scrollbar class="max-h-4/5 pr-4">
+      <div class="flex">
+        <n-input
+          :value="complectation.displayName"
+          :on-update:value="complectationFieldUpdateHandler('displayName')"
+          type="text"
+          class="mr-4"
+        />
+
+        <n-popselect
+          :options="complectationsForCopy"
+          @update:value="optionsCopyHandler"
+        >
+          <n-button
+            type="primary"
+            ghost
+            :title="t('complectations.copyOptions')"
+          >
+            <template #icon>
+              <n-icon>
+                <Copy />
+              </n-icon>
+            </template>
+          </n-button>
+        </n-popselect>
+      </div>
+
+      <n-divider>{{ t("options.title") }}</n-divider>
+
+      <n-collapse accordion>
+        <n-collapse-item
+          v-for="category in Object.values(optionCategories)"
+          :key="category.id"
+          :title="category.displayName"
+          :name="category.id"
+        >
+          <n-transfer
+            v-model:value="optionsTransferModelValue[category.id]"
+            virtual-scroll
+            filterable
+            :options="getOptions(category.options)"
+            size="large"
+            class="options-transfer"
+          />
+          <add-new-option :category-id="category.id" form-class="mt-4" />
+        </n-collapse-item>
+      </n-collapse>
+
+      <div class="pt-6">
+        <add-new-option-category>
+          <n-button tertiary :title="t('options.addCategory')">
+            <template #icon>
+              <n-icon>
+                <add-circle-outline />
+              </n-icon>
+            </template>
+            {{ t("options.addCategory") }}
+          </n-button>
+        </add-new-option-category>
+      </div>
+
+      <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
+
+      <power-units-editor
+        v-model:expanded-names="expandedPowerUnit"
+        :power-units="complectation.powerUnits"
       />
 
-      <n-popselect
-        :options="complectationsForCopy"
-        @update:value="optionsCopyHandler"
-      >
-        <n-button
-          type="primary"
-          ghost
-          :title="t('complectations.copyOptions')"
-        >
-          <template #icon>
-            <n-icon>
-              <Copy />
-            </n-icon>
-          </template>
-        </n-button>
-      </n-popselect>
-    </div>
-
-    <n-divider>{{ t("options.title") }}</n-divider>
-
-    <n-collapse accordion>
-      <n-collapse-item
-        v-for="category in Object.values(optionCategories)"
-        :key="category.id"
-        :title="category.displayName"
-        :name="category.id"
-      >
-        <n-transfer
-          v-model:value="optionsTransferModelValue[category.id]"
-          virtual-scroll
-          filterable
-          :options="getOptions(category.options)"
-          size="large"
-          class="options-transfer"
-        />
-        <add-new-option
-          :category-id="category.id"
-          form-class="mt-4"
-        />
-      </n-collapse-item>
-    </n-collapse>
-
-    <div class="pt-6">
-      <add-new-option-category>
+      <div class="pt-6">
         <n-button
           tertiary
-          :title="t('options.addCategory')"
+          :loading="powerUnitFetching"
+          :title="t('vehicle.powerUnits.addNew')"
+          @click="createPowerUnit"
         >
           <template #icon>
             <n-icon>
               <add-circle-outline />
             </n-icon>
           </template>
-          {{ t("options.addCategory") }}
+          {{ t("vehicle.powerUnits.addNew") }}
         </n-button>
-      </add-new-option-category>
-    </div>
-
-    <n-divider>{{ t("vehicle.powerUnits.title") }}</n-divider>
-
-    <power-units-editor
-      v-model:expanded-names="expandedPowerUnit"
-      :power-units="complectation.powerUnits"
-    />
-
-    <div class="pt-6">
-      <n-button
-        tertiary
-        :loading="powerUnitFetching"
-        :title="t('vehicle.powerUnits.addNew')"
-        @click="createPowerUnit"
-      >
-        <template #icon>
-          <n-icon>
-            <add-circle-outline />
-          </n-icon>
-        </template>
-        {{ t("vehicle.powerUnits.addNew") }}
-      </n-button>
-    </div>
-    <n-divider />
-    <div class="flex mb-4">
-      <n-checkbox
-        :label="t('complectations.base')"
-        class="mr-auto"
-        :checked="complectation.base"
-        :on-update:checked="complectationFieldUpdateHandler('base')"
-      />
-    </div>
-
+      </div>
+      <n-divider />
+      <div class="flex mb-4">
+        <n-checkbox
+          :label="t('complectations.base')"
+          class="mr-auto"
+          :checked="complectation.base"
+          :on-update:checked="complectationFieldUpdateHandler('base')"
+        />
+      </div>
+    </n-scrollbar>
     <template #action>
       <div class="flex justify-end">
         <n-button
@@ -154,6 +149,7 @@ import {
   NPopselect,
   NCollapse,
   NCollapseItem,
+  NScrollbar,
   NTransfer,
   useNotification,
 } from "naive-ui";
