@@ -1,238 +1,274 @@
 <template>
   <n-modal
-    :show="isModalShowing"
-    :on-update:show="closeModal"
     preset="card"
-    :title="isEdit ? engine.displayName : t('vehicle.engine.addingNew')"
+    :title="
+      isEdit ? engineStore.engine.displayName : t('vehicle.engine.addingNew')
+    "
     :mask-closable="false"
-    class="max-w-3xl"
+    class="max-w-4xl"
+    :on-after-leave="onModalClose"
   >
-    <n-scrollbar style="max-height: 75vh">
+    <n-scrollbar class="max-h-4/5 pr-2">
       <n-form class="grid md:grid-cols-2 gap-4 pr-3">
         <n-form-item :label="t('vehicle.engine.displacement')">
           <n-input-number
-            :value="engine.displacement"
+            v-model:value="engineStore.engine.displacement"
             class="w-full"
-            :on-update:value="inputHandler('displacement')"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.injectionType')">
           <n-select
-            :value="engine.injection"
+            v-model:value="engineStore.engine.injection"
             :options="injectionTypes"
-            :on-update:value="inputHandler('injection')"
           />
         </n-form-item>
         <n-form-item :label="t('tradename')">
           <n-select
-            :value="engine.tradename"
+            v-model:value="engineStore.engine.tradename"
             :options="tradenames"
-            :on-update:value="inputHandler('tradename')"
             filterable
             tag
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.manufactureIndex')">
-          <n-input :on-update:value="inputHandler('manufactureIndex')" />
+          <n-input v-model:value="engineStore.engine.manufactureIndex" />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.fuelType')">
           <n-select
-            :value="engine.fuelType"
+            v-model:value="engineStore.engine.fuelType"
             :options="fuelTypes"
-            :on-update:value="inputHandler('fuelType')"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.pistonsQuantity')">
           <n-input-number
-            :value="engine.pistons"
+            v-model:value="engineStore.engine.pistons"
             class="w-full"
-            :on-update:value="inputHandler('pistons')"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.numberOfValves')">
           <n-input-number
-            :value="engine.numberOfValves"
+            v-model:value="engineStore.engine.numberOfValves"
             class="w-full"
-            :on-update:value="inputHandler('numberOfValves')"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.pistonsPlacement')">
           <n-select
-            :value="engine.pistonsPlacement"
+            v-model:value="engineStore.engine.pistonsPlacement"
             :options="pistonsPlacement"
-            :on-update:value="inputHandler('pistonsPlacement')"
           />
         </n-form-item>
-        <div>
-          <n-checkbox
-            :checked="engine.cylinderShutOffSystem"
-            :label="t('vehicle.engine.cylinderShutOffSystem')"
-            :on-update:checked="inputHandler('cylinderShutOffSystem')"
-            class="mb-3"
-          />
-          <n-form-item :label="t('vehicle.engine.cylinderShutOffNumber')">
-            <n-input-group>
-              <n-input-number
-                :value="engine.cylinderShutOffNumberFrom"
-                class="w-full"
-                :on-update:value="inputHandler('cylinderShutOffNumberFrom')"
-                :disabled="!engine.cylinderShutOffSystem"
-              >
-                <template #prefix> {{ t("from") }}: </template>
-              </n-input-number>
-              <n-input-number
-                :value="engine.cylinderShutOffNumberTo"
-                class="w-full"
-                :on-update:value="inputHandler('cylinderShutOffNumberTo')"
-                :disabled="!engine.cylinderShutOffSystem"
-              >
-                <template #prefix> {{ t("from") }}: </template>
-              </n-input-number>
-            </n-input-group>
-          </n-form-item>
-        </div>
-        <n-form-item :label="t('vehicle.engine.compressionRatio')">
-          <n-input-number
-            :value="engine.compressionRatio"
-            class="w-full"
-            :on-update:value="inputHandler('compressionRatio')"
-          />
-        </n-form-item>
-        <n-form-item :label="t('vehicle.engine.power')">
-          <n-input-number
-            :value="engine.power"
-            class="w-full"
-            :on-update:value="inputHandler('power')"
-          />
-        </n-form-item>
-        <n-form-item :label="t('vehicle.engine.rpm')">
+
+        <n-checkbox
+          v-model:checked="engineStore.engine.cylinderShutOffSystem"
+          :label="t('vehicle.engine.cylinderShutOffSystem')"
+          class="mb-3"
+        />
+
+        <n-form-item :label="t('vehicle.engine.cylinderShutOffNumber')">
           <n-input-group>
             <n-input-number
-              :value="engine.powerRPMfrom"
-              :on-update:value="inputHandler('powerRPMfrom')"
+              v-model:value="engineStore.engine.cylinderShutOffNumberFrom"
+              class="w-full"
+              :disabled="!engineStore.engine.cylinderShutOffSystem"
             >
               <template #prefix> {{ t("from") }}: </template>
             </n-input-number>
             <n-input-number
-              :value="engine.powerRPMto"
-              :on-update:value="inputHandler('powerRPMto')"
+              v-model:value="engineStore.engine.cylinderShutOffNumberTo"
+              class="w-full"
+              :disabled="!engineStore.engine.cylinderShutOffSystem"
             >
+              <template #prefix> {{ t("from") }}: </template>
+            </n-input-number>
+          </n-input-group>
+        </n-form-item>
+
+        <n-form-item :label="t('vehicle.engine.compressionRatio')">
+          <n-input-number
+            v-model:value="engineStore.engine.compressionRatio"
+            class="w-full"
+          />
+        </n-form-item>
+        <n-form-item :label="t('vehicle.engine.power')">
+          <n-input-number
+            v-model:value="engineStore.engine.power"
+            class="w-full"
+          />
+        </n-form-item>
+        <n-form-item :label="t('vehicle.engine.rpm')">
+          <n-input-group>
+            <n-input-number v-model:value="engineStore.engine.powerRPMfrom">
+              <template #prefix> {{ t("from") }}: </template>
+            </n-input-number>
+            <n-input-number v-model:value="engineStore.engine.powerRPMto">
               <template #prefix> {{ t("to") }}: </template>
             </n-input-number>
           </n-input-group>
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.torque')">
           <n-input-number
-            :value="engine.torque"
+            v-model:value="engineStore.engine.torque"
             class="w-full"
-            :on-update:value="inputHandler('torque')"
           />
         </n-form-item>
         <n-form-item :label="t('vehicle.engine.rpm')">
           <n-input-group>
-            <n-input-number
-              :value="engine.torqueRPMfrom"
-              :on-update:value="inputHandler('torqueRPMfrom')"
-            >
+            <n-input-number v-model:value="engineStore.engine.torqueRPMfrom">
               <template #prefix> {{ t("from") }}: </template>
             </n-input-number>
-            <n-input-number
-              :value="engine.torqueRPMto"
-              :on-update:value="inputHandler('torqueRPMto')"
-            >
+            <n-input-number v-model:value="engineStore.engine.torqueRPMto">
               <template #prefix> {{ t("to") }}: </template>
             </n-input-number>
           </n-input-group>
         </n-form-item>
-        <div class="flex flex-col justify-center">
-          <n-checkbox
-            :checked="engine.softHybrid"
-            :label="t('vehicle.engine.softHybrid')"
-            class="py-1"
-            :on-update:checked="inputHandler('softHybrid')"
-          />
-        </div>
+
         <n-divider title-placement="left" class="md:col-span-2">
           <n-checkbox
-            :checked="engine.turbo"
+            v-model:checked="engineStore.engine.isTurbo"
             :label="t('vehicle.engine.turbo')"
             class="py-1"
-            :on-update:checked="inputHandler('turbo')"
           />
         </n-divider>
-        <div
-          v-if="engine.turbo"
-          class="grid md:grid-cols-2 gap-4 md:col-span-2"
-        >
+        <template v-if="engineStore.engine.isTurbo && engineStore.engine.turbo">
           <n-form-item :label="t('vehicle.engine.turbineQuantity')">
             <n-input-number
-              :value="engine.turbineQuantity"
+              v-model:value="engineStore.engine.turbo.turboTurbineQuantity"
               class="w-full"
-              :on-update:value="inputHandler('turbineQuantity')"
             />
           </n-form-item>
           <n-form-item :label="t('vehicle.engine.turboType')">
             <n-select
-              :value="engine.turboType"
+              v-model:value="engineStore.engine.turbo.turboType"
               :options="turboTypes"
-              :on-update:value="inputHandler('turboType')"
             />
           </n-form-item>
-        </div>
+        </template>
+
         <n-divider title-placement="left" class="md:col-span-2">
-          <n-checkbox
-            :checked="engine.hybrid"
-            :label="t('vehicle.engine.hybrid')"
-            class="py-1"
-            :on-update:checked="inputHandler('hybrid')"
-          />
+          <div class="flex flex-col gap-2">
+            <n-checkbox
+              v-model:checked="engineStore.engine.isSoftHybrid"
+              :label="t('vehicle.engine.softHybrid')"
+              class="py-1"
+            />
+            <n-checkbox
+              v-model:checked="engineStore.engine.isHybrid"
+              :label="t('vehicle.engine.hybrid')"
+              class="py-1"
+            />
+            <n-checkbox
+              v-model:checked="engineStore.engine.isElectric"
+              :label="t('vehicle.engine.electric')"
+              class="py-1"
+            />
+          </div>
         </n-divider>
-        <div
-          v-if="engine.hybrid"
-          class="grid md:grid-cols-2 gap-4 md:col-span-2"
+        <template
+          v-if="engineStore.engine.isHybrid && engineStore.engine.hybrid"
         >
-          <n-form-item :label="t('vehicle.engine.electricPower')">
+          <n-form-item :label="t('vehicle.engine.hybridElectricPower')">
             <n-input-number
-              :value="engine.electricPower"
+              v-model:value="engineStore.engine.hybrid.hybridElectricPower"
               class="w-full"
-              :on-update:value="inputHandler('electricPower')"
             />
           </n-form-item>
-          <n-form-item :label="t('vehicle.engine.electricTorque')">
+          <n-form-item :label="t('vehicle.engine.hybridElectricTorque')">
             <n-input-number
-              :value="engine.electricTorque"
+              v-model:value="engineStore.engine.hybrid.hybridElectricTorque"
               class="w-full"
-              :on-update:value="inputHandler('electricTorque')"
-            />
-          </n-form-item>
-          <n-form-item :label="t('vehicle.engine.electricDistanceReserve')">
-            <n-input-number
-              :value="engine.electricDistanceReserve"
-              class="w-full"
-              :on-update:value="inputHandler('electricDistanceReserve')"
-            />
-          </n-form-item>
-          <n-form-item :label="t('vehicle.engine.electricBatteryReserve')">
-            <n-input-number
-              :value="engine.electricBatteryReserve"
-              class="w-full"
-              :on-update:value="inputHandler('electricBatteryReserve')"
             />
           </n-form-item>
           <n-form-item :label="t('vehicle.engine.hybridTotalPower')">
             <n-input-number
-              :value="engine.hybridTotalPower"
+              v-model:value="engineStore.engine.hybrid.hybridTotalPower"
               class="w-full"
-              :on-update:value="inputHandler('hybridTotalPower')"
             />
           </n-form-item>
           <n-checkbox
-            :checked="engine.hybridRechargeable"
+            v-model:checked="engineStore.engine.hybrid.hybridRechargeable"
             :label="t('vehicle.engine.hybridRechargeable')"
             class="py-1"
-            :on-update:checked="inputHandler('hybridRechargeable')"
           />
-        </div>
+        </template>
+
+        <template
+          v-if="
+            (engineStore.engine.isHybrid || engineStore.engine.isElectric) &&
+            engineStore.engine.electric
+          "
+        >
+          <n-form-item :label="t('vehicle.engine.electricBatteryCapacity')">
+            <n-input-number
+              v-model:value="
+                engineStore.engine.electric.electricBatteryCapacity
+              "
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item :label="t('vehicle.engine.electricDistanceReserve')">
+            <n-input-number
+              v-model:value="
+                engineStore.engine.electric.electricDistanceReserve
+              "
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item :label="t('vehicle.engine.electricBatteryType')">
+            <n-input
+              v-model:value="engineStore.engine.electric.electricBatteryType"
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item :label="t('vehicle.engine.electricChargerType')">
+            <n-input
+              v-model:value="engineStore.engine.electric.electricChargerType"
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item
+            :label="t('vehicle.engine.electricRegularChargerChargeTime')"
+          >
+            <n-input-number
+              v-model:value="
+                engineStore.engine.electric.electricRegularChargerChargeTime
+              "
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item
+            :label="t('vehicle.engine.electricSuperChargerChargeTime')"
+          >
+            <n-input-number
+              v-model:value="
+                engineStore.engine.electric.electricSuperChargerChargeTime
+              "
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item :label="t('vehicle.engine.electricEnginesQuantity')">
+            <n-input-number
+              v-model:value="
+                engineStore.engine.electric.electricEnginesQuantity
+              "
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item :label="t('vehicle.engine.electricEnginesPLacement')">
+            <n-input
+              v-model:value="
+                engineStore.engine.electric.electricEnginesPLacement
+              "
+              class="w-full"
+            />
+          </n-form-item>
+        </template>
       </n-form>
     </n-scrollbar>
 
@@ -261,6 +297,14 @@
   </n-modal>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "EngineModal",
+});
+</script>
+
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { useStore } from "vuex";
@@ -279,21 +323,23 @@ import {
   NDivider,
   useNotification,
 } from "naive-ui";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import {
-  UPDATE_ENGINE_FIELD,
-  UPDATE_ENGINE_MODAL_OPEN,
-} from "@/store/modules/carEditor/engine/mutationTypes";
-import {
-  CREATE_NEW_ENGINE,
-  EDIT_ENGINE,
-} from "@/store/modules/carEditor/engine/actionTypes";
 import apiClient from "@/helpers/apiClient";
 import i18n from "@/i18n";
+import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
+
+interface IProps {
+  isEdit: boolean;
+}
+
+withDefaults(defineProps<IProps>(), {
+  isEdit: false,
+});
+
+const emit = defineEmits(["update:show"]);
 
 const vehicleWordings = i18n.ua.vehicle;
 
-const store = useStore();
+const engineStore = useEngineStore();
 const { t } = useI18n();
 const notification = useNotification();
 
@@ -305,17 +351,6 @@ onMounted(async () => {
 
   tradenames.value = res.map((item) => ({ value: item, label: item }));
 });
-
-const isModalShowing = computed(
-  () => store.state.carEditor.engine.isEngineModalOpen
-);
-const isEdit = computed(
-  () => store.getters[carEditorNamespace("isEngineEdit")]
-);
-
-const closeModal = (val) => {
-  store.commit(carEditorNamespace(UPDATE_ENGINE_MODAL_OPEN), val);
-};
 
 const injectionTypes = Object.keys(vehicleWordings.engine.injectionTypes).map(
   (type) => ({
@@ -343,28 +378,23 @@ const pistonsPlacement = Object.keys(
   label: t(`vehicle.engine.pistonsPlacements.${placement}`),
 }));
 
-const engine = computed(() => store.state.carEditor.engine.engine);
-
-const inputHandler = (field) => (val) => {
-  store.commit(carEditorNamespace(UPDATE_ENGINE_FIELD), [field, val]);
-};
-
 const createAction = async () => {
-  await saveHelper(CREATE_NEW_ENGINE);
+  await saveHelper(engineStore.createNewEngine);
 };
 
 const updateAction = async () => {
-  await saveHelper(EDIT_ENGINE);
+  await saveHelper(engineStore.updateEngine);
 };
 
-const saveHelper = async (action) => {
+const saveHelper = async (action: () => Promise<void>) => {
   try {
     isFetching.value = true;
-    await store.dispatch(carEditorNamespace(action));
+    await action();
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
+    emit("update:show", false);
   } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),
@@ -374,5 +404,9 @@ const saveHelper = async (action) => {
   } finally {
     isFetching.value = false;
   }
+};
+
+const onModalClose = () => {
+  engineStore.$reset();
 };
 </script>
