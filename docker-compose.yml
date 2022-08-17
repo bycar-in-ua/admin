@@ -10,7 +10,6 @@ services:
     volumes:
       - ./:/home/node/app
     networks:
-      - internal
       - proxy
     command: "yarn serve"
     restart: "always"
@@ -23,7 +22,5 @@ services:
       - traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=3010
 
 networks:
-  internal:
-    external: false
   proxy:
     external: true
