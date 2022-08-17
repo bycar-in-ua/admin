@@ -6,6 +6,7 @@
     "
     :mask-closable="false"
     class="max-w-4xl"
+    :on-update:show="(val) => $emit('update:show', val)"
     :on-after-leave="onModalClose"
   >
     <n-scrollbar class="max-h-4/5 pr-2">
@@ -306,8 +307,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
-import { useStore } from "vuex";
+import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   NModal,
@@ -395,10 +395,10 @@ const saveHelper = async (action: () => Promise<void>) => {
       duration: 3000,
     });
     emit("update:show", false);
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
-      description: error.message,
+      description: error?.message,
       duration: 5000,
     });
   } finally {

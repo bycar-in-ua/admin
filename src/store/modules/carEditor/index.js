@@ -1,4 +1,3 @@
-import engine from "./engine";
 import transmission from "./transmission";
 import complectation from "./complectation";
 
@@ -43,7 +42,7 @@ export const carEditor = {
     isFetching: false,
     isEdited: false,
   }),
-  modules: { engine, transmission, complectation },
+  modules: { transmission, complectation },
   actions: {
     async [FETCH_CAR]({ commit }, carSlug) {
       const car = await apiClient.get(`/vehicles/${carSlug}/for-edit`);
