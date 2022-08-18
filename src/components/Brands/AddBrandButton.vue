@@ -1,38 +1,29 @@
 <template>
   <div class="mb-6">
-    <n-button
-      type="primary"
-      @click="openModal"
-    >
+    <n-button type="primary" @click="openModal">
       {{ t("create") }}
     </n-button>
   </div>
 </template>
 
-<script>
-import { mapActions } from "vuex";
-import { NButton } from "naive-ui";
-import { OPEN_BRAND_MODAL } from "@/store/modules/brands/modal/actionTypes";
-import { brandNamespace } from "@/store/modules/brands";
+<script lang="ts">
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "AddBrandButton",
-  components: {
-    NButton,
-  },
-  methods: {
-    ...mapActions({
-      openCreateBrandModal: brandNamespace(OPEN_BRAND_MODAL),
-    }),
-    openModal() {
-      this.openCreateBrandModal();
-    },
-  },
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
+import { NButton } from "naive-ui";
 import { useI18n } from "vue-i18n";
+import { useBrandsStore } from "@/stores/brands.store";
 
+const brandsStore = useBrandsStore();
 const { t } = useI18n();
+
+const openModal = () => {
+  brandsStore.isEdit = false;
+  brandsStore.isModalOpen = true;
+};
 </script>

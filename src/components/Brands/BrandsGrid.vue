@@ -3,56 +3,48 @@
     class="my-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4"
   >
     <n-card
-      v-for="brand in brands"
+      v-for="brand in brandsStore.brands"
       :key="brand.id"
       hoverable
       class="cursor-pointer shadow-lg"
       @click="openBrandModal(brand)"
     >
       <template #cover>
-        <img
-          :src="cdnLink(brand.logo, 300)"
-          class="h-32 p-2 object-contain"
-        >
+        <img :src="cdnLink(brand.logo, 300)" class="h-32 p-2 object-contain" />
       </template>
-      <n-h3
-        class="text-center mb-0 break-all"
-        v-text="brand.displayName"
-      />
+      <n-h3 class="text-center mb-0 break-all" v-text="brand.displayName" />
     </n-card>
   </div>
 </template>
 
-<script>
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { brandNamespace } from "@/store/modules/brands";
-import { OPEN_BRAND_MODAL } from "@/store/modules/brands/modal/actionTypes";
-import { FETCH_BRANDS } from "@/store/modules/brands/actionTypes";
+<script lang="ts">
+import { defineComponent } from "vue";
 import { NCard, NH3 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
+import { useBrandsStore, useBrandModalStore } from "@/stores/brands.store";
 
-export default {
+export default defineComponent({
   name: "BrandGrid",
   components: {
     NCard,
     NH3,
   },
   setup() {
-    const store = useStore();
+    const brandsStore = useBrandsStore();
+    const brandModalStore = useBrandModalStore();
+    brandsStore.fetchBrands();
 
-    store.dispatch(brandNamespace(FETCH_BRANDS));
-
-    const brands = computed(() => store.state.brands.all);
-
-    const openBrandModal = (brand) =>
-      store.dispatch(brandNamespace(OPEN_BRAND_MODAL), brand);
+    const openBrandModal = (brand) => {
+      brandsStore.isEdit = true;
+      brandModalStore.$state = brand;
+      brandsStore.isModalOpen = true;
+    };
 
     return {
-      brands,
+      brandsStore,
       openBrandModal,
       cdnLink,
     };
   },
-};
+});
 </script>
