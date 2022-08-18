@@ -55,7 +55,7 @@
         <n-button
           v-if="brandsStore.isEdit"
           type="primary"
-          :disablad="brandsStore.isFetching"
+          :loading="brandsStore.isFetching"
           @click="saveAction"
         >
           Сохранить
@@ -63,7 +63,7 @@
         <n-button
           v-else
           type="primary"
-          :disablad="brandsStore.isFetching"
+          :loading="brandsStore.isFetching"
           @click="createAction"
         >
           Создать

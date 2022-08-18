@@ -7,6 +7,7 @@ interface State {
   isFetching: boolean;
   isEdit: boolean;
   isModalOpen: boolean;
+  isFetched: boolean;
 }
 
 export const useBrandsStore = defineStore("brands", {
@@ -15,9 +16,11 @@ export const useBrandsStore = defineStore("brands", {
     isFetching: false,
     isEdit: false,
     isModalOpen: false,
+    isFetched: false,
   }),
   actions: {
     async fetchBrands() {
+      if (this.isFetched) return;
       try {
         const brands = await apiClient.get("/brands");
         this.brands = brands;

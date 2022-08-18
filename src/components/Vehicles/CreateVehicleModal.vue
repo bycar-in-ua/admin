@@ -9,7 +9,7 @@
       <n-form-item :label="t('brand', 1)" path="brandId">
         <n-select
           v-model:value="formModel.brandId"
-          :options="createOptions(brands)"
+          :options="createOptions(brandsStore.brands)"
           :placeholder="t('choose')"
           size="medium"
           filterable
@@ -66,21 +66,20 @@
   </n-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "CreateVehicleModal",
-};
+});
 </script>
 
-<script setup>
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import apiClient from "@/helpers/apiClient";
 import { yearValidator, slugValidator } from "@/helpers/validators";
-import { brandNamespace } from "@/store/modules/brands";
-import { FETCH_BRANDS } from "@/store/modules/brands/actionTypes";
 import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
   NButton,
@@ -95,6 +94,7 @@ import {
   NPopover,
   useNotification,
 } from "naive-ui";
+import { useBrandsStore } from "@/stores/brands.store";
 
 const rules = {
   brandId: {
@@ -115,15 +115,12 @@ const rules = {
   },
 };
 
-const store = useStore();
+const brandsStore = useBrandsStore();
 const router = useRouter();
 const { t } = useI18n();
 const notification = useNotification();
 
-const types = computed(() => store.state.library.types);
-const brands = computed(() => store.state.brands.all);
-
-store.dispatch(brandNamespace(FETCH_BRANDS));
+brandsStore.fetchBrands();
 
 const formRef = ref(null);
 
