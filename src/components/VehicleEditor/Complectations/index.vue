@@ -58,21 +58,15 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NCard, NPopconfirm, NInput, NButton, useNotification } from "naive-ui";
 import ComplectationModal from "./ComplectationModal.vue";
 import PlusButton from "@/components/common/PlusButton.vue";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import {
-  CREATE_NEW_COMPLECTATION,
-  DELETE_COMPLECTATION,
-} from "@/store/modules/carEditor/complectation/actionTypes";
-import { OPEN_COMPLECTATION_EDIT_MODAL } from "@/store/modules/carEditor/complectation/actionTypes";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 
-const store = useStore();
 const vehicleStore = useVehicleStore();
+const complectationStore = useComplectationStore();
 const { t } = useI18n();
 const notification = useNotification();
 
@@ -81,30 +75,25 @@ const showModal = ref(false);
 const isDeleting = ref(false);
 
 const openEditModal = (complectation) => {
-  store.dispatch(
-    carEditorNamespace(OPEN_COMPLECTATION_EDIT_MODAL),
-    complectation
-  );
+  complectationStore.$patch(complectation);
   showModal.value = true;
 };
 
 const createComplectation = async () => {
-  await store.dispatch(
-    carEditorNamespace(CREATE_NEW_COMPLECTATION),
-    newComplectationName.value
-  );
+  await vehicleStore.createComplectation(newComplectationName.value);
+
   newComplectationName.value = "";
 };
 
 const deleteComplectation = async (cmplId) => {
   try {
     isDeleting.value = true;
-    await store.dispatch(carEditorNamespace(DELETE_COMPLECTATION), cmplId);
+    await vehicleStore.deleteComplectation(cmplId);
     notification.success({
       title: t("notifications.complectation.deleting.success"),
       duration: 5000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

@@ -2,16 +2,16 @@
   <n-modal
     :on-after-enter="afterModalEnter"
     :on-after-leave="afterModalClose"
+    :on-update:show="(val) => $emit('update:show', val)"
     preset="card"
     :mask-closable="false"
-    :title="complectation.displayName"
+    :title="complectationStore.displayName"
     class="max-w-5xl"
   >
     <n-scrollbar class="max-h-4/5 pr-4">
       <div class="flex">
         <n-input
-          :value="complectation.displayName"
-          :on-update:value="complectationFieldUpdateHandler('displayName')"
+          v-model:value="complectationStore.displayName"
           type="text"
           class="mr-4"
         />
@@ -72,7 +72,7 @@
 
       <power-units-editor
         v-model:expanded-names="expandedPowerUnit"
-        :power-units="complectation.powerUnits"
+        :power-units="complectationStore?.powerUnits || []"
       />
 
       <div class="pt-6">
@@ -93,27 +93,14 @@
       <n-divider />
       <div class="flex mb-4">
         <n-checkbox
+          v-model:checked="complectationStore.base"
           :label="t('complectations.base')"
           class="mr-auto"
-          :checked="complectation.base"
-          :on-update:checked="complectationFieldUpdateHandler('base')"
         />
       </div>
     </n-scrollbar>
     <template #action>
       <div class="flex justify-end">
-        <n-button
-          type="error"
-          size="medium"
-          class="mr-auto"
-          :loading="isFetching"
-          @click="deleteHandler"
-        >
-          <template #icon>
-            <CloseSharp />
-          </template>
-          {{ t("complectations.delete") }}
-        </n-button>
         <n-button
           type="primary"
           size="medium"
@@ -130,6 +117,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { SelectBaseOption } from "naive-ui/lib/select/src/interface";
 
 export default defineComponent({
   name: "ComplectationModal",
@@ -154,26 +142,21 @@ import {
   NTransfer,
   useNotification,
 } from "naive-ui";
-import { AddCircleOutline, CloseSharp, Copy } from "@vicons/ionicons5";
+import { AddCircleOutline, Copy } from "@vicons/ionicons5";
 import AddNewOption from "@/components/common/AddNewOption.vue";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
 import PowerUnitsEditor from "./PowerUnitsEditor.vue";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import {
-  COPY_COMPLECTATION_DATA,
-  CLEAN_UP_COMPLECTATION,
-  CREATE_NEW_POWER_UNIT,
-  SAVE_COMPLECTATION,
-  DELETE_COMPLECTATION,
-} from "@/store/modules/carEditor/complectation/actionTypes";
-import { UPDATE_COMPLECTATION_FIELD } from "@/store/modules/carEditor/complectation/mutationTypes";
 import {
   prepareOptionIdsByCategoties,
   prepareOption,
 } from "@/helpers/preparers";
+import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-const emit = defineEmits(["close-modal"]);
+const emit = defineEmits(["update:show"]);
 const store = useStore();
+const vehicleStore = useVehicleStore();
+const complectationStore = useComplectationStore();
 const { t } = useI18n();
 const notification = useNotification();
 
@@ -182,38 +165,32 @@ const optionsTransferModelValue = ref({});
 const expandedPowerUnit = ref(null);
 const powerUnitFetching = ref(false);
 
-const complectation = computed(() => store.state.carEditor.complectation);
 const optionCategories = computed(() => store.state.library.options.categories);
 
-const complectationsForCopy = computed(() =>
-  store.state.carEditor.car.complectations.map((cmpl) => ({
+const complectationsForCopy = computed<SelectBaseOption[]>(() =>
+  vehicleStore.complectations?.map((cmpl) => ({
     label: cmpl.displayName,
     value: cmpl.id,
-    disabled: cmpl.id === complectation.value.id,
+    disabled: cmpl.id === complectationStore.id,
   }))
 );
 
 const getOptions = (options = []) =>
   options.map((option) => prepareOption(option));
 
-const complectationFieldUpdateHandler = (field) => (val) => {
-  store.commit(carEditorNamespace(UPDATE_COMPLECTATION_FIELD), [field, val]);
-};
-
 const optionsCopyHandler = (referenceComplectationId) => {
-  store.dispatch(
-    carEditorNamespace(COPY_COMPLECTATION_DATA),
-    referenceComplectationId
+  const referenceComplectation = vehicleStore.complectations?.find(
+    (cmpl) => cmpl.id === referenceComplectationId
   );
+  complectationStore.options = referenceComplectation?.options;
+
   recalcOptions();
 };
 
 const createPowerUnit = async () => {
   try {
     powerUnitFetching.value = true;
-    expandedPowerUnit.value = await store.dispatch(
-      carEditorNamespace(CREATE_NEW_POWER_UNIT)
-    );
+    expandedPowerUnit.value = await complectationStore.createNewPowerUnit();
   } finally {
     powerUnitFetching.value = false;
   }
@@ -222,39 +199,13 @@ const createPowerUnit = async () => {
 const saveHandler = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(
-      carEditorNamespace(SAVE_COMPLECTATION),
-      prepareOptionsForSaving()
-    );
+    await complectationStore.saveComplectation(prepareOptionsForSaving());
     notification.success({
       title: t("notifications.complectation.saving.success"),
       duration: 5000,
     });
-    emit("close-modal");
-  } catch (error) {
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: error.message,
-      duration: 5000,
-    });
-  } finally {
-    isFetching.value = false;
-  }
-};
-
-const deleteHandler = async () => {
-  try {
-    isFetching.value = true;
-    await store.dispatch(
-      carEditorNamespace(DELETE_COMPLECTATION),
-      complectation.value.id
-    );
-    notification.success({
-      title: t("notifications.complectation.deleting.success"),
-      duration: 5000,
-    });
-    emit("close-modal");
-  } catch (error) {
+    emit("update:show", false);
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -270,7 +221,7 @@ const afterModalEnter = () => {
 };
 
 const afterModalClose = () => {
-  store.dispatch(carEditorNamespace(CLEAN_UP_COMPLECTATION));
+  complectationStore.$reset();
   optionsTransferModelValue.value = {};
 };
 
@@ -291,7 +242,7 @@ function prepareOptionsForSaving() {
 }
 
 function recalcOptions() {
-  optionsTransferModelValue.value = complectation.value.options.reduce(
+  optionsTransferModelValue.value = complectationStore.options?.reduce(
     prepareOptionIdsByCategoties,
     {}
   );

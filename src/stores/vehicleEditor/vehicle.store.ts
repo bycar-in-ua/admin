@@ -1,4 +1,8 @@
-import { VehicleDto as Car } from "@common/dto";
+import {
+  VehicleDto as Car,
+  TransmissionDto as Transmission,
+  EngineDto as Engine,
+} from "@common/dto";
 import { PostStatus, BodyType } from "@common/enums";
 import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";
@@ -52,6 +56,18 @@ export const useVehicleStore = defineStore("vehicle", {
       this[whatToSave] = savedItems;
     },
 
+    async createComplectation(name: string) {
+      try {
+        const newComplectation = await apiClient.post("/complectations", {
+          displayName: name,
+          vehicleId: this.id,
+        });
+        this.complectations?.push(newComplectation);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async deleteComplectation(complectationId) {
       await apiClient.delete(`/complectations/${complectationId}`);
       this.complectations = this.complectations?.filter(
@@ -60,18 +76,59 @@ export const useVehicleStore = defineStore("vehicle", {
     },
   },
   getters: {
-    getVehicleTitle() {
+    getVehicleTitle(state) {
       let title = "";
 
-      title += this?.brand?.displayName + " ";
+      title += state?.brand?.displayName + " ";
 
-      title += this.model + " ";
+      title += state.model + " ";
 
-      title += this.yearFrom + " ";
+      title += state.yearFrom + " ";
 
-      if (this.yearTo) title += "- " + this.yearTo;
+      if (state.yearTo) title += "- " + state.yearTo;
 
       return title;
+    },
+    getCarImagesIds(state) {
+      return state.images?.map((image) => image.id);
+    },
+    enginesOptions(state) {
+      return state.engines?.map((engine) => ({
+        label: engine.displayName + ` ${engine.power} hp`,
+        value: engine.id,
+      }));
+    },
+    transmissionsOptions(state) {
+      return (t) =>
+        state.transmissions?.map((transmission) => ({
+          label: `${transmission.drive} - ${
+            transmission?.gearbox?.numberOfGears
+          } ${t(
+            "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
+          )}`,
+          value: transmission.id,
+        }));
+    },
+    enginesMapById(state) {
+      const engines = new Map();
+
+      for (const engine of state?.engines || []) {
+        engines.set(engine.id, engine);
+      }
+
+      return engines;
+    },
+    transmissionsMapById(state) {
+      const transmissions = new Map();
+
+      for (const transmission of state?.transmissions || []) {
+        transmissions.set(transmission.id, transmission);
+      }
+
+      return transmissions;
+    },
+    getCarBrandName(state) {
+      return state?.brand?.slug || "";
     },
   },
 });
