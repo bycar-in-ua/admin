@@ -24,15 +24,12 @@
         {{ t("colors.addNew") }}
       </n-button>
     </div>
-    <ColorForm
-      v-if="isColorsFormShowing"
-      :color="colorRef"
-    />
+    <ColorForm v-if="isColorsFormShowing" :color="colorRef" />
     <ColorsList v-else />
   </n-modal>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "VehicleColorsModal",
   props: {
@@ -47,21 +44,21 @@ export default {
 };
 </script>
 
-<script setup>
-import { ref, computed, provide } from "vue";
+<script setup lang="ts">
+import { ref, provide } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NModal, NButton } from "naive-ui";
-import ColorsList from "./ColorsList";
-import ColorForm from "./ColorForm";
+import ColorsList from "./ColorsList.vue";
+import ColorForm from "./ColorForm.vue";
 import { FETCH_COLORS } from "@/store/modules/library/actionTypes";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
+const vehicleStore = useVehicleStore();
 const store = useStore();
 const { t } = useI18n();
 
-const car = computed(() => store.state.carEditor.car);
-
-store.dispatch(FETCH_COLORS, car.value.brand.id);
+store.dispatch(FETCH_COLORS, vehicleStore.brand?.id);
 
 const colorTemplate = {
   id: null,

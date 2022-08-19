@@ -1,6 +1,6 @@
 <template>
   <editor
-    v-model="desriptionModel"
+    v-model="vehicleStore.description"
     api-key="bkij2k10jssrm5ez30czeck0fluycxbi0p1watets0n39u8n"
     :init="{
       height: 400,
@@ -11,39 +11,27 @@
   />
 </template>
 
-<script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+<script lang="ts">
+import { defineComponent } from "vue";
 import { useMemory } from "@/hooks/useMemory";
 import Editor from "@tinymce/tinymce-vue";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-export default {
+export default defineComponent({
   name: "DescriptionEditor",
   components: {
     Editor,
   },
   setup() {
-    const store = useStore();
-    const car = computed(() => store.state.carEditor.car);
+    const vehicleStore = useVehicleStore();
     const memory = useMemory();
 
     const darkTheme = memory.get("darkTheme", false);
 
-    const desriptionModel = computed({
-      get: () => car.value.description,
-      set: (val) =>
-        store.commit(carEditorNamespace(UPDATE_CAR_FIELD), [
-          "description",
-          val,
-        ]),
-    });
-
     return {
-      desriptionModel,
+      vehicleStore,
       darkTheme,
     };
   },
-};
+});
 </script>

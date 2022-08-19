@@ -2,23 +2,22 @@
   <n-h3 v-text="title" />
 </template>
 
-<script>
-import { mapState } from "vuex";
+<script lang="ts">
+import { defineComponent } from "vue";
 import { NH3 } from "naive-ui";
-import { prepareCarTitle } from "@/helpers/preparers";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-export default {
+export default defineComponent({
   name: "VehicleTitle",
   components: {
     NH3,
   },
-  computed: {
-    ...mapState({
-      car: (state) => state.carEditor.car,
-    }),
-    title() {
-      return prepareCarTitle(this.car);
-    },
+  setup() {
+    const vehicleStore = useVehicleStore();
+
+    return {
+      title: vehicleStore.getVehicleTitle,
+    };
   },
-};
+});
 </script>

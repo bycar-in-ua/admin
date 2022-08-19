@@ -1,6 +1,5 @@
 <template>
   <n-modal
-    :show="show"
     :on-after-enter="afterModalEnter"
     :on-after-leave="afterModalClose"
     preset="card"
@@ -129,13 +128,15 @@
   </n-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ComplectationModal",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
@@ -156,7 +157,7 @@ import {
 import { AddCircleOutline, CloseSharp, Copy } from "@vicons/ionicons5";
 import AddNewOption from "@/components/common/AddNewOption.vue";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
-import PowerUnitsEditor from "./PowerUnitsEditor";
+import PowerUnitsEditor from "./PowerUnitsEditor.vue";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
   COPY_COMPLECTATION_DATA,

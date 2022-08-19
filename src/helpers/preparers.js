@@ -25,6 +25,10 @@ export const prepareOptionIdsByCategoties = (acc, cur) => {
   return acc;
 };
 
+/**
+ *
+ * @deprecated
+ */
 export const prepareCar = (car) => {
   for (let i = 0; i < car.complectations.length; i++) {
     car.complectations[i].powerUnits.sort((a, b) => a.id - b.id);
@@ -33,6 +37,10 @@ export const prepareCar = (car) => {
   return car;
 };
 
+/**
+ *
+ *  @deprecared
+ */
 export const prepareCarTitle = (car) => {
   let title = "";
 

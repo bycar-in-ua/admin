@@ -7,63 +7,46 @@
     <n-form class="general-data grid sm:grid-cols-2 md:grid-cols-3 gap-4">
       <n-form-item :label="t('vehicle.bodyTypes.title')">
         <n-select
-          :value="car.bodyType"
+          v-model:value="car.bodyType"
           :options="createOptions('bodyTypes')"
-          :on-update:value="inputHandler('bodyType')"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.sizeClases.title')">
         <n-select
-          :value="car.sizeClass"
+          v-model:value="car.sizeClass"
           :options="createOptions('sizeClases')"
-          :on-update:value="inputHandler('sizeClass')"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.powerSteerings.title')">
         <n-select
-          :value="car.powerSteering"
+          v-model:value="car.powerSteering"
           :options="createOptions('powerSteerings')"
-          :on-update:value="inputHandler('powerSteering')"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.enginePlacements.title')">
         <n-select
-          :value="car.enginePlacement"
+          v-model:value="car.enginePlacement"
           :options="createOptions('enginePlacements')"
-          :on-update:value="inputHandler('enginePlacement')"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.numberOfDoors')">
-        <n-input-number
-          :value="car.numberOfDoors"
-          :on-update:value="inputHandler('numberOfDoors')"
-        />
+        <n-input-number v-model:value="car.numberOfDoors" />
       </n-form-item>
       <n-form-item :label="t('vehicle.discDiameter')">
-        <n-input-number
-          :value="car.discDiameter"
-          :on-update:value="inputHandler('discDiameter')"
-        />
+        <n-input-number v-model:value="car.discDiameter" />
       </n-form-item>
       <n-form-item
         :label="t('vehicle.generalCharacteristics.manufactureCountry')"
       >
-        <n-input
-          :value="car.manufactureCountry"
-          :on-update:value="inputHandler('manufactureCountry')"
-        />
+        <n-input v-model:value="car.manufactureCountry" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.crashTestsRate')">
-        <n-rate
-          allow-half
-          :value="car.crashTestsRate"
-          :on-update:value="inputHandler('crashTestsRate')"
-        />
+        <n-rate v-model:value="car.crashTestsRate" allow-half />
         <n-icon
           size="24"
           :title="t('clear')"
           class="cursor-pointer hover:text-red-400 transition-all"
-          @click="inputHandler('crashTestsRate')(null)"
+          @click="car.crashTestsRate = undefined"
         >
           <Close />
         </n-icon>
@@ -71,120 +54,75 @@
       <n-form-item
         :label="t('vehicle.generalCharacteristics.crashTestsRateLink')"
       >
-        <n-input
-          :value="car.crashTestsRateLink"
-          :on-update:value="inputHandler('crashTestsRateLink')"
-        />
+        <n-input v-model:value="car.crashTestsRateLink" />
       </n-form-item>
 
       <n-form-item :label="t('vehicle.generalCharacteristics.warantyYears')">
-        <n-input-number
-          :value="car.warantyYears"
-          :on-update:value="inputHandler('warantyYears')"
-        />
+        <n-input-number v-model:value="car.warantyYears" />
       </n-form-item>
       <n-form-item
         :label="t('vehicle.generalCharacteristics.warantyYearsPaintwork')"
       >
-        <n-input-number
-          :value="car.warantyYearsPaintwork"
-          :on-update:value="inputHandler('warantyYearsPaintwork')"
-        />
+        <n-input-number v-model:value="car.warantyYearsPaintwork" />
       </n-form-item>
       <n-form-item
         :label="t('vehicle.generalCharacteristics.warantyYearsCorroison')"
       >
-        <n-input-number
-          :value="car.warantyYearsCorroison"
-          :on-update:value="inputHandler('warantyYearsCorroison')"
-        />
+        <n-input-number v-model:value="car.warantyYearsCorroison" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.warantyMileage')">
-        <n-input-number
-          :value="car.warantyMileage"
-          :on-update:value="inputHandler('warantyMileage')"
-        />
+        <n-input-number v-model:value="car.warantyMileage" />
       </n-form-item>
 
       <n-divider class="sm:col-span-2 md:col-span-3">
         {{ t("vehicle.generalCharacteristics.dimensions.title") }}
       </n-divider>
       <n-form-item :label="t('vehicle.generalCharacteristics.dimensions.l')">
-        <n-input-number
-          :value="car.dimensionL"
-          :on-update:value="inputHandler('dimensionL')"
-        />
+        <n-input-number v-model:value="car.dimensionL" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.dimensions.w')">
-        <n-input-number
-          :value="car.dimensionW"
-          :on-update:value="inputHandler('dimensionW')"
-        />
+        <n-input-number v-model:value="car.dimensionW" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.dimensions.h')">
-        <n-input-number
-          :value="car.dimensionH"
-          :on-update:value="inputHandler('dimensionH')"
-        />
+        <n-input-number v-model:value="car.dimensionH" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.wheelbase')">
-        <n-input-number
-          :value="car.wheelbase"
-          :on-update:value="inputHandler('wheelbase')"
-        />
+        <n-input-number v-model:value="car.wheelbase" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.clearance')">
-        <n-input-number
-          :value="car.clearance"
-          :on-update:value="inputHandler('clearance')"
-        />
+        <n-input-number v-model:value="car.clearance" />
       </n-form-item>
       <n-divider class="sm:col-span-2 md:col-span-3">
         {{ t("vehicle.generalCharacteristics.weightsNVolumes") }}
       </n-divider>
       <n-form-item :label="t('vehicle.generalCharacteristics.curbWeight')">
-        <n-input-number
-          :value="car.curbWeight"
-          :on-update:value="inputHandler('curbWeight')"
-        />
+        <n-input-number v-model:value="car.curbWeight" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.fullWeight')">
-        <n-input-number
-          :value="car.fullWeight"
-          :on-update:value="inputHandler('fullWeight')"
-        />
+        <n-input-number v-model:value="car.fullWeight" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.numberOfSeats')">
-        <n-input-number
-          :value="car.numberOfSeats"
-          :on-update:value="inputHandler('numberOfSeats')"
-        />
+        <n-input-number v-model:value="car.numberOfSeats" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.gasTankVolume')">
-        <n-input-number
-          :value="car.gasTankVolume"
-          :on-update:value="inputHandler('gasTankVolume')"
-        />
+        <n-input-number v-model:value="car.gasTankVolume" />
       </n-form-item>
       <n-form-item :label="t('vehicle.generalCharacteristics.trunkVolume')">
-        <n-input-number
-          :value="car.trunkVolume"
-          :on-update:value="inputHandler('trunkVolume')"
-        />
+        <n-input-number v-model:value="car.trunkVolume" />
       </n-form-item>
     </n-form>
   </n-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "GeneralOptions",
-};
+});
 </script>
 
-<script setup>
-import { computed } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import {
   NCard,
@@ -198,20 +136,14 @@ import {
   NIcon,
 } from "naive-ui";
 import { Close } from "@vicons/ionicons5";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
 import i18n from "@/i18n";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
 const vehicleTranslations = i18n.ua.vehicle;
 
-const store = useStore();
 const { t } = useI18n();
 
-const car = computed(() => store.state.carEditor.car);
-
-const inputHandler = (field) => (val) => {
-  store.commit(carEditorNamespace(UPDATE_CAR_FIELD), [field, val]);
-};
+const car = useVehicleStore();
 
 const createOptions = (field) =>
   Object.keys(vehicleTranslations[field].items).map((item) => ({

@@ -1,95 +1,59 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="car"
-    :rules="rules"
-  >
+  <n-form ref="formRef" :model="car" :rules="rules">
     <div class="text-right mb-4">
       <n-button
         type="primary"
-        :disabled="!isEdited"
+        :loading="editorStore.isFetching"
+        :disabled="!editorStore.isModified"
         @click="saveAction"
       >
-        <template v-if="isFetching">
-          <n-spin
-            size="small"
-            stroke="white"
-          />
-        </template>
-        <template v-else>
-          {{ t("save") }}
-        </template>
+        {{ t("save") }}
       </n-button>
     </div>
     <n-form-item :label="t('status')">
       <n-select
+        v-model:value="car.status"
         size="medium"
-        :value="car.status"
         :options="statusOptions"
-        :on-update:value="updateCarField('status')"
       />
     </n-form-item>
-    <n-form-item
-      :label="t('brand')"
-      required
-    >
+    <n-form-item :label="t('brand')" required>
       <n-select
+        :value="car.brand"
         size="medium"
         disabled
-        :value="car.brand"
         :render-label="renderBrandLabel"
       />
     </n-form-item>
-    <n-form-item
-      :label="t('vehicle.model')"
-      path="model"
-    >
+    <n-form-item :label="t('vehicle.model')" path="model">
       <n-input
-        type="text"
-        :value="car.model"
-        :on-update:value="updateCarField('model')"
+        v-model:value="car.model"
         :placeholder="t('vehicle.enterModel')"
       />
     </n-form-item>
     <n-form-item :label="t('vehicle.modelYear')">
       <n-input-group>
         <n-input-number
+          v-model:value="car.yearFrom"
           class="w-full"
-          :value="car.yearFrom"
           :placeholder="t('vehicle.enterModelYear')"
-          :on-update:value="updateCarField('yearFrom')"
         />
         <n-input-number
+          v-model:value="car.yearTo"
           class="w-full"
-          :value="car.yearTo"
           :placeholder="t('vehicle.enterModelYear')"
-          :on-update:value="updateCarField('yearTo')"
         />
       </n-input-group>
     </n-form-item>
     <n-form-item :label="t('vehicle.bodyName')">
-      <n-input
-        type="text"
-        :value="car.bodyName"
-        :on-update:value="updateCarField('bodyName')"
-      />
+      <n-input v-model:value="car.bodyName" />
     </n-form-item>
-    <n-form-item
-      :label="t('vehicle.slug')"
-      path="slug"
-    >
-      <n-input
-        type="text"
-        :value="car.slug"
-        :on-update:value="updateCarField('slug')"
-      >
+    <n-form-item :label="t('vehicle.slug')" path="slug">
+      <n-input v-model:value="car.slug">
         <template #suffix>
           <n-popover trigger="hover">
             <template #trigger>
-              <n-icon
-                size="20"
-                class="cursor-help"
-              >
+              <n-icon size="20" class="cursor-help">
                 <InformationCircleOutline />
               </n-icon>
             </template>
@@ -110,7 +74,7 @@
         v-if="car.featureImage"
         :src="cdnLink(car.featureImage.path, 300)"
         class="w-full object-cover"
-      >
+      />
     </div>
   </n-form>
   <n-modal
@@ -131,20 +95,20 @@
   </n-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "SideColumn",
-};
+});
 </script>
 
-<script setup>
-import { h, computed, ref } from "vue";
+<script setup lang="ts">
+import { h, ref, Ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import Images from "@/components/Images";
+import Images from "@/components/Images/index.vue";
 import { yearValidator, slugValidator } from "@/helpers/validators";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { UPDATE_CAR_FIELD } from "@/store/modules/carEditor/mutationTypes";
 import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
   NButton,
@@ -155,35 +119,37 @@ import {
   NInputNumber,
   NInputGroup,
   NImage,
-  NSpin,
   NPopover,
   NIcon,
   NModal,
   useNotification,
   useLoadingBar,
+  FormInst,
 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
 import { statuses } from "@/helpers/postStatuses";
-import { SAVE_CAR } from "@/store/modules/carEditor/actionTypes";
 import { SET_IMAGES } from "@/store/modules/library/images/actionTypes";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useEditorStore } from "@/stores/vehicleEditor/editor.store";
+import { BrandDto as Brand } from "@common/dto";
+
+const editorStore = useEditorStore();
+const car = useVehicleStore();
+
 const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();
 const loading = useLoadingBar();
 
 const showImageModal = ref(false);
-const formRef = ref(null);
-
-const car = computed(() => store.state.carEditor.car);
-const isEdited = computed(() => store.state.carEditor.isEdited);
-const isFetching = computed(() => store.state.carEditor.isFetching);
+const formRef = ref<FormInst>();
 
 const statusOptions = statuses.map((status) => ({
   value: status,
   label: t("vehicle.status." + status),
 }));
 
-const renderBrandLabel = (option) => {
+const renderBrandLabel = (option: Ref<Brand>) => {
   try {
     return h("div", { className: "flex items-center" }, [
       h(NImage, {
@@ -215,19 +181,16 @@ const rules = {
   },
 };
 
-const updateCarField = (field) => (val) =>
-  store.commit(carEditorNamespace(UPDATE_CAR_FIELD), [field, val]);
-
 const saveAction = async () => {
   try {
-    await formRef.value.validate();
+    await formRef.value?.validate();
     loading.start();
-    await store.dispatch(carEditorNamespace(SAVE_CAR));
+    await car.saveCar();
     notification.success({
       title: t("notifications.vehicle.saving.success"),
       duration: 3000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       content: t("notifications.vehicle.saving.error"),
@@ -258,7 +221,7 @@ const toolbarActions = [
         const selectedImage = store.state.library.images.items.find(
           (image) => image.id == selectedImagesIds[0]
         );
-        updateCarField("featureImage")(selectedImage);
+        car.featureImage = selectedImage;
         await saveAction();
       } finally {
         setModalOpen(false);

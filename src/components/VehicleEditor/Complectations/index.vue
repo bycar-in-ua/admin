@@ -1,12 +1,8 @@
 <template>
-  <n-card
-    :title="t('complectations.title')"
-    size="small"
-    class="my-4 shadow"
-  >
+  <n-card :title="t('complectations.title')" size="small" class="my-4 shadow">
     <div class="editors-cards-grid">
       <n-card
-        v-for="complectation in complectations"
+        v-for="complectation in vehicleStore.complectations"
         :key="complectation.id"
         :title="complectation.displayName"
       >
@@ -21,10 +17,7 @@
               {{ t("delete") }}
             </n-button>
 
-            <n-button
-              quaternary
-              @click="openEditModal(complectation)"
-            >
+            <n-button quaternary @click="openEditModal(complectation)">
               {{ t("edit") }}
             </n-button>
           </div>
@@ -52,37 +45,36 @@
       </n-popconfirm>
     </div>
   </n-card>
-  <complectation-modal
-    v-model:show="showModal"
-    @close-modal="showModal = false"
-  />
+  <complectation-modal v-model:show="showModal" />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "Complectations",
-};
+});
 </script>
 
-<script setup>
-import { computed, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NCard, NPopconfirm, NInput, NButton, useNotification } from "naive-ui";
-import ComplectationModal from "./ComplectationModal";
-import PlusButton from "@/components/common/PlusButton";
+import ComplectationModal from "./ComplectationModal.vue";
+import PlusButton from "@/components/common/PlusButton.vue";
 import { carEditorNamespace } from "@/store/modules/carEditor";
 import {
   CREATE_NEW_COMPLECTATION,
   DELETE_COMPLECTATION,
 } from "@/store/modules/carEditor/complectation/actionTypes";
 import { OPEN_COMPLECTATION_EDIT_MODAL } from "@/store/modules/carEditor/complectation/actionTypes";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
 const store = useStore();
+const vehicleStore = useVehicleStore();
 const { t } = useI18n();
 const notification = useNotification();
-
-const complectations = computed(() => store.state.carEditor.car.complectations);
 
 const newComplectationName = ref("");
 const showModal = ref(false);
