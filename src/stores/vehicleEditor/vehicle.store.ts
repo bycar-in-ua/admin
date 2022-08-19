@@ -1,8 +1,4 @@
-import {
-  VehicleDto as Car,
-  TransmissionDto as Transmission,
-  EngineDto as Engine,
-} from "@common/dto";
+import { VehicleDto as Car } from "@common/dto";
 import { PostStatus, BodyType } from "@common/enums";
 import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";

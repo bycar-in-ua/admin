@@ -2,7 +2,7 @@
   <n-card :title="t('vehicle.engine.title', 2)" size="small" class="my-4">
     <div class="editors-cards-grid">
       <n-card
-        v-for="engine in engines"
+        v-for="engine in vehicleStore.engines"
         :key="engine.id"
         :title="engine.displayName"
         hoverable
@@ -25,7 +25,7 @@
             <n-button
               type="error"
               quaternary
-              @click="engineStore.deleteEngine(engine.id)"
+              @click="engineStore.deleteEngine(Number(engine.id))"
             >
               {{ t("delete") }}
             </n-button>
@@ -51,22 +51,20 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import EngineModal from "./EngineModal.vue";
 import PlusButton from "@/components/common/PlusButton.vue";
 import { NCard, NTable, NButton } from "naive-ui";
 import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-const store = useStore();
 const engineStore = useEngineStore();
+const vehicleStore = useVehicleStore();
 const { t } = useI18n();
 
 const showModal = ref(false);
 const isEdit = ref(false);
-
-const engines = computed(() => store.state.carEditor.car.engines);
 
 const openCreateModal = () => {
   isEdit.value = false;
