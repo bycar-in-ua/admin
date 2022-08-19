@@ -1,15 +1,14 @@
 <template>
   <n-modal
-    :show="show"
     preset="card"
     class="max-w-6xl"
-    @update:show="toggleCallback"
+    :on-update:show="(val) => $emit('update:show', val)"
   >
     <Images
       :is-selectable="true"
       :toolbar-actions="toolbarActions"
-      :preselected-images="existingImages"
-      :cdn-path-to-save="carBrandName"
+      :preselected-images="vehicleStore.carImagesIds"
+      :cdn-path-to-save="vehicleStore.brand?.slug || ''"
     />
     <div
       v-if="isFetching"
@@ -20,41 +19,27 @@
   </n-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "VehicleImagesModal",
-};
+});
 </script>
 
-<script setup>
-import { h, ref, computed } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { h, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { NModal, NButton, NSpin } from "naive-ui";
-import Images from "@/components/Images";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SAVE_CAR_IMAGES } from "@/store/modules/carEditor/actionTypes";
+import Images from "@/components/Images/index.vue";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false,
-  },
-  toggleCallback: {
-    type: Function,
-  },
-});
+const emit = defineEmits(["update:show"]);
 
-const store = useStore();
+const vehicleStore = useVehicleStore();
 const { t } = useI18n();
 
 const isFetching = ref(false);
-const existingImages = computed(
-  () => store.getters[carEditorNamespace("getCarImagesIds")]
-);
-const carBrandName = computed(
-  () => store.getters[carEditorNamespace("getCarBrandName")]
-);
 
 const toolbarActions = [
   {
@@ -69,11 +54,8 @@ const toolbarActions = [
     clickCallback: async (selectedImages) => {
       try {
         isFetching.value = true;
-        await store.dispatch(
-          carEditorNamespace(SAVE_CAR_IMAGES),
-          selectedImages
-        );
-        props.toggleCallback(false);
+        await vehicleStore.saveSomething(selectedImages, "images");
+        emit("update:show", false);
       } finally {
         isFetching.value = false;
       }

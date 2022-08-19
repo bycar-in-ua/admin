@@ -1,19 +1,13 @@
 <template>
   <div class="vehicle-image-card">
-    <n-icon
-      class="vehicle-image-card__delete-icon"
-      @click="deleteHandler"
-    >
+    <n-icon class="vehicle-image-card__delete-icon" @click="deleteHandler">
       <close-circle-outline />
     </n-icon>
     <div
       v-if="isDeleting"
       class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-red-500 bg-opacity-50"
     >
-      <n-spin
-        size="medium"
-        stroke="red"
-      />
+      <n-spin size="medium" stroke="red" />
     </div>
     <n-image
       :src="cdnLink(image.path, 300, 300)"
@@ -22,43 +16,36 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "VehicleImageCard",
-};
+});
 </script>
 
-<script setup>
-import { ref, computed } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref } from "vue";
 import { NIcon, NImage, NSpin } from "naive-ui";
 import { CloseCircleOutline } from "@vicons/ionicons5";
 import { cdnLink } from "@/helpers/cdn";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SAVE_CAR_IMAGES } from "@/store/modules/carEditor/actionTypes";
+import { ImageDto as Image } from "@common/dto";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
-const props = defineProps({
-  image: {
-    type: Object,
-    requierd: true,
-  },
-});
+const props = defineProps<{ image: Image }>();
 
-const store = useStore();
-
-const allImagesIds = computed(
-  () => store.getters[carEditorNamespace("getCarImagesIds")]
-);
+const vehicleStore = useVehicleStore();
 
 const isDeleting = ref(false);
 
 const deleteHandler = async () => {
   try {
     isDeleting.value = true;
-    await store.dispatch(
-      carEditorNamespace(SAVE_CAR_IMAGES),
-      allImagesIds.value.filter((imageId) => imageId !== props.image.id)
+
+    const imagesToSave = vehicleStore.carImagesIds?.filter(
+      (imageId) => imageId != props.image.id
     );
+
+    await vehicleStore.saveSomething(imagesToSave, "images");
   } finally {
     isDeleting.value = false;
   }

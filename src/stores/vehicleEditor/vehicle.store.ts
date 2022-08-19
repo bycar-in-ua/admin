@@ -85,7 +85,7 @@ export const useVehicleStore = defineStore("vehicle", {
 
       return title;
     },
-    getCarImagesIds(state) {
+    carImagesIds(state) {
       return state.images?.map((image) => image.id);
     },
     enginesOptions(state) {
