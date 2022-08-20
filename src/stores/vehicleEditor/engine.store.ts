@@ -24,7 +24,7 @@ export const useEngineStore = defineStore("engine", {
         ...this.engine,
         vehicleId: vuexStore.state.carEditor.car.id,
       });
-      useVehicleStore().engines.push(newEngine);
+      useVehicleStore().car.engines.push(newEngine);
     },
     async updateEngine() {
       const updatedEngine = await apiClient.put(`/engines/${this.engine.id}`, {
@@ -34,7 +34,7 @@ export const useEngineStore = defineStore("engine", {
 
       const vehicleStore = useVehicleStore();
 
-      vehicleStore.engines = vehicleStore.engines.map((engine) => {
+      vehicleStore.car.engines = vehicleStore.car.engines.map((engine) => {
         if (engine.id == updatedEngine.id) {
           return updatedEngine;
         }
@@ -45,7 +45,7 @@ export const useEngineStore = defineStore("engine", {
       await apiClient.delete(`/engines/${engineId}`);
       const vehicleStore = useVehicleStore();
 
-      vehicleStore.engines = vehicleStore.engines.filter(
+      vehicleStore.car.engines = vehicleStore.car.engines.filter(
         (engine) => engine.id !== engineId
       );
     },

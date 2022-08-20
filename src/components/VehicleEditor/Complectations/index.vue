@@ -2,7 +2,7 @@
   <n-card :title="t('complectations.title')" size="small" class="my-4 shadow">
     <div class="editors-cards-grid">
       <n-card
-        v-for="complectation in vehicleStore.complectations"
+        v-for="complectation in vehicleStore.car.complectations"
         :key="complectation.id"
         :title="complectation.displayName"
       >

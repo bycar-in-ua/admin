@@ -4,7 +4,7 @@
       class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
     >
       <ColorCard
-        v-for="color in vehicleStore.colors"
+        v-for="color in vehicleStore.car.colors"
         :key="color.id"
         :color="color"
         :close-action="removeColorHandler"
@@ -44,7 +44,7 @@ const { t } = useI18n();
 const isModalOpen = ref(false);
 
 const removeColorHandler = async (colorToRemove: Color) => {
-  const colorsToSave = vehicleStore.colors?.map((color) =>
+  const colorsToSave = vehicleStore.car.colors?.map((color) =>
     color.id != colorToRemove.id ? color.id : NaN
   );
   await vehicleStore.saveSomething(colorsToSave, "colors");

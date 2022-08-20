@@ -2,7 +2,7 @@
   <n-card :title="t('vehicle.engine.title', 2)" size="small" class="my-4">
     <div class="editors-cards-grid">
       <n-card
-        v-for="engine in vehicleStore.engines"
+        v-for="engine in vehicleStore.car.engines"
         :key="engine.id"
         :title="engine.displayName"
         hoverable

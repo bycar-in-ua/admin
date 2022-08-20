@@ -6,7 +6,7 @@
   >
     <div class="editors-cards-grid">
       <n-card
-        v-for="transmission in vehicleStore.transmissions"
+        v-for="transmission in vehicleStore.car.transmissions"
         :key="transmission.id"
         :title="getTransmissionDisplayName(transmission, t)"
         hoverable

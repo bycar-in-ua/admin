@@ -9,15 +9,11 @@ export const useVehicleEditorStore = defineStore(
     const editorStore = useEditorStore();
     const vehicle = useVehicleStore();
 
-    vehicle.$subscribe(() => {
-      editorStore.isModified = true;
-    });
-
     async function fetchCar(carSlug: string) {
       try {
         editorStore.isFetching = true;
         const car = await apiClient.get(`/vehicles/${carSlug}/for-edit`);
-        vehicle.$patch(car);
+        vehicle.$state.car = car;
       } catch (e: unknown) {
         console.log(e);
       } finally {

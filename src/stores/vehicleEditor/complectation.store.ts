@@ -24,7 +24,7 @@ export const useComplectationStore = defineStore("complectation", {
         }
       );
 
-      vehicleStore.complectations = vehicleStore.complectations?.map((cmpl) =>
+      vehicleStore.car.complectations = vehicleStore.car.complectations?.map((cmpl) =>
         cmpl.id == updatedComplectation.id ? updatedComplectation : cmpl
       );
     },

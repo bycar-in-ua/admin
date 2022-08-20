@@ -60,14 +60,14 @@ const vehicleStore = useVehicleStore();
 const colorsStore = useColorsStore();
 const { t } = useI18n();
 
-colorsStore.fetchColors(vehicleStore.brand?.id);
+colorsStore.fetchColors(vehicleStore.car.brandId);
 
 const colorTemplate: Color = {
   id: null,
   name: "",
   closestShade: null,
   reference: null,
-  brandIdentityId: vehicleStore.brandId,
+  brandIdentityId: vehicleStore.car.brandId,
 };
 
 const isColorsFormShowing = ref(false);

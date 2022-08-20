@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :model="car" :rules="rules">
+  <n-form ref="formRef" :model="vehicleStore.car" :rules="rules">
     <div class="text-right mb-4">
       <n-button
         type="primary"
@@ -12,14 +12,14 @@
     </div>
     <n-form-item :label="t('status')">
       <n-select
-        v-model:value="car.status"
+        v-model:value="vehicleStore.car.status"
         size="medium"
         :options="statusOptions"
       />
     </n-form-item>
     <n-form-item :label="t('brand')" required>
       <n-select
-        :value="car.brand"
+        :value="asAny(vehicleStore.car.brand)"
         size="medium"
         disabled
         :render-label="renderBrandLabel"
@@ -27,29 +27,29 @@
     </n-form-item>
     <n-form-item :label="t('vehicle.model')" path="model">
       <n-input
-        v-model:value="car.model"
+        v-model:value="vehicleStore.car.model"
         :placeholder="t('vehicle.enterModel')"
       />
     </n-form-item>
     <n-form-item :label="t('vehicle.modelYear')">
       <n-input-group>
         <n-input-number
-          v-model:value="car.yearFrom"
+          v-model:value="vehicleStore.car.yearFrom"
           class="w-full"
           :placeholder="t('vehicle.enterModelYear')"
         />
         <n-input-number
-          v-model:value="car.yearTo"
+          v-model:value="vehicleStore.car.yearTo"
           class="w-full"
           :placeholder="t('vehicle.enterModelYear')"
         />
       </n-input-group>
     </n-form-item>
     <n-form-item :label="t('vehicle.bodyName')">
-      <n-input v-model:value="car.bodyName" />
+      <n-input v-model:value="vehicleStore.car.bodyName" />
     </n-form-item>
     <n-form-item :label="t('vehicle.slug')" path="slug">
-      <n-input v-model:value="car.slug">
+      <n-input v-model:value="vehicleStore.car.slug">
         <template #suffix>
           <n-popover trigger="hover">
             <template #trigger>
@@ -71,8 +71,8 @@
       @click="setModalOpen(true)"
     >
       <img
-        v-if="car.featureImage"
-        :src="cdnLink(car.featureImage.path, 300)"
+        v-if="vehicleStore.car.featureImage"
+        :src="cdnLink(vehicleStore.car.featureImage.path, 300)"
         class="w-full object-cover"
       />
     </div>
@@ -88,9 +88,13 @@
       :single-selection="true"
       :discardable="false"
       :toolbar-actions="toolbarActions"
-      :preselected-images="[car.featureImage ? car.featureImage.id : false]"
+      :preselected-images="[
+        vehicleStore.car.featureImage
+          ? vehicleStore.car.featureImage.id
+          : false,
+      ]"
       :vuex-action="SET_IMAGES"
-      :action-payload="car.images"
+      :action-payload="vehicleStore.car.images"
     />
   </n-modal>
 </template>
@@ -134,7 +138,11 @@ import { useEditorStore } from "@/stores/vehicleEditor/editor.store";
 import { BrandDto as Brand } from "@common/dto";
 
 const editorStore = useEditorStore();
-const car = useVehicleStore();
+const vehicleStore = useVehicleStore();
+
+vehicleStore.$subscribe(() => {
+  editorStore.isModified = true;
+});
 
 const store = useStore();
 const { t } = useI18n();
@@ -185,7 +193,7 @@ const saveAction = async () => {
   try {
     await formRef.value?.validate();
     loading.start();
-    await car.saveCar();
+    await vehicleStore.saveCar();
     notification.success({
       title: t("notifications.vehicle.saving.success"),
       duration: 3000,
@@ -221,7 +229,7 @@ const toolbarActions = [
         const selectedImage = store.state.library.images.items.find(
           (image) => image.id == selectedImagesIds[0]
         );
-        car.featureImage = selectedImage;
+        vehicleStore.car.featureImage = selectedImage;
         await saveAction();
       } finally {
         setModalOpen(false);
@@ -229,4 +237,7 @@ const toolbarActions = [
     },
   },
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const asAny = (foo: any) => foo as any;
 </script>

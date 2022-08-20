@@ -51,7 +51,7 @@ const colorsStore = useColorsStore();
 const { t } = useI18n();
 
 const isFetching = ref(false);
-const selectedColors = ref(vehicleStore.colors?.map((c) => c.id));
+const selectedColors = ref(vehicleStore.car.colors.map((c) => c.id));
 
 const selectHandler = (color, selected) => {
   if (selected) {

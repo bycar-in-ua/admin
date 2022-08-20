@@ -8,7 +8,7 @@
       :is-selectable="true"
       :toolbar-actions="toolbarActions"
       :preselected-images="vehicleStore.carImagesIds"
-      :cdn-path-to-save="vehicleStore.brand?.slug || ''"
+      :cdn-path-to-save="vehicleStore.car.brand?.slug || ''"
     />
     <div
       v-if="isFetching"

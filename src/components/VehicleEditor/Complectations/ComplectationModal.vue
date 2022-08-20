@@ -152,6 +152,7 @@ import {
 } from "@/helpers/preparers";
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { OptionCategoryDto as OptionCategory } from "@common/dto";
 
 const emit = defineEmits(["update:show"]);
 const store = useStore();
@@ -161,14 +162,16 @@ const { t } = useI18n();
 const notification = useNotification();
 
 const isFetching = ref(false);
-const optionsTransferModelValue = ref({});
+const optionsTransferModelValue = ref<{ [k: number]: number[] }>({});
 const expandedPowerUnit = ref(null);
 const powerUnitFetching = ref(false);
 
-const optionCategories = computed(() => store.state.library.options.categories);
+const optionCategories = computed<OptionCategory[]>(
+  () => store.state.library.options.categories
+);
 
 const complectationsForCopy = computed<SelectBaseOption[]>(() =>
-  vehicleStore.complectations?.map((cmpl) => ({
+  vehicleStore.car.complectations.map((cmpl) => ({
     label: cmpl.displayName,
     value: cmpl.id,
     disabled: cmpl.id === complectationStore.id,
@@ -179,7 +182,7 @@ const getOptions = (options = []) =>
   options.map((option) => prepareOption(option));
 
 const optionsCopyHandler = (referenceComplectationId) => {
-  const referenceComplectation = vehicleStore.complectations?.find(
+  const referenceComplectation = vehicleStore.car.complectations.find(
     (cmpl) => cmpl.id === referenceComplectationId
   );
   complectationStore.options = referenceComplectation?.options;

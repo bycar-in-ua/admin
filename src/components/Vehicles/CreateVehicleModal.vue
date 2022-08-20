@@ -1,10 +1,5 @@
 <template>
-  <n-modal
-    v-model:show="show"
-    preset="card"
-    :title="t('vehicle.addNew')"
-    class="max-w-xl"
-  >
+  <n-modal preset="card" :title="t('vehicle.addNew')" class="max-w-xl">
     <n-form ref="formRef" :model="formModel" :rules="rules">
       <n-form-item :label="t('brand', 1)" path="brandId">
         <n-select
@@ -144,7 +139,7 @@ const submitHandler = async () => {
     await formRef.value.validate();
     const newVehicle = await apiClient.post("/vehicles", formModel.value);
     router.push({ name: "EditVehicle", params: { slug: newVehicle.slug } });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

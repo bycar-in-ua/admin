@@ -5,23 +5,25 @@ import { useEditorStore } from "./editor.store";
 import apiClient from "@/helpers/apiClient";
 
 export const useVehicleStore = defineStore("vehicle", {
-  state: (): Car => ({
-    id: undefined,
-    status: PostStatus.DRAFT,
-    slug: "",
-    model: "",
-    yearFrom: 0,
-    bodyType: BodyType.sedan,
-    engines: [],
-    transmissions: [],
-    complectations: [],
-    images: [],
-    colors: [],
-    brandId: undefined,
-    brand: {
-      displayName: "",
+  state: (): { car: Car } => ({
+    car: {
+      id: undefined,
+      status: PostStatus.DRAFT,
       slug: "",
-      logo: "",
+      model: "",
+      yearFrom: 0,
+      bodyType: BodyType.sedan,
+      engines: [],
+      transmissions: [],
+      complectations: [],
+      images: [],
+      colors: [],
+      brandId: undefined,
+      brand: {
+        displayName: "",
+        slug: "",
+        logo: "",
+      },
     },
   }),
   actions: {
@@ -30,7 +32,7 @@ export const useVehicleStore = defineStore("vehicle", {
       try {
         editorStore.isFetching = true;
         const updatedCar = await apiClient.put(
-          `/vehicles/${this.id}`,
+          `/vehicles/${this.car.id}`,
           this.$state
         );
         this.$patch(updatedCar);
@@ -47,7 +49,7 @@ export const useVehicleStore = defineStore("vehicle", {
       whatToSave: "images" | "colors"
     ) {
       const savedItems = await apiClient.put(
-        `/vehicles/${this.id}/${whatToSave}`,
+        `/vehicles/${this.car.id}/${whatToSave}`,
         someIds
       );
       this[whatToSave] = savedItems;
@@ -57,9 +59,9 @@ export const useVehicleStore = defineStore("vehicle", {
       try {
         const newComplectation = await apiClient.post("/complectations", {
           displayName: name,
-          vehicleId: this.id,
+          vehicleId: this.car.id,
         });
-        this.complectations?.push(newComplectation);
+        this.car.complectations?.push(newComplectation);
       } catch (error) {
         console.log(error);
       }
@@ -67,7 +69,7 @@ export const useVehicleStore = defineStore("vehicle", {
 
     async deleteComplectation(complectationId) {
       await apiClient.delete(`/complectations/${complectationId}`);
-      this.complectations = this.complectations?.filter(
+      this.car.complectations = this.car.complectations?.filter(
         (complectation) => complectation.id !== complectationId
       );
     },
@@ -76,28 +78,28 @@ export const useVehicleStore = defineStore("vehicle", {
     getVehicleTitle(state) {
       let title = "";
 
-      title += state?.brand?.displayName + " ";
+      title += state.car?.brand?.displayName + " ";
 
-      title += state.model + " ";
+      title += state.car.model + " ";
 
-      title += state.yearFrom + " ";
+      title += state.car.yearFrom + " ";
 
-      if (state.yearTo) title += "- " + state.yearTo;
+      if (state.car.yearTo) title += "- " + state.car.yearTo;
 
       return title;
     },
     carImagesIds(state) {
-      return state.images?.map((image) => image.id);
+      return state.car.images?.map((image) => image.id);
     },
     enginesOptions(state) {
-      return state.engines?.map((engine) => ({
+      return state.car.engines?.map((engine) => ({
         label: engine.displayName + ` ${engine.power} hp`,
         value: engine.id,
       }));
     },
     transmissionsOptions(state) {
       return (t) =>
-        state.transmissions?.map((transmission) => ({
+        state.car.transmissions?.map((transmission) => ({
           label: `${transmission.drive} - ${
             transmission?.gearbox?.numberOfGears
           } ${t(
@@ -109,7 +111,7 @@ export const useVehicleStore = defineStore("vehicle", {
     enginesMapById(state) {
       const engines = new Map();
 
-      for (const engine of state?.engines || []) {
+      for (const engine of state.car.engines) {
         engines.set(engine.id, engine);
       }
 
@@ -118,14 +120,14 @@ export const useVehicleStore = defineStore("vehicle", {
     transmissionsMapById(state) {
       const transmissions = new Map();
 
-      for (const transmission of state?.transmissions || []) {
+      for (const transmission of state.car.transmissions) {
         transmissions.set(transmission.id, transmission);
       }
 
       return transmissions;
     },
     getCarBrandName(state) {
-      return state?.brand?.slug || "";
+      return state.car.brand.slug || "";
     },
   },
 });

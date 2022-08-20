@@ -1,6 +1,6 @@
 <template>
   <editor
-    v-model="vehicleStore.description"
+    v-model="vehicleStore.car.description"
     api-key="bkij2k10jssrm5ez30czeck0fluycxbi0p1watets0n39u8n"
     :init="{
       height: 400,

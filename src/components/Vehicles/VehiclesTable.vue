@@ -112,6 +112,7 @@ const columns: TableColumn[] = [
     title: t("vehicle.table.cols.actions"),
     key: "actions",
     render(row) {
+      // @ts-ignore
       return h(TableRowActions, {
         rowData: row,
       });

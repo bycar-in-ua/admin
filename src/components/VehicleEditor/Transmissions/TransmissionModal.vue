@@ -116,6 +116,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { SelectMixedOption } from "naive-ui/lib/select/src/interface";
 
 export default defineComponent({
   name: "TransmissionModal",
@@ -185,7 +186,7 @@ const breakingSystemOptions = Object.keys(
   createSelectOption(item, "vehicle.transmission.brakingSystemTypes.")
 );
 
-const suspensionTypesOptions = [
+const suspensionTypesOptions: SelectMixedOption[] = [
   {
     type: "group",
     label: t("vehicle.transmission.suspensions.types.independent.title"),

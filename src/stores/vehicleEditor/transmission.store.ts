@@ -28,9 +28,9 @@ export const useTransmissionStore = defineStore("transmission", {
       const vehicleStore = useVehicleStore();
       const newTransmission = await apiClient.post("/transmissions", {
         ...this.$state,
-        vehicleId: vehicleStore.id,
+        vehicleId: vehicleStore.car.id,
       });
-      vehicleStore.transmissions?.push(newTransmission);
+      vehicleStore.car.transmissions.push(newTransmission);
     },
     async updateTransmission() {
       const vehicleStore = useVehicleStore();
@@ -40,8 +40,9 @@ export const useTransmissionStore = defineStore("transmission", {
         this.$state
       );
 
-      vehicleStore.transmissions = vehicleStore.transmissions?.map((trans) =>
-        trans.id == updatedTransmission.id ? updatedTransmission : trans
+      vehicleStore.car.transmissions = vehicleStore.car.transmissions.map(
+        (trans) =>
+          trans.id == updatedTransmission.id ? updatedTransmission : trans
       );
     },
     async deleteTransmission(transmissionId) {
@@ -49,7 +50,7 @@ export const useTransmissionStore = defineStore("transmission", {
 
       await apiClient.delete(`/transmissions/${transmissionId}`);
 
-      vehicleStore.transmissions = vehicleStore.transmissions?.filter(
+      vehicleStore.car.transmissions = vehicleStore.car.transmissions.filter(
         (transmission) => transmission.id !== transmissionId
       );
     },
