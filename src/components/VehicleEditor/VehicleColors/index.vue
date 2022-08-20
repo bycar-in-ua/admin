@@ -1,13 +1,10 @@
 <template>
-  <n-card
-    :title="t('colors.title', 2)"
-    class="my-4 shadow"
-  >
+  <n-card :title="t('colors.title', 2)" class="my-4 shadow">
     <div
       class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
     >
       <ColorCard
-        v-for="color in colors"
+        v-for="color in vehicleStore.colors"
         :key="color.id"
         :color="color"
         :close-action="removeColorHandler"
@@ -15,55 +12,41 @@
     </div>
     <template #action>
       <div class="flex justify-end">
-        <n-button
-          type="primary"
-          size="medium"
-          @click="isModalOpen = true"
-        >
+        <n-button type="primary" size="medium" @click="isModalOpen = true">
           {{ t("colors.add") }}
         </n-button>
       </div>
     </template>
   </n-card>
-  <VehicleColorsModal
-    :show="isModalOpen"
-    :toggle-callback="toggleModal"
-  />
+  <VehicleColorsModal v-model:show="isModalOpen" />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "VehicleColors",
-};
+});
 </script>
 
-<script setup>
-import { ref, provide, computed } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { NCard, NButton } from "naive-ui";
-import VehicleColorsModal from "./VehicleColorsModal";
-import ColorCard from "./ColorCard";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SAVE_CAR_COLORS } from "@/store/modules/carEditor/actionTypes";
+import VehicleColorsModal from "./VehicleColorsModal/index.vue";
+import ColorCard from "./ColorCard.vue";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { ColorDto as Color } from "@common/dto";
 
-const store = useStore();
+const vehicleStore = useVehicleStore();
 const { t } = useI18n();
-
-const colors = computed(() => store.state.carEditor.car.colors);
 
 const isModalOpen = ref(false);
 
-const toggleModal = (val) => {
-  isModalOpen.value = val;
-};
-
-const removeColorHandler = async (color) => {
-  await store.dispatch(
-    carEditorNamespace(SAVE_CAR_COLORS),
-    colors.value.map((c) => c.id).filter((colorId) => colorId !== color.id)
+const removeColorHandler = async (colorToRemove: Color) => {
+  const colorsToSave = vehicleStore.colors?.map((color) =>
+    color.id != colorToRemove.id ? color.id : NaN
   );
+  await vehicleStore.saveSomething(colorsToSave, "colors");
 };
-
-provide("toggleColorsModal", toggleModal);
 </script>

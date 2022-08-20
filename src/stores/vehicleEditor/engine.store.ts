@@ -2,8 +2,7 @@ import { defineStore } from "pinia";
 import { EngineDto as Engine } from "@common/dto";
 import vuexStore from "@/store";
 import apiClient from "@/helpers/apiClient";
-import { UPDATE_CAR_FIELD } from "../../store/modules/carEditor/mutationTypes";
-import { carEditorNamespace } from "../../store/modules/carEditor";
+import { useVehicleStore } from "./vehicle.store";
 
 interface State {
   engine: Engine;
@@ -25,36 +24,30 @@ export const useEngineStore = defineStore("engine", {
         ...this.engine,
         vehicleId: vuexStore.state.carEditor.car.id,
       });
-      vuexStore.commit(carEditorNamespace(UPDATE_CAR_FIELD), [
-        "engines",
-        [...vuexStore.state.carEditor.car.engines, newEngine],
-      ]);
+      useVehicleStore().engines.push(newEngine);
     },
     async updateEngine() {
       const updatedEngine = await apiClient.put(`/engines/${this.engine.id}`, {
         ...this.engine,
         displayName: undefined,
       });
-      vuexStore.commit(carEditorNamespace(UPDATE_CAR_FIELD), [
-        "engines",
-        [
-          ...vuexStore.state.carEditor.car.engines.map((engine) => {
-            if (engine.id == updatedEngine.id) {
-              return updatedEngine;
-            }
-            return engine;
-          }),
-        ],
-      ]);
+
+      const vehicleStore = useVehicleStore();
+
+      vehicleStore.engines = vehicleStore.engines.map((engine) => {
+        if (engine.id == updatedEngine.id) {
+          return updatedEngine;
+        }
+        return engine;
+      });
     },
     async deleteEngine(engineId: string | number) {
       await apiClient.delete(`/engines/${engineId}`);
-      vuexStore.commit(carEditorNamespace(UPDATE_CAR_FIELD), [
-        "engines",
-        vuexStore.state.carEditor.car.engines.filter(
-          (engine) => engine.id !== engineId
-        ),
-      ]);
+      const vehicleStore = useVehicleStore();
+
+      vehicleStore.engines = vehicleStore.engines.filter(
+        (engine) => engine.id !== engineId
+      );
     },
   },
 });

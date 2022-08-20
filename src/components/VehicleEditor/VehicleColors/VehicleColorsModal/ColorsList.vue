@@ -1,25 +1,21 @@
 <template>
-  <div
-    v-if="colors.length"
-    class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
-  >
-    <ColorCard
-      v-for="color in colors"
-      :key="color.id"
-      :color="color"
-      :select-action="selectHandler"
-      :edit-action="editHandler"
-      :close-action="deleteHandler"
-      :selected="selectedColors.includes(color.id)"
-      editable
-    />
-  </div>
-  <n-empty
-    v-else
-    size="large"
-    :show-description="false"
-    class="p-4"
-  />
+  <n-scrollbar v-if="colorsStore.$state.length" class="max-h-4/5 pr-4">
+    <div
+      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4"
+    >
+      <ColorCard
+        v-for="color in colorsStore.$state"
+        :key="color.id"
+        :color="color"
+        :select-action="selectHandler"
+        :edit-action="editHandler"
+        :close-action="deleteHandler"
+        :selected="selectedColors.includes(color.id)"
+        editable
+      />
+    </div>
+  </n-scrollbar>
+  <n-empty v-else size="large" :show-description="false" class="p-4" />
   <div class="flex justify-end mt-4">
     <n-button
       type="primary"
@@ -32,59 +28,54 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ColorsList",
-};
+});
 </script>
 
-<script setup>
-import { computed, inject, ref } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { NEmpty, NButton } from "naive-ui";
-import { DELETE_COLOR } from "@/store/modules/library/actionTypes";
-import ColorCard from "../ColorCard";
-import { carEditorNamespace } from "@/store/modules/carEditor";
-import { SAVE_CAR_COLORS } from "@/store/modules/carEditor/actionTypes";
+import { NEmpty, NButton, NScrollbar } from "naive-ui";
+import ColorCard from "../ColorCard.vue";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
 
-const store = useStore();
+const emit = defineEmits(["toggle-modal", "toggle-form"]);
+
+const vehicleStore = useVehicleStore();
+const colorsStore = useColorsStore();
 const { t } = useI18n();
-const toggleModal = inject("toggleColorsModal");
-const toggleColorForm = inject("toggleColorForm");
-
-const car = computed(() => store.state.carEditor.car);
-const colors = computed(() => store.state.library.colors);
 
 const isFetching = ref(false);
-const selectedColors = ref(car.value.colors.map((c) => c.id));
+const selectedColors = ref(vehicleStore.colors?.map((c) => c.id));
 
 const selectHandler = (color, selected) => {
   if (selected) {
-    selectedColors.value = selectedColors.value.filter(
+    selectedColors.value = selectedColors.value?.filter(
       (colorId) => colorId !== color.id
     );
     return;
   }
-  selectedColors.value.push(color.id);
+  selectedColors.value?.push(color.id);
 };
 
 const editHandler = (color) => {
-  toggleColorForm(true, color);
+  emit("toggle-form", true, color);
 };
 
 const deleteHandler = async (color) => {
-  await store.dispatch(DELETE_COLOR, color.id);
+  await colorsStore.deleteColor(color.id);
 };
 
 const saveHandler = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(
-      carEditorNamespace(SAVE_CAR_COLORS),
-      selectedColors.value
-    );
-    toggleModal(false);
+    await vehicleStore.saveSomething(selectedColors.value, "colors");
+    emit("toggle-modal", false);
   } finally {
     isFetching.value = false;
   }

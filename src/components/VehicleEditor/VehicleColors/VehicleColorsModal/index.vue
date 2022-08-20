@@ -1,10 +1,9 @@
 <template>
   <n-modal
-    :show="show"
     preset="card"
     :title="t('colors.add')"
     class="max-w-4xl"
-    @update:show="toggleCallback"
+    :on-update:show="(val) => $emit('update:show', val)"
   >
     <div class="flex justify-end mb-4">
       <n-button
@@ -24,47 +23,51 @@
         {{ t("colors.addNew") }}
       </n-button>
     </div>
-    <ColorForm v-if="isColorsFormShowing" :color="colorRef" />
-    <ColorsList v-else />
+    <ColorForm
+      v-if="isColorsFormShowing"
+      :color="colorRef"
+      @toggle-form="(val) => toggleColorForm(val)"
+    />
+    <ColorsList
+      v-else
+      @toggle-modal="(val) => $emit('update:show', val)"
+      @toggle-form="(val, color) => toggleColorForm(val, color)"
+    />
   </n-modal>
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "VehicleColorsModal",
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-    toggleCallback: {
-      type: Function,
-    },
-  },
-};
+});
 </script>
 
 <script setup lang="ts">
-import { ref, provide } from "vue";
-import { useStore } from "vuex";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { NModal, NButton } from "naive-ui";
 import ColorsList from "./ColorsList.vue";
 import ColorForm from "./ColorForm.vue";
-import { FETCH_COLORS } from "@/store/modules/library/actionTypes";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
+import { ColorDto as Color } from "@common/dto";
+
+defineEmits(["update:show"]);
 
 const vehicleStore = useVehicleStore();
-const store = useStore();
+const colorsStore = useColorsStore();
 const { t } = useI18n();
 
-store.dispatch(FETCH_COLORS, vehicleStore.brand?.id);
+colorsStore.fetchColors(vehicleStore.brand?.id);
 
-const colorTemplate = {
+const colorTemplate: Color = {
   id: null,
   name: "",
   closestShade: null,
   reference: null,
+  brandIdentityId: vehicleStore.brandId,
 };
 
 const isColorsFormShowing = ref(false);
@@ -79,6 +82,4 @@ const discardColorForm = () => {
   colorRef.value = { ...colorTemplate };
   isColorsFormShowing.value = false;
 };
-
-provide("toggleColorForm", toggleColorForm);
 </script>

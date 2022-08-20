@@ -5,11 +5,11 @@
         :src="cdnLink(color.reference, 300, 300)"
         :title="color?.name"
         class="rounded-full cursor-pointer"
-        :class="selected ? 'border-2 border-primary' : ''"
+        :class="selected ? 'border-solid border-2 border-primary' : ''"
         width="150"
         height="150"
         @click="selectAction(color, selected)"
-      >
+      />
       <n-icon
         size="30"
         class="icon cursor-pointer left-0 top-0 hover:text-primary transition-all"
@@ -34,50 +34,44 @@
         <n-spin size="medium" />
       </div>
     </div>
-    <n-p
-      class="text-center"
-      v-text="color?.name"
-    />
+    <n-p class="text-center" v-text="color?.name" />
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ColorCard",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { cdnLink } from "@/helpers/cdn";
 import { NIcon, NSpin, NP } from "naive-ui";
 import { CloseCircleOutline, Pencil } from "@vicons/ionicons5";
+import { ColorDto as Color } from "@common/dto";
 
-const props = defineProps({
-  color: {
-    type: Object,
-    requierd: true,
-  },
-  selectAction: {
-    type: Function,
-    default: () => {},
-  },
-  closeAction: {
-    type: Function || Promise,
-  },
-  editAction: {
-    type: Function,
-    default: () => {},
-  },
-  selected: {
-    type: Boolean,
-    default: false,
-  },
-  editable: {
-    type: Boolean,
-    default: false,
-  },
+interface IProps {
+  color: Color;
+  selectAction: (...args) => void;
+  closeAction: (...args) => void | Promise<void>;
+  editAction: (...args) => void;
+  selected: boolean;
+  editable: boolean;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  selectAction: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  closeAction: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  editAction: () => {},
+  selected: false,
+  editable: false,
 });
 
 const { t } = useI18n();

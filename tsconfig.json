@@ -18,7 +18,8 @@
       "@common/*": ["./common/*"]
     },
     "allowJs": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "strictNullChecks": false
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["dist"],

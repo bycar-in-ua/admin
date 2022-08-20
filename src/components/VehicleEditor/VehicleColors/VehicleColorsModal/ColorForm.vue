@@ -49,15 +49,16 @@
   </n-form>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ColorForm",
-};
+});
 </script>
 
-<script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   NForm,
@@ -70,43 +71,21 @@ import {
   NUploadDragger,
   useNotification,
 } from "naive-ui";
-import ColorCard from "../ColorCard";
+import ColorCard from "../ColorCard.vue";
 import { ArchiveOutline } from "@vicons/ionicons5";
 import i18n from "@/i18n/index.js";
 import apiClient from "@/helpers/apiClient";
-import {
-  CREATE_NEW_COLOR,
-  UPDATE_COLOR,
-} from "@/store/modules/library/actionTypes";
 import useClipboard from "@/hooks/useClipboard";
+import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
+import { ColorDto as Color } from "@common/dto";
 
-/**
- * @typedef ColorFormProps
- * @type {Object}
- * @property {Number || null} id
- * @property {String || null} name
- * @property {String || null} closestShade
- * @property {String || null} reference
- *
- * Color props
- * @param {ColorFormProps} color
- */
-const props = defineProps({
-  color: {
-    type: Object,
-    requierd: true,
-    default: () => ({}),
-  },
-});
+const props = defineProps<{ color: Color }>();
+const emit = defineEmits(["toggle-form"]);
 
-const store = useStore();
+const colorsStore = useColorsStore();
 const notification = useNotification();
 const { t } = useI18n();
 const { getImage } = useClipboard();
-
-const toggleColorFormShowing = inject("toggleColorForm");
-
-const carBrand = computed(() => store.state.carEditor.car.brand);
 
 const colorItems = Object.keys(i18n.ua.colors.shades).map((color) => ({
   value: color,
@@ -120,16 +99,13 @@ const formModel = ref(props.color);
 const createHandler = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(CREATE_NEW_COLOR, {
-      ...formModel.value,
-      brandIdentity: carBrand.value,
-    });
-    toggleColorFormShowing(false);
+    await colorsStore.createNewColor(formModel.value);
+    emit("toggle-form", false);
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -143,13 +119,13 @@ const createHandler = async () => {
 const updateHandler = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(UPDATE_COLOR, formModel.value);
-    toggleColorFormShowing(false);
+    await colorsStore.updateColor(formModel.value);
+    emit("toggle-form", false);
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -169,7 +145,7 @@ const uploader = async (file) => {
       title: t("images.save.success"),
       duration: 3000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

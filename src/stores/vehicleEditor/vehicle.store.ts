@@ -17,6 +17,7 @@ export const useVehicleStore = defineStore("vehicle", {
     complectations: [],
     images: [],
     colors: [],
+    brandId: undefined,
     brand: {
       displayName: "",
       slug: "",
