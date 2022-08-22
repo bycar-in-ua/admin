@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { EngineDto as Engine } from "@common/dto";
-import vuexStore from "@/store";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 
@@ -20,9 +19,11 @@ export const useEngineStore = defineStore("engine", {
   }),
   actions: {
     async createNewEngine() {
+      const vehicleStore = useVehicleStore();
+
       const newEngine = await apiClient.post("/engines", {
         ...this.engine,
-        vehicleId: vuexStore.state.carEditor.car.id,
+        vehicleId: vehicleStore.car.id,
       });
       useVehicleStore().car.engines.push(newEngine);
     },

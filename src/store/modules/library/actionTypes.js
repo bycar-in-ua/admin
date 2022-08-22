@@ -1,4 +1,0 @@
-export const FETCH_COLORS = "FETCH_COLORS";
-export const CREATE_NEW_COLOR = "CREATE_NEW_COLOR";
-export const UPDATE_COLOR = "UPDATE_COLOR";
-export const DELETE_COLOR = "DELETE_COLOR";
