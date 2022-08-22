@@ -4,9 +4,8 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
 import NavBgUpload from "@/components/Profile/NavBgUpload";
+import { useAuthStore } from "@/stores/auth.store";
 
 export default {
   name: "Profile",
@@ -14,12 +13,9 @@ export default {
     NavBgUpload,
   },
   setup() {
-    const store = useStore();
-
-    const profile = computed(() => store.state.auth.user);
-
+    const authStore = useAuthStore();
     return {
-      profile,
+      profile: authStore.user,
     };
   },
 };

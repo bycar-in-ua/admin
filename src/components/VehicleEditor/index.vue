@@ -23,7 +23,6 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { useStore } from "vuex";
 import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { NScrollbar, useDialog } from "naive-ui";
@@ -37,20 +36,16 @@ import Transmissions from "./Transmissions/index.vue";
 import VehicleImages from "./VehicleImages/index.vue";
 import VehicleColors from "./VehicleColors/index.vue";
 import VahicleEditorSkeleton from "./Skeleton.vue";
-import { FETCH_OPTION_CATEGORIES } from "@/store/modules/library/options/actionTypes";
 import { useVehicleEditorStore } from "@/stores/vehicleEditor";
 import { useEditorStore } from "@/stores/vehicleEditor/editor.store";
 
 const vehicleEditorStore = useVehicleEditorStore();
 const editoreState = useEditorStore();
-const store = useStore();
 const router = useRouter();
 const { t } = useI18n();
 const dialog = useDialog();
 
 vehicleEditorStore.fetchCar(String(router.currentRoute.value.params.slug));
-
-store.dispatch(FETCH_OPTION_CATEGORIES);
 
 onBeforeRouteLeave((to) => {
   if (editoreState.isModified) {

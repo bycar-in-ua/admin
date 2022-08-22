@@ -25,7 +25,7 @@
       :key="index"
       @click="action.clickCallback(selectedImages)"
     />
-    <template v-if="selectedImages.length">
+    <template v-if="selectedImages.length && uploadble">
       <n-button
         type="error"
         class="mr-4"
@@ -51,13 +51,12 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { inject, ref, provide } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import AddNewImage from "./AddNewImage.vue";
 import { NButton } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
-import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
 import { type ToolbarAction } from "@/components/Images/index.vue";
+import { useImagesStore } from "@/stores/images.store";
 
 interface IProps {
   uploadble: boolean;
@@ -73,7 +72,7 @@ const props = withDefaults(defineProps<IProps>(), {
   discardable: true,
 });
 
-const store = useStore();
+const imagesStore = useImagesStore();
 const { t } = useI18n();
 
 const setSelectable = inject<() => void>("setImagesSelectable");
@@ -82,18 +81,21 @@ const setUnselectable = inject<() => void>("setImagesUnselectable");
 
 const isFetching = ref(false);
 
+/**
+ * @todo Сделать удаление одним запросом
+ */
 const deleteHandler = async () => {
   try {
     isFetching.value = true;
 
-    const imagesToDelete = store.state.library.images.items
+    const imagesToDelete = imagesStore.images
       .filter((image) => props.selectedImages.includes(image.id))
       .map((image) => image.path);
 
     await apiClient.delete("/images", props.selectedImages);
     await apiClient.deleteFiles(imagesToDelete);
 
-    store.dispatch(FETCH_IMAGES);
+    imagesStore.fetchImages(1);
     setUnselectable();
   } finally {
     isFetching.value = false;
