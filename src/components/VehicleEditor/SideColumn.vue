@@ -68,7 +68,7 @@
     <div
       class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer flex justify-center"
       style="min-height: 60px"
-      @click="setModalOpen(true)"
+      @click="showImageModal = true"
     >
       <img
         v-if="vehicleStore.car.featureImage"
@@ -78,23 +78,20 @@
     </div>
   </n-form>
   <n-modal
-    :show="showImageModal"
+    v-model:show="showImageModal"
     preset="card"
     class="max-w-6xl"
-    @update:show="setModalOpen"
+    :on-after-enter="afterModalEnter"
   >
     <Images
+      :is-uploadble="false"
       :is-selectable="true"
       :single-selection="true"
       :discardable="false"
       :toolbar-actions="toolbarActions"
       :preselected-images="[
-        vehicleStore.car.featureImage
-          ? vehicleStore.car.featureImage.id
-          : false,
+        vehicleStore.car.featureImage ? vehicleStore.car.featureImage.id : NaN,
       ]"
-      :vuex-action="SET_IMAGES"
-      :action-payload="vehicleStore.car.images"
     />
   </n-modal>
 </template>
@@ -109,9 +106,8 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { h, ref, Ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import Images from "@/components/Images/index.vue";
+import Images, { type ToolbarAction } from "@/components/Images/index.vue";
 import { yearValidator, slugValidator } from "@/helpers/validators";
 import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
@@ -132,19 +128,19 @@ import {
 } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
 import { statuses } from "@/helpers/postStatuses";
-import { SET_IMAGES } from "@/store/modules/library/images/actionTypes";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useEditorStore } from "@/stores/vehicleEditor/editor.store";
+import { useImagesStore } from "@/stores/images.store";
 import { BrandDto as Brand } from "@common/dto";
 
 const editorStore = useEditorStore();
 const vehicleStore = useVehicleStore();
+const imagesStore = useImagesStore();
 
 vehicleStore.$subscribe(() => {
   editorStore.isModified = true;
 });
 
-const store = useStore();
 const { t } = useI18n();
 const notification = useNotification();
 const loading = useLoadingBar();
@@ -189,6 +185,10 @@ const rules = {
   },
 };
 
+const afterModalEnter = () => {
+  imagesStore.images = vehicleStore.car.images;
+};
+
 const saveAction = async () => {
   try {
     await formRef.value?.validate();
@@ -210,11 +210,7 @@ const saveAction = async () => {
   }
 };
 
-const setModalOpen = (val) => {
-  showImageModal.value = val;
-};
-
-const toolbarActions = [
+const toolbarActions: ToolbarAction[] = [
   {
     component: h(
       NButton,
@@ -225,15 +221,12 @@ const toolbarActions = [
       t("save")
     ),
     clickCallback: async (selectedImagesIds) => {
-      try {
-        const selectedImage = store.state.library.images.items.find(
-          (image) => image.id == selectedImagesIds[0]
-        );
-        vehicleStore.car.featureImage = selectedImage;
-        await saveAction();
-      } finally {
-        setModalOpen(false);
-      }
+      const selectedImage = vehicleStore.car.images.find(
+        (image) => image.id == selectedImagesIds[0]
+      );
+      vehicleStore.car.featureImage = selectedImage;
+      await saveAction();
+      showImageModal.value = false;
     },
   },
 ];

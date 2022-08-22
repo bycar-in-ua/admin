@@ -6,11 +6,10 @@ import {
   UPDATE_COLOR,
 } from "./actionTypes";
 import { UPDATE_LIBRARY, UPDATE_LIBRARY_ITEM } from "./mutationTypes";
-import images from "./images";
 import options from "./options";
 
 export const library = {
-  modules: { images, options },
+  modules: { options },
   state: () => ({
     types: [],
     colors: [],

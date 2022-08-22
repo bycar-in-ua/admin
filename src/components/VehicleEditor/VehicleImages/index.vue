@@ -17,7 +17,7 @@
       </div>
     </template>
   </n-card>
-  <VehicleImagesModal v-model:show="isModalOpen" />
+  <VehicleImagesModal v-if="isModalOpen" v-model:show="isModalOpen" />
 </template>
 
 <script lang="ts">

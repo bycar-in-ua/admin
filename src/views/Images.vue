@@ -2,12 +2,18 @@
   <Images />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "ImagesView",
-};
+});
 </script>
 
-<script setup>
-import Images from "@/components/Images";
+<script setup lang="ts">
+import Images from "@/components/Images/index.vue";
+import { useImagesStore } from "@/stores/images.store";
+
+const imagesStore = useImagesStore();
+
+imagesStore.fetchImages(1);
 </script>

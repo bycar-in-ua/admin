@@ -33,12 +33,13 @@ export const useVehicleStore = defineStore("vehicle", {
         editorStore.isFetching = true;
         const updatedCar = await apiClient.put(
           `/vehicles/${this.car.id}`,
-          this.$state
+          this.car
         );
         this.$patch(updatedCar);
         editorStore.isModified = false;
-      } catch (e: unknown) {
-        console.log(e);
+      } catch (error: unknown) {
+        console.log(error);
+        if (error instanceof Error) throw new Error(error.message);
       } finally {
         editorStore.isFetching = false;
       }
@@ -52,7 +53,7 @@ export const useVehicleStore = defineStore("vehicle", {
         `/vehicles/${this.car.id}/${whatToSave}`,
         someIds
       );
-      this[whatToSave] = savedItems;
+      this.car[whatToSave] = savedItems;
     },
 
     async createComplectation(name: string) {

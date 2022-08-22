@@ -16,17 +16,18 @@
       class="hidden"
       multiple
       @change="uploadHandler"
-    >
+    />
   </form>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "AddNewImage",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, inject } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
@@ -40,7 +41,7 @@ const { t } = useI18n();
 const notification = useNotification();
 const { getImages } = useClipboard();
 
-const cdnPathToSave = inject("cdnPathToSave");
+const cdnPathToSave = inject<string>("cdnPathToSave");
 
 const isUploading = ref(false);
 
@@ -50,11 +51,7 @@ const handleClick = () => {
   fileInput.value.click();
 };
 
-/**
- * @param {Array.<File>} files
- * @param {string} pathTosave
- */
-const uploader = async (files) => {
+const uploader = async (files: Array<File>) => {
   try {
     isUploading.value = true;
     const uploadImages = await apiClient.uploadFiles(files, cdnPathToSave);
@@ -80,9 +77,9 @@ const uploadHandler = async (e) => {
 };
 
 async function pasteListener(e) {
-  const images = getImages(e);
+  const images: Array<File> | boolean = getImages(e);
 
-  if (images) {
+  if (Array.isArray(images)) {
     await uploader(images);
     return;
   }

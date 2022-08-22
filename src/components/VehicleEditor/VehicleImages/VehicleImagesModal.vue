@@ -10,12 +10,6 @@
       :preselected-images="vehicleStore.carImagesIds"
       :cdn-path-to-save="vehicleStore.car.brand?.slug || ''"
     />
-    <div
-      v-if="isFetching"
-      class="absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-gray-600 bg-opacity-50"
-    >
-      <n-spin size="medium" />
-    </div>
   </n-modal>
 </template>
 
@@ -28,20 +22,22 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { h, ref } from "vue";
+import { h } from "vue";
 import { useI18n } from "vue-i18n";
-import { NModal, NButton, NSpin } from "naive-ui";
-import Images from "@/components/Images/index.vue";
+import { NModal, NButton } from "naive-ui";
+import Images, { type ToolbarAction } from "@/components/Images/index.vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useImagesStore } from "@/stores/images.store";
 
 const emit = defineEmits(["update:show"]);
 
 const vehicleStore = useVehicleStore();
+const imagesStore = useImagesStore();
 const { t } = useI18n();
 
-const isFetching = ref(false);
+imagesStore.fetchImages(1);
 
-const toolbarActions = [
+const toolbarActions: ToolbarAction[] = [
   {
     component: h(
       NButton,
@@ -53,11 +49,11 @@ const toolbarActions = [
     ),
     clickCallback: async (selectedImages) => {
       try {
-        isFetching.value = true;
+        imagesStore.isFetching = true;
         await vehicleStore.saveSomething(selectedImages, "images");
         emit("update:show", false);
       } finally {
-        isFetching.value = false;
+        imagesStore.isFetching = false;
       }
     },
   },

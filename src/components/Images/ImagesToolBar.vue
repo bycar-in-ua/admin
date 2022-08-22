@@ -37,50 +37,48 @@
       </n-button>
     </template>
 
-    <AddNewImage class="ml-auto" />
+    <AddNewImage v-if="uploadble" class="ml-auto" />
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ImagesToolBar",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { inject, ref, provide } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import AddNewImage from "./AddNewImage";
+import AddNewImage from "./AddNewImage.vue";
 import { NButton } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
 import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
+import { type ToolbarAction } from "@/components/Images/index.vue";
+
+interface IProps {
+  uploadble: boolean;
+  selectable: boolean;
+  selectedImages?: Array<number | string>;
+  additionalActions?: ToolbarAction[];
+  discardable?: boolean;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  selectedImages: () => [],
+  additionalActions: () => [],
+  discardable: true,
+});
 
 const store = useStore();
 const { t } = useI18n();
 
-const props = defineProps({
-  selectable: {
-    type: Boolean,
-    default: false,
-  },
-  selectedImages: {
-    type: Array,
-    default: () => [],
-  },
-  additionalActions: {
-    type: Array,
-    default: () => [],
-  },
-  discardable: {
-    type: Boolean,
-    default: true,
-  },
-});
+const setSelectable = inject<() => void>("setImagesSelectable");
 
-const setSelectable = inject("setImagesSelectable");
-
-const setUnselectable = inject("setImagesUnselectable");
+const setUnselectable = inject<() => void>("setImagesUnselectable");
 
 const isFetching = ref(false);
 

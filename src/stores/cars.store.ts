@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 import { VehicleDto as Car } from "@common/dto";
+import { PaginationMeta } from "@common/types";
 import apiClient from "@/helpers/apiClient.js";
 
 interface State {
   items: Car[];
-  meta: {
-    currentPage: number | undefined;
-    totalPages: number | undefined;
-    itemsPerPage: number | undefined;
-    totalItems: number | undefined;
-  };
+  meta: PaginationMeta;
   isFetching: boolean;
 }
 

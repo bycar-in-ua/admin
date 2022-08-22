@@ -24,6 +24,8 @@ export const useVehicleEditorStore = defineStore(
     }
 
     function purgeEditor() {
+      vehicle.$reset();
+      editorStore.$reset();
       vehicle.$dispose();
       editorStore.$dispose();
     }

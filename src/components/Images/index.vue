@@ -1,23 +1,22 @@
 <template>
   <ImagesToolBar
+    :uploadble="isUploadble"
     :selectable="selectable"
     :selected-images="selectedImages"
     :additional-actions="toolbarActions"
     :discardable="discardable"
   />
-  <div
-    class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-4"
-  >
+  <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-4">
     <n-image-group>
       <n-skeleton
-        v-if="images.isFetching"
-        :repeat="10"
+        v-if="imagesStore.isFetching"
+        :repeat="28"
         width="100%"
-        height="15vh"
+        height="14vh"
       />
       <template v-else>
         <Image
-          v-for="image in images.items"
+          v-for="image in imagesStore.images"
           :key="image.id"
           :image="image"
           :selectable="selectable"
@@ -27,80 +26,67 @@
     </n-image-group>
   </div>
   <n-empty
-    v-if="!images.items?.length"
+    v-if="!imagesStore.images.length"
     :description="t('images.empty')"
     class="p-4"
   />
   <n-pagination
-    v-if="images.totalPages > 1"
+    v-if="imagesStore.meta.totalPages > 1"
     class="mt-4 justify-end"
-    :page="images.curentPage"
-    :page-count="images.totalPages"
-    :disabled="images.isFetching"
-    @update:page="handlePagination"
+    :page="imagesStore.meta.currentPage"
+    :page-count="imagesStore.meta.totalPages"
+    :disabled="imagesStore.isFetching"
+    @update:page="(page) => imagesStore.fetchImages(page)"
   />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "Images",
-};
+});
 </script>
 
-<script setup>
-import { computed, ref, provide } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref, provide, type Component } from "vue";
 import { useI18n } from "vue-i18n";
-import ImagesToolBar from "./ImagesToolBar";
-import Image from "./Image";
+import ImagesToolBar from "./ImagesToolBar.vue";
+import Image from "./Image.vue";
 import { NImageGroup, NPagination, NSkeleton, NEmpty } from "naive-ui";
-import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
+import { useImagesStore } from "@/stores/images.store";
 
-const props = defineProps({
-  vuexAction: {
-    type: String,
-    default: FETCH_IMAGES,
-  },
-  actionPayload: {
-    type: [String, Number, Object, Array],
-    default: 1,
-  },
-  isSelectable: {
-    type: Boolean,
-    default: false,
-    requierd: false,
-  },
-  discardable: {
-    type: Boolean,
-    default: true,
-  },
-  singleSelection: {
-    type: Boolean,
-    default: false,
-  },
-  preselectedImages: {
-    type: Array,
-    default: () => [],
-  },
-  toolbarActions: Array,
-  cdnPathToSave: {
-    type: String,
-    default: "",
-  },
+export interface ToolbarAction {
+  component: Component;
+  clickCallback: (...args) => void | Promise<void>;
+}
+
+interface IProps {
+  isUploadble?: boolean;
+  isSelectable?: boolean;
+  discardable?: boolean;
+  singleSelection?: boolean;
+  preselectedImages?: Array<number | string>;
+  toolbarActions?: ToolbarAction[];
+  cdnPathToSave?: string;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  isUploadble: true,
+  isSelectable: false,
+  discardable: false,
+  singleSelection: false,
+  preselectedImages: () => [],
+  cdnPathToSave: "",
 });
 
-const store = useStore();
-const { t } = useI18n();
+defineEmits(["paginate"]);
 
-store.dispatch(props.vuexAction, props.actionPayload);
+const imagesStore = useImagesStore();
+const { t } = useI18n();
 
 const selectable = ref(props.isSelectable);
 
 const selectedImages = ref([...props.preselectedImages]);
-
-const handlePagination = (page) => {
-  store.dispatch(FETCH_IMAGES, page);
-};
 
 provide("setImagesSelectable", () => {
   selectable.value = true;
@@ -127,5 +113,5 @@ provide("removeImageFromSelection", (imageId) => {
 
 provide("cdnPathToSave", props.cdnPathToSave);
 
-const images = computed(() => store.state.library.images);
+provide("isUploadble", props.isUploadble);
 </script>
