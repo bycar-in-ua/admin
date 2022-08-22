@@ -8,10 +8,7 @@
       :negative-click="hadleClose"
       :loading="isFetching"
     />
-    <div
-      v-else
-      class="flex justify-between items-center"
-    >
+    <div v-else class="flex justify-between items-center">
       {{ option.displayName }}
       <n-icon
         class="cursor-pointer ml-auto"
@@ -22,7 +19,7 @@
       </n-icon>
       <n-popselect
         :value="category.id"
-        :options="categoryOptions"
+        :options="optionsStore.optionCategoriesForSelect"
         size="small"
         scrollable
         :on-update:value="handleSwap"
@@ -53,48 +50,45 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import { NListItem, NIcon, NPopselect, useNotification } from "naive-ui";
 import { Pencil, Close, SwapVertical } from "@vicons/ionicons5";
 import OptionEditor from "./OptionEditor";
 import apiClient from "@/helpers/apiClient";
-import { UPDATE_SPECIFIC_OPTION } from "@/store/modules/library/options/mutationTypes";
-import {
-  CHANGE_OPTION_CATEGORY,
-  DELETE_OPTION,
-} from "@/store/modules/library/options/actionTypes";
+import { useOptionsStore } from "@/stores/options.store";
 
 const props = defineProps({
   option: Object,
   category: Object,
 });
 
-const store = useStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 const notification = useNotification();
 
 const isEdit = ref(false);
 const isFetching = ref(false);
 
-const categoryOptions = computed(
-  () => store.getters.getOptionCategoriesForSelect
-);
-
 const hadnleSave = async (val) => {
   isFetching.value = true;
   const updatedOption = await apiClient.put(`/options/${props.option.id}`, {
     displayName: val,
   });
-  store.commit(UPDATE_SPECIFIC_OPTION, [props.category.id, updatedOption]);
+
+  optionsStore.categories[props.category.id].options[
+    optionsStore.categories[props.category.id].options.findIndex(
+      (op) => op.id === updatedOption.id
+    )
+  ] = updatedOption;
+
   isEdit.value = false;
   isFetching.value = false;
 };
 
 const handleDelete = async () => {
   isFetching.value = true;
-  await store.dispatch(DELETE_OPTION, props.option.id);
+  await optionsStore.deleteOption(props.option.id);
   isFetching.value = false;
 };
 
@@ -103,7 +97,7 @@ const handleSwap = (targetCategory) => {
     return;
   }
   try {
-    store.dispatch(CHANGE_OPTION_CATEGORY, [props.option, targetCategory]);
+    optionsStore.changeOptionCategory(props.option, targetCategory);
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,

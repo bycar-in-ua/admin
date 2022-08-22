@@ -18,20 +18,21 @@
   </n-popconfirm>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "AddNewOptionsCategory",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { NPopconfirm, NInput, useNotification } from "naive-ui";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
-import { CREATE_OPTION_CATEGORY } from "@/store/modules/library/options/actionTypes";
+import { useOptionsStore } from "@/stores/options.store";
 
-const store = useStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 const notification = useNotification();
 
@@ -42,13 +43,13 @@ const newOptCatName = ref("");
 const createOptionCategory = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(CREATE_OPTION_CATEGORY, newOptCatName.value);
+    await optionsStore.createOptionCategory(newOptCatName.value);
     newOptCatName.value = "";
     notification.success({
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error) {
+  } catch (error: Error) {
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

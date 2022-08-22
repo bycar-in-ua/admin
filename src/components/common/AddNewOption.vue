@@ -10,10 +10,7 @@
       path="optionName"
       :class="formItemClass"
     >
-      <n-input
-        v-model:value="optionName"
-        :placeholder="t('enter')"
-      />
+      <n-input v-model:value="optionName" :placeholder="t('enter')" />
     </n-form-item>
     <n-form-item>
       <n-button
@@ -27,20 +24,22 @@
     </n-form-item>
   </n-form>
 </template>
-<script>
-export default {
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "AddNewOption",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NForm, NFormItem, NInput, NButton } from "naive-ui";
-import { CREATE_OPTION } from "@/store/modules/library/options/actionTypes";
+import { useOptionsStore } from "@/stores/options.store";
 
-const store = useStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 
 const props = defineProps({
@@ -62,7 +61,7 @@ const isFetching = ref(false);
 const submitHandler = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(CREATE_OPTION, [props.categoryId, optionName.value]);
+    await optionsStore.createOption(props.categoryId, optionName.value);
     optionName.value = "";
   } finally {
     isFetching.value = false;

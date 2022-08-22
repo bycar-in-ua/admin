@@ -45,7 +45,7 @@
       </n-popconfirm>
     </div>
   </n-card>
-  <complectation-modal v-model:show="showModal" />
+  <complectation-modal v-if="showModal" v-model:show="showModal" />
 </template>
 
 <script lang="ts">

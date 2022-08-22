@@ -8,10 +8,7 @@
         :negative-click="hadleClose"
         :loading="isFetching"
       />
-      <div
-        v-else
-        class="flex items-center"
-      >
+      <div v-else class="flex items-center">
         {{ optionCategory.displayName }}
         <n-icon
           class="title-icon cursor-pointer transition-all ml-auto"
@@ -49,30 +46,31 @@
   </n-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "OptionCategory",
-};
+});
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import { NList, NCard, NIcon, NScrollbar } from "naive-ui";
 import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
-import OptionCategoryListItem from "./OptionCategoryListItem";
-import OptionEditor from "./OptionEditor";
-import AddNewOption from "@/components/common/AddNewOption";
+import OptionCategoryListItem from "./OptionCategoryListItem.vue";
+import OptionEditor from "./OptionEditor.vue";
+import AddNewOption from "@/components/common/AddNewOption.vue";
 import apiClient from "@/helpers/apiClient";
-import { UPDATE_OPTION_CATEGORY } from "@/store/modules/library/options/mutationTypes";
+import { useOptionsStore } from "@/stores/options.store";
 
 const props = defineProps({
   optionCategory: Object,
   openDeleteDrawer: Function,
 });
 
-const store = useStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 
 const isEdit = ref(false);
@@ -86,10 +84,7 @@ const hadnleSave = async (val) => {
       displayName: val,
     }
   );
-  store.commit(UPDATE_OPTION_CATEGORY, [
-    props.optionCategory.id,
-    updatedOptCat,
-  ]);
+  optionsStore.updateOptionCategory(updatedOptCat);
   isEdit.value = false;
   isFetching.value = false;
 };

@@ -1,6 +1,6 @@
 <template>
   <n-modal
-    :on-after-enter="afterModalEnter"
+    :on-after-enter="recalcOptions"
     :on-after-leave="afterModalClose"
     :on-update:show="(val) => $emit('update:show', val)"
     preset="card"
@@ -38,7 +38,7 @@
 
       <n-collapse accordion>
         <n-collapse-item
-          v-for="category in Object.values(optionCategories)"
+          v-for="category in Object.values(optionsStore.categories)"
           :key="category.id"
           :title="category.displayName"
           :name="category.id"
@@ -126,7 +126,6 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import {
   NModal,
@@ -152,12 +151,12 @@ import {
 } from "@/helpers/preparers";
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
-import { OptionCategoryDto as OptionCategory } from "@common/dto";
+import { useOptionsStore } from "@/stores/options.store";
 
 const emit = defineEmits(["update:show"]);
-const store = useStore();
 const vehicleStore = useVehicleStore();
 const complectationStore = useComplectationStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 const notification = useNotification();
 
@@ -166,9 +165,7 @@ const optionsTransferModelValue = ref<{ [k: number]: number[] }>({});
 const expandedPowerUnit = ref(null);
 const powerUnitFetching = ref(false);
 
-const optionCategories = computed<OptionCategory[]>(
-  () => store.state.library.options.categories
-);
+optionsStore.fetchOptionsByCategories();
 
 const complectationsForCopy = computed<SelectBaseOption[]>(() =>
   vehicleStore.car.complectations.map((cmpl) => ({
@@ -219,10 +216,6 @@ const saveHandler = async () => {
   }
 };
 
-const afterModalEnter = () => {
-  recalcOptions();
-};
-
 const afterModalClose = () => {
   complectationStore.$reset();
   optionsTransferModelValue.value = {};
@@ -234,7 +227,7 @@ function prepareOptionsForSaving() {
   for (const [catId, optionsIds] of Object.entries(
     optionsTransferModelValue.value
   )) {
-    optionCategories.value[catId].options.forEach((op) => {
+    optionsStore.categories[catId].options.forEach((op) => {
       if (optionsIds.includes(op.id)) {
         options.push(op);
       }
@@ -250,6 +243,7 @@ function recalcOptions() {
     {}
   );
 }
+recalcOptions();
 </script>
 
 <style lang="postcss">

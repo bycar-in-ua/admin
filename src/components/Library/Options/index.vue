@@ -1,7 +1,7 @@
 <template>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
     <OptionCategory
-      v-for="optionCategory in Object.values(optionCategories)"
+      v-for="optionCategory in Object.values(optionsStore.categories)"
       :key="optionCategory.id"
       :option-category="optionCategory"
       :open-delete-drawer="openDrawer"
@@ -19,14 +19,8 @@
       </n-icon>
     </add-new-option-category>
   </n-divider>
-  <n-drawer
-    v-model:show="showDrawer"
-    placement="right"
-  >
-    <n-drawer-content
-      :title="t('info.confirmation')"
-      closable
-    >
+  <n-drawer v-model:show="showDrawer" placement="right">
+    <n-drawer-content :title="t('info.confirmation')" closable>
       {{ t("info.deletingOptionCategory") }}
       <div class="text-right mt-4">
         <n-button
@@ -43,30 +37,28 @@
   </n-drawer>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "Options",
-};
+});
 </script>
 
-<script setup>
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { NDrawer, NDrawerContent, NButton, NDivider, NIcon } from "naive-ui";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import colors from "@/colors.json";
-import {
-  FETCH_OPTION_CATEGORIES,
-  DELETE_OPTION_CATEGORY,
-} from "@/store/modules/library/options/actionTypes";
-import OptionCategory from "./OptionCategory";
-import AddNewOptionCategory from "@/components/common/AddNewOptionCategory";
+import OptionCategory from "./OptionCategory/index.vue";
+import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
+import { useOptionsStore } from "@/stores/options.store";
 
-const store = useStore();
+const optionsStore = useOptionsStore();
 const { t } = useI18n();
 
-store.dispatch(FETCH_OPTION_CATEGORIES);
+optionsStore.fetchOptionsByCategories();
 
 const showDrawer = ref(false);
 const isFetching = ref(false);
@@ -80,13 +72,11 @@ const openDrawer = (targetCategoryId) => {
 const hadleDelete = async () => {
   try {
     isFetching.value = true;
-    await store.dispatch(DELETE_OPTION_CATEGORY, targetCategory.value);
+    await optionsStore.deleteOptionCategory(targetCategory.value);
     targetCategory.value = null;
     showDrawer.value = false;
   } finally {
     isFetching.value = false;
   }
 };
-
-const optionCategories = computed(() => store.state.library.options.categories);
 </script>
