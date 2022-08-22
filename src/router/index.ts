@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store";
-import { FETCH_USER } from "@/store/modules/auth/actionTypes";
 import Dashboard from "@/views/Dashboard.vue";
+import { useAuthStore } from "@/stores/auth.store";
 
 const routes = [
   {
@@ -64,17 +63,18 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore();
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
-  if (!store.getters.isLogedIn) {
+  if (!authStore.isLoggedIn && !authStore.isFetched) {
     try {
-      await store.dispatch(FETCH_USER);
+      await authStore.fetchUser();
     } catch (error) {
       console.log(error);
     }
   }
 
-  if (authRequired && !store.getters.isLogedIn) {
+  if (authRequired && !authStore.isLoggedIn) {
     next("/login");
   } else {
     next();

@@ -1,9 +1,5 @@
 <template>
-  <n-card
-    :title="t('adminPanelEnter')"
-    class="shadow-lg max-w-lg"
-    loading
-  >
+  <n-card :title="t('adminPanelEnter')" class="shadow-lg max-w-lg" loading>
     <template #header-extra>
       <a href="https://bycar.in.ua/">bycar.in.ua</a>
     </template>
@@ -13,20 +9,14 @@
       :rules="rules"
       :disabled="isFetching"
     >
-      <n-form-item
-        :label="t('userName')"
-        path="username"
-      >
+      <n-form-item :label="t('userName')" path="username">
         <n-input
           v-model:value="model.username"
           type="text"
           :placeholder="t('enterUserName')"
         />
       </n-form-item>
-      <n-form-item
-        :label="t('password')"
-        path="password"
-      >
+      <n-form-item :label="t('password')" path="password">
         <n-input
           v-model:value="model.password"
           type="password"
@@ -37,99 +27,80 @@
 
     <template #action>
       <div class="text-right">
-        <n-button
-          type="primary"
-          @click="submitHandler"
-        >
-          <n-spin
-            v-if="isFetching"
-            stroke="white"
-          />
-          <template v-else>
-            {{ t("login") }}
-          </template>
+        <n-button type="primary" :loading="isFetching" @click="submitHandler">
+          {{ t("login") }}
         </n-button>
       </div>
     </template>
   </n-card>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "Login",
+});
+</script>
+
+<script setup lang="ts">
+import { ref } from "vue";
 import {
   NCard,
   NButton,
   NForm,
   NFormItem,
   NInput,
-  NSpin,
   useLoadingBar,
+  FormInst,
 } from "naive-ui";
-import { mapActions } from "vuex";
-import { LOGIN_USER } from "../../store/modules/auth/actionTypes";
-import useErrorHandler from "../../hooks/useErrorHandler";
 import { useNotification } from "naive-ui";
 import { useI18n } from "vue-i18n";
+import { useAuthStore } from "@/stores/auth.store";
+import { useRouter } from "vue-router";
 
-export default {
-  name: "Login",
-  components: {
-    NCard,
-    NButton,
-    NForm,
-    NFormItem,
-    NInput,
-    NSpin,
-  },
-  setup() {
-    const loading = useLoadingBar();
-    const notification = useNotification();
-    const { handleError } = useErrorHandler(notification);
-    const { t } = useI18n();
+const loading = useLoadingBar();
+const notification = useNotification();
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
 
-    return {
-      loading,
-      handleError,
-      t,
-    };
+const loginForm = ref<FormInst>();
+const model = ref({
+  username: "",
+  password: "",
+});
+const isFetching = ref(false);
+
+const rules = {
+  username: {
+    required: true,
+    trigger: ["blur", "input"],
+    message: "Это обязательное поле",
   },
-  data: () => ({
-    model: {
-      username: "",
-      password: "",
-    },
-    rules: {
-      username: {
-        required: true,
-        trigger: ["blur", "input"],
-        message: "Это обязательное поле",
-      },
-      password: {
-        required: true,
-        trigger: ["blur", "input"],
-        message: "Это обязательное поле",
-      },
-    },
-    isFetching: false,
-  }),
-  methods: {
-    ...mapActions({
-      loginUser: LOGIN_USER,
-    }),
-    async submitHandler() {
-      try {
-        this.isFetching = true;
-        this.loading.start();
-        await this.$refs.loginForm.validate();
-        await this.loginUser(this.model);
-        this.$router.push({ name: "Dashboard" });
-        this.loading.finish();
-        this.isFetching = false;
-      } catch (error) {
-        this.loading.error();
-        this.isFetching = false;
-        this.handleError(error?.message, "Возникла ошибка при входе");
-      }
-    },
+  password: {
+    required: true,
+    trigger: ["blur", "input"],
+    message: "Это обязательное поле",
   },
 };
+
+async function submitHandler() {
+  try {
+    isFetching.value = true;
+    loading.start();
+    await loginForm.value.validate();
+    await authStore.loginUser(model.value);
+    router.push({ name: "Dashboard" });
+    loading.finish();
+  } catch (error: Error) {
+    loading.error();
+    notification.error({
+      title: error.message,
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
+}
 </script>

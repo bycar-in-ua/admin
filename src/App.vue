@@ -8,7 +8,7 @@
     <n-loading-bar-provider>
       <n-dialog-provider>
         <n-notification-provider>
-          <app-layout v-if="isUserFetched">
+          <app-layout v-if="authStore.isFetched">
             <router-view :key="locale" />
           </app-layout>
           <div v-else class="h-screen flex justify-center items-center">
@@ -28,8 +28,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed, provide, ref } from "vue";
-import { useStore } from "vuex";
+import { provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   NConfigProvider,
@@ -44,6 +43,7 @@ import {
 import colors from "./colors.json";
 import AppLayout from "./layouts/AppLayout.vue";
 import useMemory from "./hooks/useMemory";
+import { useAuthStore } from "@/stores/auth.store";
 
 const themeOverrides = {
   common: {
@@ -59,7 +59,7 @@ const themeOverrides = {
   },
 };
 
-const store = useStore();
+const authStore = useAuthStore();
 const memory = useMemory();
 const { locale } = useI18n();
 
@@ -86,6 +86,4 @@ const themeSwitcher = () => {
 };
 
 provide("themeSwitcher", themeSwitcher);
-
-const isUserFetched = computed(() => store.state.auth.isFetched);
 </script>
