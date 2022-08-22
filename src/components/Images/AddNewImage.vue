@@ -29,14 +29,13 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, inject } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { NButton, useNotification } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
-import { FETCH_IMAGES } from "@/store/modules/library/images/actionTypes";
 import useClipboard from "@/hooks/useClipboard";
+import { useImagesStore } from "@/stores/images.store";
 
-const store = useStore();
+const imagesStore = useImagesStore()
 const { t } = useI18n();
 const notification = useNotification();
 const { getImages } = useClipboard();
@@ -56,7 +55,7 @@ const uploader = async (files: Array<File>) => {
     isUploading.value = true;
     const uploadImages = await apiClient.uploadFiles(files, cdnPathToSave);
     await apiClient.post("/images", uploadImages);
-    store.dispatch(FETCH_IMAGES);
+    await imagesStore.fetchImages(1);
     notification.success({
       title: t("images.save.success"),
       duration: 3000,
