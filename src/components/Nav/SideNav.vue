@@ -23,6 +23,7 @@ import {
   Albums,
   Library,
   Images,
+  Newspaper,
 } from "@vicons/ionicons5";
 
 function renderMenuIcon(icon) {
@@ -36,6 +37,10 @@ const menuOptions = [
     key: "Dashboard",
     exact: true,
     icon: PodiumSharp,
+  },
+  {
+    key: "Posts",
+    icon: Newspaper,
   },
   {
     key: "Vehicles",

@@ -5,7 +5,8 @@ import images from "@common/translations/images.json";
 import info from "@common/translations/info.json";
 import notifications from "@common/translations/notifications.json";
 import options from "@common/translations/options.json";
-import vehicle from "../../common/translations/vehicle.json";
+import vehicle from "@common/translations/vehicle.json";
+import posts from "@common/translations/posts.json";
 
 export default {
   ua: {
@@ -13,6 +14,7 @@ export default {
     info: info.ua,
     menuItems: {
       Dashboard: "Дашборд",
+      Posts: posts.ua.title,
       Vehicles: "Автомобілі",
       Brands: "Бренди",
       Library: "Бібліотека",
@@ -24,12 +26,14 @@ export default {
     images: images.ua,
     colors: colors.ua,
     notifications: notifications.ua,
+    posts: posts.ua
   },
   ru: {
     ...general.ru,
     info: info.ru,
     menuItems: {
       Dashboard: "Дашборд",
+      Posts: posts.ru.title,
       Vehicles: "Автомобили",
       Brands: "Бренды",
       Library: "Библиотека",
@@ -41,5 +45,6 @@ export default {
     images: images.ru,
     colors: colors.ru,
     notifications: notifications.ru,
+    posts: posts.ru
   },
 };

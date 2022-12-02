@@ -6,12 +6,12 @@ import messages from "@/i18n";
 import "./assets/global.css";
 import "./assets/tailwind.css";
 import { getCookie } from "./helpers/cookieHelpers";
-import { createPinia } from "pinia";
+import { createPinia } from "pinia"; 
 
 const i18n = createI18n({
   legacy: false,
-  locale: getCookie("lang") || "ru",
-  fallbackLocale: "ru",
+  locale: getCookie("lang") || "ua",
+  fallbackLocale: "ua",
   messages,
 });
 
