@@ -4,7 +4,7 @@
     :options="options"
     @select="langSwitchHandler"
   >
-    <div class="mr-3 uppercase">
+    <div class="mr-3 uppercase cursor-default">
       {{ currentLocale }}
     </div>
   </n-dropdown>
