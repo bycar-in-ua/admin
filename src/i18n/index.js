@@ -15,6 +15,7 @@ export default {
     menuItems: {
       Dashboard: "Дашборд",
       Posts: posts.ua.title,
+      PostCategories: posts.ua.category,
       Vehicles: "Автомобілі",
       Brands: "Бренди",
       Library: "Бібліотека",
@@ -34,6 +35,7 @@ export default {
     menuItems: {
       Dashboard: "Дашборд",
       Posts: posts.ru.title,
+      PostCategories: posts.ru.category,
       Vehicles: "Автомобили",
       Brands: "Бренды",
       Library: "Библиотека",

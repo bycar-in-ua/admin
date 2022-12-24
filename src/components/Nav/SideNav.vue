@@ -3,19 +3,31 @@
     :collapsed="collapsed"
     :collapsed-width="64"
     :collapsed-icon-size="22"
-    :options="createMenuOptions()"
+    :options="createMenuOptions(menuOptions)"
     :render-label="renderMenuLabel"
     :expand-icon="expandIcon"
-    :value="$route.name"
+    :value="($route.name as string)"
     inverted
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "SideNav",
+  props: {
+    collapsed: Boolean,
+  },
+});
+</script>
+
+<script setup lang="ts">
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { NMenu, NIcon } from "naive-ui";
+import type { MenuOption } from "naive-ui";
 import {
   PodiumSharp,
   CaretDownOutline,
@@ -32,7 +44,7 @@ function renderMenuIcon(icon) {
   return null;
 }
 
-const menuOptions = [
+const menuOptions: Omit<MenuOption, "icon">[] = [
   {
     key: "Dashboard",
     exact: true,
@@ -41,6 +53,15 @@ const menuOptions = [
   {
     key: "Posts",
     icon: Newspaper,
+    children: [
+      {
+        key: "Posts",
+      },
+      {
+        key: "PostCategories",
+        pluralism: 2,
+      },
+    ],
   },
   {
     key: "Vehicles",
@@ -60,41 +81,24 @@ const menuOptions = [
   },
 ];
 
-export default {
-  name: "SideNav",
-  components: {
-    NMenu,
-  },
-  props: {
-    collapsed: Boolean,
-  },
-  setup() {
-    const { t } = useI18n();
+const { t } = useI18n();
 
-    const createMenuOptions = () =>
-      menuOptions.map((item) => ({
-        ...item,
-        label: t(`menuItems.${item.key}`),
-        icon: renderMenuIcon(item.icon),
-      }));
+function createMenuOptions(menuOptions): MenuOption[] {
+  return menuOptions.map((item) => ({
+    ...item,
+    label: t(`menuItems.${item.key}`, item.pluralism),
+    icon: item.icon ? renderMenuIcon(item.icon) : null,
+    children: item.children ? createMenuOptions(item.children) : undefined,
+  }));
+}
 
-    const renderMenuLabel = (option) => {
-      return h(
-        RouterLink,
-        { to: { name: option.key }, exact: option.exact },
-        { default: () => option.label }
-      );
-    };
-
-    const expandIcon = () => {
-      return h(NIcon, null, { default: () => h(CaretDownOutline) });
-    };
-
-    return {
-      renderMenuLabel,
-      expandIcon,
-      createMenuOptions,
-    };
-  },
+const renderMenuLabel = (option) => {
+  return h(
+    RouterLink,
+    { to: { name: option.key }, exact: option.exact },
+    { default: () => option.label }
+  );
 };
+
+const expandIcon = () => h(NIcon, null, { default: () => h(CaretDownOutline) });
 </script>
