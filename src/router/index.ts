@@ -30,6 +30,9 @@ const routes = [
     path: "/post-categories",
     name: "PostCategories",
     component: () => import("@/views/PostCategories.vue"),
+    meta: {
+      title: ["posts.category", 2],
+    },
   },
   {
     path: "/vehicles",

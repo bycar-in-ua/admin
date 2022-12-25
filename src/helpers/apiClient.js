@@ -6,8 +6,7 @@ export const get = async (path) => {
     const response = await fetch(API_URL + path, {
       credentials: "include",
     });
-    await validateResponse(response);
-    return await response.json();
+    return await validateResponse(response);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -23,8 +22,7 @@ export const post = async (path, body) => {
       credentials: "include",
       body: JSON.stringify(body),
     });
-    await validateResponse(response);
-    return await response.json();
+    return await validateResponse(response);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -40,8 +38,7 @@ export const put = async (path, body) => {
       credentials: "include",
       body: JSON.stringify(body),
     });
-    await validateResponse(response);
-    return await response.json();
+    return await validateResponse(response);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -57,8 +54,7 @@ export const remove = async (path, body) => {
       credentials: "include",
       body: JSON.stringify(body),
     });
-    await validateResponse(response);
-    return await response.json();
+    return await validateResponse(response);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -80,8 +76,7 @@ export const uploadFiles = async (files, path = "") => {
       method: "POST",
       body: formData,
     });
-    await validateResponse(response);
-    return await response.json();
+    return await validateResponse(response);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -101,8 +96,7 @@ export const deleteFiles = async (files) => {
       },
       body: JSON.stringify(files),
     });
-    await validateResponse(response);
-    return await response.json();
+    await response.json();
   } catch (error) {
     throw new Error(error.message);
   }
