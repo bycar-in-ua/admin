@@ -5,10 +5,35 @@
     class="max-w-lg"
     :title="title"
   >
+    <n-form
+      ref="formRef"
+      :model="postCategoryModalStore.category"
+      :disabled="postCategoryModalStore.loading"
+      :rules="rules"
+    >
+      <n-form-item :label="t('title')" path="title" required>
+        <n-input
+          id="postCatTitle"
+          v-model:value="postCategoryModalStore.category.title"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.slug')" path="slug" required>
+        <n-input v-model:value="postCategoryModalStore.category.slug" />
+      </n-form-item>
+    </n-form>
+
     <template #footer>
       <div class="flex justify-between">
-        <n-button type="error">{{ t("discard") }}</n-button>
-        <n-button type="primary">{{ t("save") }}</n-button>
+        <n-button type="error" :disabled="postCategoryModalStore.loading">{{
+          t("discard")
+        }}</n-button>
+        <n-button
+          type="primary"
+          :loading="postCategoryModalStore.loading"
+          @click="submitHandler"
+        >
+          {{ t("save") }}
+        </n-button>
       </div>
     </template>
   </n-modal>
@@ -22,18 +47,41 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { NModal, NButton } from "naive-ui";
-import { usePostCategoryModalStore } from "@/stores/postCategories.store";
+import { computed, ref } from "vue";
+import { NModal, NButton, NForm, NFormItem, NInput, FormRules } from "naive-ui";
+import {
+  usePostCategoryModalStore,
+  usePostCategoriesStore,
+} from "@/stores/postCategories.store";
 import { useI18n } from "vue-i18n";
 
 const postCategoryModalStore = usePostCategoryModalStore();
+const postCategoriesStore = usePostCategoriesStore();
 
 const { t } = useI18n();
+const formRef = ref(null);
+
+const rules: FormRules = {
+  title: {
+    required: true,
+  },
+  slug: {
+    required: true,
+  },
+};
 
 const title = computed(() =>
   postCategoryModalStore.isEdit
     ? `${t("edit")}: ${postCategoryModalStore.category.title}`
     : t("posts.addCategory")
 );
+
+async function submitHandler() {
+  await formRef.value.validate();
+  postCategoryModalStore.isEdit
+    ? await postCategoryModalStore.updatePostCategory()
+    : await postCategoryModalStore.storePostCategory();
+  postCategoriesStore.fetchPostCategories();
+  postCategoryModalStore.$reset();
+}
 </script>
