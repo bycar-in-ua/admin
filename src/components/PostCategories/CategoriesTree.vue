@@ -1,5 +1,9 @@
 <template>
-  <n-tree :data="categories" />
+  <n-tree
+    :data="postCategoriesStore.getCategoriesTree"
+    draggable
+    @drop="handleDrop"
+  />
 </template>
 
 <script lang="ts">
@@ -10,17 +14,23 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { usePostCategoriesStore } from "@/stores/postCategories.store";
 import { NTree } from "naive-ui";
-import type { TreeOption } from "naive-ui";
+import type { TreeDropInfo } from "naive-ui";
 
 const postCategoriesStore = usePostCategoriesStore();
 
-const categories = computed<TreeOption[]>(() =>
-  postCategoriesStore.categories.map((postCat) => ({
-    key: postCat.id,
-    label: postCat.title,
-  }))
-);
+const handleDrop = async (dropInfo: TreeDropInfo) => {
+  switch (dropInfo.dropPosition) {
+    case "inside":
+      await postCategoriesStore.updateParrent(
+        dropInfo.dragNode.key,
+        dropInfo.node.key
+      );
+      break;
+
+    default:
+      break;
+  }
+};
 </script>
