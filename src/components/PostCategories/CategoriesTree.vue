@@ -22,8 +22,8 @@ import {
   usePostCategoriesStore,
   usePostCategoryModalStore,
 } from "@/stores/postCategories.store";
-import { NTree, NButton, NIcon } from "naive-ui";
-import type { TreeDropInfo, TreeOption } from "naive-ui";
+import { NTree, NIcon } from "naive-ui";
+import type { TreeDropInfo } from "naive-ui";
 import { Pencil } from "@vicons/ionicons5";
 
 const postCategoriesStore = usePostCategoriesStore();
@@ -45,14 +45,13 @@ const handleDrop = async (dropInfo: TreeDropInfo) => {
 };
 
 const renderPrefix = ({ option }) => {
-  const openModal = () => {
-    postCategoryModalStore.category = option;
-    postCategoryModalStore.isModalOpen = true;
-  };
   return h(
     NIcon,
     {
-      onClick: openModal,
+      onClick: () => {
+        postCategoryModalStore.category = option;
+        postCategoryModalStore.isModalOpen = true;
+      },
     },
     h(Pencil)
   );

@@ -91,6 +91,16 @@ export const usePostCategoryModalStore = defineStore("post-categories-modal", {
         this.loading = false;
       }
     },
+    async deletePostCategory() {
+      try {
+        this.loading = true;
+        await apiClient.delete(`/post-categories/${this.category.id}`);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
   getters: {
     isEdit: (state) => !!state.category.id,

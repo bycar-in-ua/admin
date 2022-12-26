@@ -4,6 +4,7 @@
     preset="card"
     class="max-w-lg"
     :title="title"
+    @after-leave="postCategoryModalStore.$reset()"
   >
     <n-form
       ref="formRef"
@@ -22,9 +23,9 @@
       </n-form-item>
       <n-form-item :label="t('posts.parentCategory')">
         <n-tree-select
+          v-model:value="postCategoryModalStore.category.parent"
           key-field="id"
           label-field="title"
-          v-model:value="postCategoryModalStore.category.parent"
           :options="postCategoriesStore.getCategoriesTree"
           clearable
           default-expand-all
@@ -33,14 +34,17 @@
     </n-form>
 
     <template #footer>
-      <div class="flex justify-between">
+      <div class="flex gap-4 justify-end flex-wrap">
         <n-button
+          v-if="postCategoryModalStore.isEdit"
           type="error"
-          :disabled="postCategoryModalStore.loading"
-          @click="postCategoryModalStore.$reset()"
+          :loading="postCategoryModalStore.loading"
+          style="marging-right: auto"
+          @click="deleteHandler"
         >
-          {{ t("discard") }}
+          {{ t("delete") }}
         </n-button>
+        <span class="flex-grow" />
         <n-button
           type="primary"
           :loading="postCategoryModalStore.loading"
@@ -102,6 +106,12 @@ async function submitHandler() {
   await formRef.value.validate();
   await postCategoryModalStore.storePostCategory();
   postCategoriesStore.fetchPostCategories();
-  postCategoryModalStore.$reset();
+  postCategoryModalStore.isModalOpen = false;
+}
+
+async function deleteHandler() {
+  await postCategoryModalStore.deletePostCategory();
+  postCategoriesStore.fetchPostCategories();
+  postCategoryModalStore.isModalOpen = false;
 }
 </script>
