@@ -42,13 +42,13 @@ export const usePostCategoriesStore = defineStore("post-categories", {
   getters: {
     getCategoriesTree(state): TreeOption[] {
       type PostCatToTree = PostCategory & { children?: PostCatToTree[] };
-      const convertPostCatToTree = (
-        postCat: PostCatToTree
-      ): Omit<TreeOption, "children"> => ({
-        key: postCat.id,
-        label: postCat.title,
-        children: postCat.children,
-      });
+      // const convertPostCatToTree = (
+      //   postCat: PostCatToTree
+      // ): Omit<TreeOption, "children"> => ({
+      //   key: postCat.id,
+      //   label: postCat.title,
+      //   children: postCat.children,
+      // });
 
       const hashTable: PostCatToTree = Object.create(null);
       state.categories.forEach(
@@ -58,9 +58,9 @@ export const usePostCategoriesStore = defineStore("post-categories", {
       state.categories.forEach((postCat) => {
         if (postCat.parent)
           hashTable[Number(postCat.parent)].children.push(
-            convertPostCatToTree(hashTable[postCat.id])
+            hashTable[postCat.id]
           );
-        else dataTree.push(convertPostCatToTree(hashTable[postCat.id]));
+        else dataTree.push(hashTable[postCat.id]);
       });
 
       return dataTree;
@@ -90,9 +90,6 @@ export const usePostCategoryModalStore = defineStore("post-categories-modal", {
       } finally {
         this.loading = false;
       }
-    },
-    async updatePostCategory() {
-      console.log("Updated");
     },
   },
   getters: {

@@ -20,13 +20,27 @@
       <n-form-item :label="t('vehicle.slug')" path="slug" required>
         <n-input v-model:value="postCategoryModalStore.category.slug" />
       </n-form-item>
+      <n-form-item :label="t('posts.parentCategory')">
+        <n-tree-select
+          key-field="id"
+          label-field="title"
+          v-model:value="postCategoryModalStore.category.parent"
+          :options="postCategoriesStore.getCategoriesTree"
+          clearable
+          default-expand-all
+        />
+      </n-form-item>
     </n-form>
 
     <template #footer>
       <div class="flex justify-between">
-        <n-button type="error" :disabled="postCategoryModalStore.loading">{{
-          t("discard")
-        }}</n-button>
+        <n-button
+          type="error"
+          :disabled="postCategoryModalStore.loading"
+          @click="postCategoryModalStore.$reset()"
+        >
+          {{ t("discard") }}
+        </n-button>
         <n-button
           type="primary"
           :loading="postCategoryModalStore.loading"
@@ -48,7 +62,15 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { NModal, NButton, NForm, NFormItem, NInput, FormRules } from "naive-ui";
+import {
+  NModal,
+  NButton,
+  NForm,
+  NFormItem,
+  NInput,
+  NTreeSelect,
+} from "naive-ui";
+import type { FormRules } from "naive-ui";
 import {
   usePostCategoryModalStore,
   usePostCategoriesStore,
@@ -78,9 +100,7 @@ const title = computed(() =>
 
 async function submitHandler() {
   await formRef.value.validate();
-  postCategoryModalStore.isEdit
-    ? await postCategoryModalStore.updatePostCategory()
-    : await postCategoryModalStore.storePostCategory();
+  await postCategoryModalStore.storePostCategory();
   postCategoriesStore.fetchPostCategories();
   postCategoryModalStore.$reset();
 }

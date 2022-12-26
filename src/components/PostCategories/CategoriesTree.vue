@@ -1,6 +1,9 @@
 <template>
   <n-tree
+    key-field="id"
+    label-field="title"
     :data="postCategoriesStore.getCategoriesTree"
+    :render-prefix="renderPrefix"
     draggable
     @drop="handleDrop"
   />
@@ -14,11 +17,17 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { usePostCategoriesStore } from "@/stores/postCategories.store";
-import { NTree } from "naive-ui";
-import type { TreeDropInfo } from "naive-ui";
+import { h } from "vue";
+import {
+  usePostCategoriesStore,
+  usePostCategoryModalStore,
+} from "@/stores/postCategories.store";
+import { NTree, NButton, NIcon } from "naive-ui";
+import type { TreeDropInfo, TreeOption } from "naive-ui";
+import { Pencil } from "@vicons/ionicons5";
 
 const postCategoriesStore = usePostCategoriesStore();
+const postCategoryModalStore = usePostCategoryModalStore();
 
 const handleDrop = async (dropInfo: TreeDropInfo) => {
   switch (dropInfo.dropPosition) {
@@ -30,7 +39,22 @@ const handleDrop = async (dropInfo: TreeDropInfo) => {
       break;
 
     default:
+      console.log(dropInfo);
       break;
   }
+};
+
+const renderPrefix = ({ option }) => {
+  const openModal = () => {
+    postCategoryModalStore.category = option;
+    postCategoryModalStore.isModalOpen = true;
+  };
+  return h(
+    NIcon,
+    {
+      onClick: openModal,
+    },
+    h(Pencil)
+  );
 };
 </script>
