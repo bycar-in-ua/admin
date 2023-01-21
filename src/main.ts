@@ -6,7 +6,8 @@ import messages from "@/i18n";
 import "./assets/global.css";
 import "./assets/tailwind.css";
 import { getCookie } from "./helpers/cookieHelpers";
-import { createPinia } from "pinia"; 
+import { createPinia } from "pinia";
+import { VueQueryPlugin } from "vue-query";
 
 const i18n = createI18n({
   legacy: false,
@@ -21,5 +22,6 @@ const app = createApp(App);
 app.use(router);
 app.use(pinia);
 app.use(i18n);
+app.use(VueQueryPlugin);
 
 app.mount("#app");

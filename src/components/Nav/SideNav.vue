@@ -36,6 +36,7 @@ import {
   Library,
   Images,
   Newspaper,
+  People,
 } from "@vicons/ionicons5";
 
 function renderMenuIcon(icon) {
@@ -78,6 +79,11 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
   {
     key: "Images",
     icon: Images,
+  },
+  {
+    key: "Users",
+    icon: People,
+    pluralism: 2,
   },
 ];
 

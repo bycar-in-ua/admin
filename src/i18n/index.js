@@ -7,6 +7,7 @@ import notifications from "@common/translations/notifications.json";
 import options from "@common/translations/options.json";
 import vehicle from "@common/translations/vehicle.json";
 import posts from "@common/translations/posts.json";
+import users from "@common/translations/users.json";
 
 export default {
   ua: {
@@ -20,6 +21,7 @@ export default {
       Brands: "Бренди",
       Library: "Бібліотека",
       Images: images.ua.title,
+      Users: users.ua.title,
     },
     vehicle: vehicle.ua,
     options: options.ua,
@@ -27,7 +29,8 @@ export default {
     images: images.ua,
     colors: colors.ua,
     notifications: notifications.ua,
-    posts: posts.ua
+    posts: posts.ua,
+    users: users.ua,
   },
   ru: {
     ...general.ru,
@@ -40,6 +43,7 @@ export default {
       Brands: "Бренды",
       Library: "Библиотека",
       Images: images.ru.title,
+      Users: users.ru.title,
     },
     vehicle: vehicle.ru,
     options: options.ru,
@@ -47,6 +51,7 @@ export default {
     images: images.ru,
     colors: colors.ru,
     notifications: notifications.ru,
-    posts: posts.ru
+    posts: posts.ru,
+    users: users.ru,
   },
 };

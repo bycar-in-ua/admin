@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
 import { useAuthStore } from "@/stores/auth.store";
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: "/login",
     name: "Login",
@@ -69,6 +69,14 @@ const routes = [
     component: () => import("@/views/Images.vue"),
     meta: {
       title: ["images.title", 2],
+    },
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: () => import("@/views/Users.vue"),
+    meta: {
+      title: ["users.title", 2],
     },
   },
 ];
