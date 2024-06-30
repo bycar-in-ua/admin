@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { ImageDto as Image } from "@common/dto";
-import { PaginationMeta } from "@common/types";
+import { PaginationMeta, ImageDto as Image } from "@bycar-in-ua/common";
 import { get } from "@/helpers/apiClient";
 
 interface State {
@@ -24,7 +23,7 @@ export const useImagesStore = defineStore("images", {
     async fetchImages(page = 1) {
       try {
         this.isFetching = true;
-        const images = await get(`/images/${page}`);
+        const images = await get(`/images?page=${page}`);
         this.images = images.items;
         this.meta = images.meta;
       } finally {

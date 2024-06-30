@@ -129,7 +129,7 @@ import {
   useNotification,
 } from "naive-ui";
 import { CloseSharp } from "@vicons/ionicons5";
-import { PowerUnitDto as PowerUnit } from "@common/dto";
+import { PowerUnitDto as PowerUnit } from "@bycar-in-ua/common";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 

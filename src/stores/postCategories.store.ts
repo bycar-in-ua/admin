@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { PostCategoryDto as PostCategory } from "@common/dto";
+import { PostCategoryDto as PostCategory } from "@bycar-in-ua/common";
 import apiClient, { post } from "@/helpers/apiClient";
 import type { TreeOption } from "naive-ui";
 

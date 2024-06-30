@@ -77,7 +77,7 @@ import i18n from "@/i18n/index.js";
 import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
-import { ColorDto as Color } from "@common/dto";
+import { ColorDto as Color } from "@bycar-in-ua/common";
 
 const props = defineProps<{ color: Color }>();
 const emit = defineEmits(["toggle-form"]);

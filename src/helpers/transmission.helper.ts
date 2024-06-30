@@ -1,4 +1,4 @@
-import { TransmissionDto as Transmission } from "@common/dto";
+import { TransmissionDto as Transmission } from "@bycar-in-ua/common";
 import { ComposerTranslation } from "vue-i18n";
 
 export function getTransmissionDisplayName(

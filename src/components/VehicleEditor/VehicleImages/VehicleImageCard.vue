@@ -28,7 +28,7 @@ import { ref } from "vue";
 import { NIcon, NImage, NSpin } from "naive-ui";
 import { CloseCircleOutline } from "@vicons/ionicons5";
 import { cdnLink } from "@/helpers/cdn";
-import { ImageDto as Image } from "@common/dto";
+import { ImageDto as Image } from "@bycar-in-ua/common";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 
 const props = defineProps<{ image: Image }>();

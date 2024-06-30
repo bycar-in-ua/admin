@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
+    "@bycar-in-ua/common": "^1.1.2",
     "@mdi/font": "5.9.55",
     "@tinymce/tinymce-vue": "^4",
     "@vicons/ionicons5": "^0.11.0",

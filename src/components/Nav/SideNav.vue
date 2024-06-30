@@ -35,7 +35,7 @@ import {
   Albums,
   Library,
   Images,
-  Newspaper,
+  // Newspaper,
   People,
 } from "@vicons/ionicons5";
 
@@ -51,19 +51,19 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
     exact: true,
     icon: PodiumSharp,
   },
-  {
-    key: "Posts",
-    icon: Newspaper,
-    children: [
-      {
-        key: "Posts",
-      },
-      {
-        key: "PostCategories",
-        pluralism: 2,
-      },
-    ],
-  },
+  // {
+  //   key: "Posts",
+  //   icon: Newspaper,
+  //   children: [
+  //     {
+  //       key: "Posts",
+  //     },
+  //     {
+  //       key: "PostCategories",
+  //       pluralism: 2,
+  //     },
+  //   ],
+  // },
   {
     key: "Vehicles",
     icon: CarSport,

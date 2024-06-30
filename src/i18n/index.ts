@@ -1,13 +1,14 @@
-import complectations from "@common/translations/complectations.json";
-import colors from "@common/translations/colors.json";
-import general from "@common/translations/general.json";
-import images from "@common/translations/images.json";
-import info from "@common/translations/info.json";
-import notifications from "@common/translations/notifications.json";
-import options from "@common/translations/options.json";
-import vehicle from "@common/translations/vehicle.json";
-import posts from "@common/translations/posts.json";
-import users from "@common/translations/users.json";
+import {
+  general,
+  info,
+  posts,
+  images,
+  vehicle,
+  options,
+  complectations,
+  notifications,
+  colors,
+} from "@bycar-in-ua/common/dist/translations/index.js";
 
 export default {
   ua: {
@@ -21,7 +22,7 @@ export default {
       Brands: "Бренди",
       Library: "Бібліотека",
       Images: images.ua.title,
-      Users: users.ua.title,
+      // Users: users.ua.title,
     },
     vehicle: vehicle.ua,
     options: options.ua,
@@ -30,7 +31,7 @@ export default {
     colors: colors.ua,
     notifications: notifications.ua,
     posts: posts.ua,
-    users: users.ua,
+    // users: users.ua,
   },
   ru: {
     ...general.ru,
@@ -43,7 +44,7 @@ export default {
       Brands: "Бренды",
       Library: "Библиотека",
       Images: images.ru.title,
-      Users: users.ru.title,
+      // Users: users.ru.title,
     },
     vehicle: vehicle.ru,
     options: options.ru,
@@ -52,6 +53,6 @@ export default {
     colors: colors.ru,
     notifications: notifications.ru,
     posts: posts.ru,
-    users: users.ru,
+    // users: users.ru,
   },
 };

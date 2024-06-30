@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { BrandDto as Brand } from "@common/dto";
+import { BrandDto as Brand } from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient";
 
 interface State {

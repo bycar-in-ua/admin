@@ -73,7 +73,7 @@
       <img
         v-if="vehicleStore.car.featureImage"
         :src="cdnLink(vehicleStore.car.featureImage.path, 300)"
-        class="w-full object-cover"
+        class="w-full max-w-sm object-cover"
       />
     </div>
   </n-form>
@@ -131,7 +131,7 @@ import { statuses } from "@/helpers/postStatuses";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useEditorStore } from "@/stores/vehicleEditor/editor.store";
 import { useImagesStore } from "@/stores/images.store";
-import { BrandDto as Brand } from "@common/dto";
+import { BrandDto as Brand } from "@bycar-in-ua/common";
 
 const editorStore = useEditorStore();
 const vehicleStore = useVehicleStore();
@@ -198,7 +198,8 @@ const saveAction = async () => {
       title: t("notifications.vehicle.saving.success"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
     notification.error({
       title: t("notifications.error.title.default"),
       content: t("notifications.vehicle.saving.error"),

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { VehicleDto as Car } from "@common/dto";
-import { PaginationMeta } from "@common/types";
+import { PaginationMeta, VehicleDto as Car } from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient.js";
 
 interface State {

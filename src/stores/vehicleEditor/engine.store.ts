@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { EngineDto as Engine } from "@common/dto";
+import { EngineDto as Engine } from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 

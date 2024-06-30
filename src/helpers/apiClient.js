@@ -72,8 +72,9 @@ export const uploadFiles = async (files, path = "") => {
       formData.append(files[index].name, files[index]);
     }
     formData.append("path", path);
-    const response = await fetch(`${CDN_URL}/upload`, {
+    const response = await fetch(`${API_URL}/images`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     });
     return await validateResponse(response);

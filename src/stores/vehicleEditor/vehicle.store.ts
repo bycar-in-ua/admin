@@ -1,5 +1,4 @@
-import { VehicleDto as Car } from "@common/dto";
-import { PostStatus, BodyType } from "@common/enums";
+import { VehicleDto as Car, PostStatus, BodyType } from "@bycar-in-ua/common";
 import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";
 import apiClient from "@/helpers/apiClient";

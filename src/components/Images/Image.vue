@@ -15,6 +15,7 @@
     :src="cdnLink(image.path, 300, 300)"
     :preview-src="cdnLink(image.path)"
     class="rounded-lg"
+    object-fit="cover"
   />
 </template>
 

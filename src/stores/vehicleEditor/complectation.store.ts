@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import {
   ComplectationDto as Complectation,
   PowerUnitDto as PowerUnit,
-} from "@common/dto";
+} from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 

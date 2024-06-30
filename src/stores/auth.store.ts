@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { UserDto as User, LoginUserDto } from "@common/dto";
+import { UserDto as User, LoginUserDto } from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient";
 
 interface State {

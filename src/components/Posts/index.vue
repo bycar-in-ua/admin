@@ -20,7 +20,7 @@ interface IPotsRow {
   name: string;
   category: string;
   author: number | string;
-  actions?: any;
+  actions?: unknown;
 }
 
 const columns = [

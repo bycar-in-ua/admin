@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { TransmissionDto as Transmission } from "@common/dto";
+import { TransmissionDto as Transmission } from "@bycar-in-ua/common";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 
