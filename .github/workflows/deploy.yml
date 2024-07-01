@@ -15,15 +15,24 @@ jobs:
 
       - name: setup node environment
         uses: actions/setup-node@v3
+
+      - name: "create .npmrc"
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            @bycar-in-ua:registry=https://npm.pkg.github.com
+            //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+          EOF
         env:
-          VITE_API_HOST: ${{ secrets.VITE_API_HOST }}
-          VITE_CDN_HOST: ${{ secrets.VITE_CDN_HOST }}
-          VITE_COOKIE_DOMAIN: ${{ secrets.VITE_COOKIE_DOMAIN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: install and build
         run: |
           npm ci
           npm run build
+        env:
+          VITE_API_HOST: ${{ secrets.VITE_API_HOST }}
+          VITE_CDN_HOST: ${{ secrets.VITE_CDN_HOST }}
+          VITE_COOKIE_DOMAIN: ${{ secrets.VITE_COOKIE_DOMAIN }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
