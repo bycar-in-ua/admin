@@ -81,21 +81,13 @@ const setUnselectable = inject<() => void>("setImagesUnselectable");
 
 const isFetching = ref(false);
 
-/**
- * @todo Сделать удаление одним запросом
- */
 const deleteHandler = async () => {
   try {
     isFetching.value = true;
 
-    const imagesToDelete = imagesStore.images
-      .filter((image) => props.selectedImages.includes(image.id))
-      .map((image) => image.path);
-
     await apiClient.delete("/images", props.selectedImages);
-    await apiClient.deleteFiles(imagesToDelete);
 
-    imagesStore.fetchImages(1);
+    imagesStore.fetchImages(imagesStore.meta.currentPage);
     setUnselectable();
   } finally {
     isFetching.value = false;

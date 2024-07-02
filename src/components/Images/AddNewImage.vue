@@ -35,7 +35,7 @@ import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useImagesStore } from "@/stores/images.store";
 
-const imagesStore = useImagesStore()
+const imagesStore = useImagesStore();
 const { t } = useI18n();
 const notification = useNotification();
 const { getImages } = useClipboard();
@@ -53,8 +53,7 @@ const handleClick = () => {
 const uploader = async (files: Array<File>) => {
   try {
     isUploading.value = true;
-    const uploadImages = await apiClient.uploadFiles(files, cdnPathToSave);
-    await apiClient.post("/images", uploadImages);
+    await apiClient.uploadFiles(files, cdnPathToSave);
     await imagesStore.fetchImages(1);
     notification.success({
       title: t("images.save.success"),
