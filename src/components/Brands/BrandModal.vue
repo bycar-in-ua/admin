@@ -131,7 +131,7 @@ const rules = {
 const uploader = async (file) => {
   isImageLoading.value = true;
   const response = await apiClient.uploadFiles([file], "brands");
-  brandModalStore.logo = response[0];
+  brandModalStore.logo = response[0].path;
   isImageLoading.value = false;
 };
 

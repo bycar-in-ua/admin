@@ -140,7 +140,7 @@ const uploader = async (file) => {
   try {
     isFetching.value = true;
     const colorImageLink = await apiClient.uploadFiles([file], "colors");
-    formModel.value.reference = colorImageLink[0];
+    formModel.value.reference = colorImageLink[0].path;
     notification.success({
       title: t("images.save.success"),
       duration: 3000,

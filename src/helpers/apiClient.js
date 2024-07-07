@@ -1,4 +1,4 @@
-import { API_URL, CDN_URL } from "@/constants";
+import { API_URL, } from "@/constants";
 import validateResponse from "./validateResponse";
 
 export const get = async (path) => {
@@ -63,7 +63,7 @@ export const remove = async (path, body) => {
 /**
  * @param {Array.<File>} files Files to uploa
  * @param {string} path Path to save images
- * @returns {Array.<string>} Array of saved files pathes
+ * @returns {Array.<{path: string}>} Array of saved files pathes
  */
 export const uploadFiles = async (files, path = "") => {
   try {

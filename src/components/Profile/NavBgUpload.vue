@@ -36,7 +36,7 @@ const uploadHandler = async (options) => {
   const response = await apiClient.uploadFiles(
     options.fileList.map((fileInfo) => fileInfo.file)
   );
-  memory.set("navBgImage", cdnLink(response[0], 0, 1920));
+  memory.set("navBgImage", cdnLink(response[0].path, 0, 1920));
   location.reload();
 };
 </script>
