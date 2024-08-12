@@ -9,7 +9,12 @@
       <n-dialog-provider>
         <n-notification-provider>
           <app-layout v-if="authStore.isFetched">
-            <router-view :key="locale" />
+            <Suspense>
+              <router-view :key="locale" />
+              <template #fallback>
+                <n-skeleton :repeat="5" />
+              </template>
+            </Suspense>
           </app-layout>
           <div v-else class="h-screen flex justify-center items-center">
             <n-spin :size="100" />
@@ -39,6 +44,7 @@ import {
   NNotificationProvider,
   NDialogProvider,
   NSpin,
+  NSkeleton,
 } from "naive-ui";
 import colors from "./colors.json";
 import AppLayout from "./layouts/AppLayout.vue";

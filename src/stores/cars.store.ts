@@ -5,6 +5,10 @@ import apiClient from "@/helpers/apiClient.js";
 interface State {
   items: Car[];
   meta: PaginationMeta;
+  filters: {
+    status?: string[];
+    brand?: number[];
+  };
   isFetching: boolean;
 }
 
@@ -14,16 +18,33 @@ export const useCarsStore = defineStore("cars", {
     meta: {
       currentPage: 1,
       totalPages: undefined,
-      itemsPerPage: undefined,
+      itemsPerPage: 10,
       totalItems: undefined,
     },
+    filters: {},
     isFetching: false,
   }),
   actions: {
     async fetchCars(page = 1) {
       try {
         this.isFetching = true;
-        const cars = await apiClient.get(`/vehicles/all?page=${page}`);
+
+        const queryParams = new URLSearchParams({
+          page: page.toString(),
+          limit: this.meta.itemsPerPage.toString(),
+        });
+
+        if (this.filters.status?.length) {
+          queryParams.set("status", this.filters.status.join(","));
+        }
+
+        if (this.filters.brand?.length) {
+          queryParams.set("brand", this.filters.brand.join(","));
+        }
+
+        const cars = await apiClient.get(
+          `/vehicles/all?${queryParams.toString()}`
+        );
         this.items = cars.items;
         this.meta = cars.meta;
       } catch (e) {
@@ -31,6 +52,10 @@ export const useCarsStore = defineStore("cars", {
       } finally {
         this.isFetching = false;
       }
+    },
+    setFilters(filters: State["filters"]) {
+      this.filters = filters;
+      this.fetchCars(1);
     },
     async duplicateCar(targetCarId: number) {
       try {

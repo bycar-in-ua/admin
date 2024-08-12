@@ -2,13 +2,10 @@
   <vehicles-table />
 </template>
 
-<script>
+<script setup lang="ts">
 import VehiclesTable from "@/components/Vehicles/VehiclesTable.vue";
+import { useBrandsStore } from "@/stores/brands.store";
+import { useCarsStore } from "@/stores/cars.store";
 
-export default {
-  name: "VehiclesView",
-  components: {
-    VehiclesTable,
-  },
-};
+await Promise.all([useBrandsStore().fetchBrands(), useCarsStore().fetchCars()]);
 </script>

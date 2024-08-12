@@ -115,8 +115,6 @@ const router = useRouter();
 const { t } = useI18n();
 const notification = useNotification();
 
-brandsStore.fetchBrands();
-
 const formRef = ref(null);
 
 const formModel = ref({
