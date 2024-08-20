@@ -45,7 +45,7 @@ const toolbarActions: ToolbarAction[] = [
         type: "primary",
         class: "mr-4",
       },
-      t("vehicle.images.saveVehicleImages")
+      () => t("vehicle.images.saveVehicleImages")
     ),
     clickCallback: async (selectedImages) => {
       try {

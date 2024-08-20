@@ -205,10 +205,10 @@ const saveHandler = async () => {
       duration: 5000,
     });
     emit("update:show", false);
-  } catch (error: Error) {
+  } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),
-      description: error.message,
+      description: (error as Error).message,
       duration: 5000,
     });
   } finally {

@@ -1,28 +1,3 @@
-<template>
-  <div class="vehicle-image-card">
-    <n-icon class="vehicle-image-card__delete-icon" @click="deleteHandler">
-      <close-circle-outline />
-    </n-icon>
-    <div
-      v-if="isDeleting"
-      class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-red-500 bg-opacity-50"
-    >
-      <n-spin size="medium" stroke="red" />
-    </div>
-    <n-image
-      :src="cdnLink(image.path, 300, 300)"
-      :preview-src="cdnLink(image.path)"
-    />
-  </div>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "VehicleImageCard",
-});
-</script>
-
 <script setup lang="ts">
 import { ref } from "vue";
 import { NIcon, NImage, NSpin } from "naive-ui";
@@ -52,7 +27,25 @@ const deleteHandler = async () => {
 };
 </script>
 
-<style lang="postcss">
+<template>
+  <div class="vehicle-image-card">
+    <n-icon class="vehicle-image-card__delete-icon" @click="deleteHandler">
+      <close-circle-outline />
+    </n-icon>
+    <div
+      v-if="isDeleting"
+      class="absolute left-0 top-0 right-0 bottom-0 flex justify-center items-center bg-red-500 bg-opacity-50"
+    >
+      <n-spin size="medium" stroke="red" />
+    </div>
+    <n-image
+      :src="cdnLink(image.path, 300, 300)"
+      :preview-src="cdnLink(image.path)"
+    />
+  </div>
+</template>
+
+<style>
 .vehicle-image-card {
   @apply relative;
   &:hover {
