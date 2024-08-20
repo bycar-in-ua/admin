@@ -61,7 +61,7 @@ export const useVehicleStore = defineStore("vehicle", {
           displayName: name,
           vehicleId: this.car.id,
         });
-        this.car.complectations?.push(newComplectation);
+        this.car.complectations.push(newComplectation);
       } catch (error) {
         console.log(error);
       }
@@ -69,7 +69,7 @@ export const useVehicleStore = defineStore("vehicle", {
 
     async deleteComplectation(complectationId) {
       await apiClient.delete(`/complectations/${complectationId}`);
-      this.car.complectations = this.car.complectations?.filter(
+      this.car.complectations = this.car.complectations.filter(
         (complectation) => complectation.id !== complectationId
       );
     },

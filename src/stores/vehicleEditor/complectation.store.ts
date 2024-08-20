@@ -12,6 +12,7 @@ export const useComplectationStore = defineStore("complectation", {
     displayName: "",
     powerUnits: [],
     options: [],
+    base: undefined,
   }),
   actions: {
     async saveComplectation(options) {
@@ -24,8 +25,9 @@ export const useComplectationStore = defineStore("complectation", {
         }
       );
 
-      vehicleStore.car.complectations = vehicleStore.car.complectations?.map((cmpl) =>
-        cmpl.id == updatedComplectation.id ? updatedComplectation : cmpl
+      vehicleStore.car.complectations = vehicleStore.car.complectations?.map(
+        (cmpl) =>
+          cmpl.id == updatedComplectation.id ? updatedComplectation : cmpl
       );
     },
     async createNewPowerUnit() {

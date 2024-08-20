@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";
 import { useVehicleStore } from "./vehicle.store";
 import apiClient from "@/helpers/apiClient";
+import { VehicleView } from "@bycar-in-ua/common";
 
 export const useVehicleEditorStore = defineStore(
   "vehicle-editor-composed",
@@ -12,7 +13,9 @@ export const useVehicleEditorStore = defineStore(
     async function fetchCar(carSlug: string) {
       try {
         editorStore.isFetching = true;
-        const car = await apiClient.get(`/vehicles/${carSlug}/for-edit`);
+        const car: VehicleView = await apiClient.get(
+          `/vehicles/${carSlug}/for-edit`
+        );
         vehicle.$state.car = car;
       } catch (e: unknown) {
         console.log(e);

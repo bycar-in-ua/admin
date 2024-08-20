@@ -1,27 +1,3 @@
-<template>
-  <div v-if="editoreState.initiallyFetched" class="flex gap-4 relative">
-    <n-scrollbar class="basis-3/4 pr-4" style="max-height: calc(100vh - 100px)">
-      <VehicleTitle />
-      <DescriptionEditor />
-      <GeneralOptions />
-      <Complectations />
-      <Engines />
-      <Transmissions />
-      <VehicleImages />
-      <VehicleColors />
-    </n-scrollbar>
-    <SideColumn class="basis-1/4" />
-  </div>
-  <VahicleEditorSkeleton v-else />
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "VehicleEditor",
-});
-</script>
-
 <script setup lang="ts">
 import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -66,3 +42,20 @@ onBeforeRouteLeave((to) => {
   vehicleEditorStore.$dispose();
 });
 </script>
+
+<template>
+  <div v-if="editoreState.initiallyFetched" class="flex gap-4 relative">
+    <n-scrollbar class="basis-3/4 pr-4" style="max-height: calc(100vh - 100px)">
+      <VehicleTitle />
+      <DescriptionEditor />
+      <GeneralOptions />
+      <Complectations />
+      <Engines />
+      <Transmissions />
+      <VehicleImages />
+      <VehicleColors />
+    </n-scrollbar>
+    <SideColumn class="basis-1/4" />
+  </div>
+  <VahicleEditorSkeleton v-else />
+</template>

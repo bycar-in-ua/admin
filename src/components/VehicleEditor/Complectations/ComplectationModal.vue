@@ -1,12 +1,137 @@
+<script setup lang="ts">
+import { computed, ref, defineModel } from "vue";
+import { useI18n } from "vue-i18n";
+import {
+  NModal,
+  NCheckbox,
+  NButton,
+  NDivider,
+  NIcon,
+  NInput,
+  NPopselect,
+  NCollapse,
+  NCollapseItem,
+  NScrollbar,
+  NTransfer,
+  useNotification,
+} from "naive-ui";
+import type { SelectBaseOption } from "naive-ui/es/select/src/interface";
+import { AddCircleOutline, Copy } from "@vicons/ionicons5";
+import AddNewOption from "@/components/common/AddNewOption.vue";
+import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
+import PowerUnitsEditor from "./PowerUnitsEditor.vue";
+import {
+  prepareOptionIdsByCategoties,
+  prepareOption,
+} from "@/helpers/preparers";
+import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { useOptionsStore } from "@/stores/options.store";
+
+const show = defineModel<boolean, "show">();
+
+const vehicleStore = useVehicleStore();
+const complectationStore = useComplectationStore();
+const optionsStore = useOptionsStore();
+const { t } = useI18n();
+const notification = useNotification();
+
+const isFetching = ref(false);
+const optionsTransferModelValue = ref<{ [k: number]: number[] }>({});
+const expandedPowerUnit = ref(null);
+const powerUnitFetching = ref(false);
+
+optionsStore.fetchOptionsByCategories();
+
+const complectationsForCopy = computed<SelectBaseOption[]>(() =>
+  vehicleStore.car.complectations.map((cmpl) => ({
+    label: cmpl.displayName,
+    value: cmpl.id,
+    disabled: cmpl.id === complectationStore.id,
+  }))
+);
+
+const getOptions = (options = []) =>
+  options.map((option) => prepareOption(option));
+
+const optionsCopyHandler = (referenceComplectationId) => {
+  const referenceComplectation = vehicleStore.car.complectations.find(
+    (cmpl) => cmpl.id === referenceComplectationId
+  );
+  complectationStore.options = referenceComplectation?.options;
+
+  recalcOptions();
+};
+
+const createPowerUnit = async () => {
+  try {
+    powerUnitFetching.value = true;
+    expandedPowerUnit.value = await complectationStore.createNewPowerUnit();
+  } finally {
+    powerUnitFetching.value = false;
+  }
+};
+
+const saveHandler = async () => {
+  try {
+    isFetching.value = true;
+    await complectationStore.saveComplectation(prepareOptionsForSaving());
+    notification.success({
+      title: t("notifications.complectation.saving.success"),
+      duration: 5000,
+    });
+    show.value = false;
+    // emit("update:show", false);
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: (error as Error).message,
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const afterModalClose = () => {
+  complectationStore.$reset();
+  optionsTransferModelValue.value = {};
+};
+
+function prepareOptionsForSaving() {
+  const options = [];
+
+  for (const [catId, optionsIds] of Object.entries(
+    optionsTransferModelValue.value
+  )) {
+    optionsStore.categories[catId].options.forEach((op) => {
+      if (optionsIds.includes(op.id)) {
+        options.push(op);
+      }
+    });
+  }
+
+  return options;
+}
+
+function recalcOptions() {
+  optionsTransferModelValue.value = complectationStore.options?.reduce(
+    prepareOptionIdsByCategoties,
+    {}
+  );
+}
+recalcOptions();
+</script>
+
 <template>
   <n-modal
-    :on-after-enter="recalcOptions"
-    :on-after-leave="afterModalClose"
-    :on-update:show="(val) => $emit('update:show', val)"
+    :show="show"
     preset="card"
     :mask-closable="false"
     :title="complectationStore.displayName"
     class="max-w-5xl"
+    @after-enter="recalcOptions"
+    @after-leave="afterModalClose"
   >
     <n-scrollbar class="max-h-4/5 pr-4">
       <div class="flex">
@@ -115,138 +240,7 @@
   </n-modal>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { SelectBaseOption } from "naive-ui/lib/select/src/interface";
-
-export default defineComponent({
-  name: "ComplectationModal",
-});
-</script>
-
-<script setup lang="ts">
-import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import {
-  NModal,
-  NCheckbox,
-  NButton,
-  NDivider,
-  NIcon,
-  NInput,
-  NPopselect,
-  NCollapse,
-  NCollapseItem,
-  NScrollbar,
-  NTransfer,
-  useNotification,
-} from "naive-ui";
-import { AddCircleOutline, Copy } from "@vicons/ionicons5";
-import AddNewOption from "@/components/common/AddNewOption.vue";
-import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
-import PowerUnitsEditor from "./PowerUnitsEditor.vue";
-import {
-  prepareOptionIdsByCategoties,
-  prepareOption,
-} from "@/helpers/preparers";
-import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
-import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
-import { useOptionsStore } from "@/stores/options.store";
-
-const emit = defineEmits(["update:show"]);
-const vehicleStore = useVehicleStore();
-const complectationStore = useComplectationStore();
-const optionsStore = useOptionsStore();
-const { t } = useI18n();
-const notification = useNotification();
-
-const isFetching = ref(false);
-const optionsTransferModelValue = ref<{ [k: number]: number[] }>({});
-const expandedPowerUnit = ref(null);
-const powerUnitFetching = ref(false);
-
-optionsStore.fetchOptionsByCategories();
-
-const complectationsForCopy = computed<SelectBaseOption[]>(() =>
-  vehicleStore.car.complectations.map((cmpl) => ({
-    label: cmpl.displayName,
-    value: cmpl.id,
-    disabled: cmpl.id === complectationStore.id,
-  }))
-);
-
-const getOptions = (options = []) =>
-  options.map((option) => prepareOption(option));
-
-const optionsCopyHandler = (referenceComplectationId) => {
-  const referenceComplectation = vehicleStore.car.complectations.find(
-    (cmpl) => cmpl.id === referenceComplectationId
-  );
-  complectationStore.options = referenceComplectation?.options;
-
-  recalcOptions();
-};
-
-const createPowerUnit = async () => {
-  try {
-    powerUnitFetching.value = true;
-    expandedPowerUnit.value = await complectationStore.createNewPowerUnit();
-  } finally {
-    powerUnitFetching.value = false;
-  }
-};
-
-const saveHandler = async () => {
-  try {
-    isFetching.value = true;
-    await complectationStore.saveComplectation(prepareOptionsForSaving());
-    notification.success({
-      title: t("notifications.complectation.saving.success"),
-      duration: 5000,
-    });
-    emit("update:show", false);
-  } catch (error) {
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: (error as Error).message,
-      duration: 5000,
-    });
-  } finally {
-    isFetching.value = false;
-  }
-};
-
-const afterModalClose = () => {
-  complectationStore.$reset();
-  optionsTransferModelValue.value = {};
-};
-
-function prepareOptionsForSaving() {
-  const options = [];
-
-  for (const [catId, optionsIds] of Object.entries(
-    optionsTransferModelValue.value
-  )) {
-    optionsStore.categories[catId].options.forEach((op) => {
-      if (optionsIds.includes(op.id)) {
-        options.push(op);
-      }
-    });
-  }
-
-  return options;
-}
-
-function recalcOptions() {
-  optionsTransferModelValue.value = complectationStore.options?.reduce(
-    prepareOptionIdsByCategoties,
-    {}
-  );
-}
-recalcOptions();
-</script>
-
-<style lang="postcss">
+<style>
 .options-transfer {
   &.n-transfer {
     width: 100%;
