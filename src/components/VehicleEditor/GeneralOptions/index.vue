@@ -1,3 +1,42 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import {
+  NCard,
+  NDivider,
+  NForm,
+  NFormItem,
+  NInputNumber,
+  NInput,
+  NRate,
+  NSelect,
+  NIcon,
+} from "naive-ui";
+import { VehicleSizeClass } from "@bycar-in-ua/common";
+import { Close, InformationCircle } from "@vicons/ionicons5";
+import i18n from "@/i18n";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import SizeClassesHint from "./SizeClassesHint.vue";
+
+const vehicleTranslations = i18n.ua.vehicle;
+
+const { t } = useI18n();
+const showClassesHint = ref(false);
+
+const vehicleStore = useVehicleStore();
+
+const createOptions = (field) =>
+  Object.keys(vehicleTranslations[field].items).map((item) => ({
+    value: item,
+    label: t(`vehicle.${field}.items.${item}`),
+  }));
+
+const sizeOptions = Object.values(VehicleSizeClass).map((size) => ({
+  value: size,
+  label: size,
+}));
+</script>
+
 <template>
   <n-card
     :title="t('vehicle.generalCharacteristics.title')"
@@ -11,10 +50,23 @@
           :options="createOptions('bodyTypes')"
         />
       </n-form-item>
-      <n-form-item :label="t('vehicle.sizeClases.title')">
+      <n-form-item>
+        <template #label>
+          <div class="flex items-center gap-2">
+            {{ t("vehicle.sizeClases.title") }}
+            <n-icon
+              :size="16"
+              class="cursor-pointer"
+              @click="showClassesHint = true"
+              ><InformationCircle
+            /></n-icon>
+            <SizeClassesHint v-model:show="showClassesHint" />
+          </div>
+        </template>
+
         <n-select
           v-model:value="vehicleStore.car.sizeClass"
-          :options="createOptions('sizeClases')"
+          :options="sizeOptions"
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.powerSteerings.title')">
@@ -118,45 +170,7 @@
   </n-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "GeneralOptions",
-});
-</script>
-
-<script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import {
-  NCard,
-  NDivider,
-  NForm,
-  NFormItem,
-  NInputNumber,
-  NInput,
-  NRate,
-  NSelect,
-  NIcon,
-} from "naive-ui";
-import { Close } from "@vicons/ionicons5";
-import i18n from "@/i18n";
-import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
-
-const vehicleTranslations = i18n.ua.vehicle;
-
-const { t } = useI18n();
-
-const vehicleStore = useVehicleStore();
-
-const createOptions = (field) =>
-  Object.keys(vehicleTranslations[field].items).map((item) => ({
-    value: item,
-    label: t(`vehicle.${field}.items.${item}`),
-  }));
-</script>
-
-<style lang="postcss">
+<style>
 .general-data {
   .n-input-number {
     @apply w-full;

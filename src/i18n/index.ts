@@ -8,7 +8,7 @@ import {
   complectations,
   notifications,
   colors,
-} from "@bycar-in-ua/common/dist/translations/index.js";
+} from "@bycar-in-ua/common";
 
 export default {
   ua: {
@@ -22,7 +22,6 @@ export default {
       Brands: "Бренди",
       Library: "Бібліотека",
       Images: images.ua.title,
-      // Users: users.ua.title,
     },
     vehicle: vehicle.ua,
     options: options.ua,
@@ -31,7 +30,6 @@ export default {
     colors: colors.ua,
     notifications: notifications.ua,
     posts: posts.ua,
-    // users: users.ua,
   },
   ru: {
     ...general.ru,
@@ -44,7 +42,6 @@ export default {
       Brands: "Бренды",
       Library: "Библиотека",
       Images: images.ru.title,
-      // Users: users.ru.title,
     },
     vehicle: vehicle.ru,
     options: options.ru,
@@ -53,6 +50,5 @@ export default {
     colors: colors.ru,
     notifications: notifications.ru,
     posts: posts.ru,
-    // users: users.ru,
   },
 };
