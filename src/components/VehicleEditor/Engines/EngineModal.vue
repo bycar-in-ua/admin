@@ -264,7 +264,7 @@
           <n-form-item :label="t('vehicle.engine.electricEnginesPLacement')">
             <n-input
               v-model:value="
-                engineStore.engine.electric.electricEnginesPLacement
+                engineStore.engine.electric.electricEnginesPlacement
               "
               class="w-full"
             />
