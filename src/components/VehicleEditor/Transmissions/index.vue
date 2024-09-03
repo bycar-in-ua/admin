@@ -11,6 +11,7 @@
         :title="getTransmissionDisplayName(transmission, t)"
         hoverable
         class="shadow"
+        size="small"
       >
         <n-table :bordered="false" :single-line="false" size="small">
           <tbody>

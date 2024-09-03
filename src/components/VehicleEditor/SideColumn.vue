@@ -57,6 +57,7 @@ const renderBrandLabel = () => {
         objectFit: "contain",
         height: 27,
         width: 27,
+        lazy: true,
       }),
       h("p", { className: "pl-2" }, brand.displayName),
     ]);
@@ -201,10 +202,14 @@ const toolbarActions: ToolbarAction[] = [
         style="min-height: 60px"
         @click="showImageModal = true"
       >
-        <img
+        <n-image
           v-if="vehicleStore.car.featureImage"
-          :src="cdnLink(vehicleStore.car.featureImage.path, 300)"
-          class="w-full max-w-sm object-cover"
+          :src="cdnLink(vehicleStore.car.featureImage.path, 300, 300)"
+          class="w-full"
+          object-fit="cover"
+          width="100%"
+          review-disabled
+          lazy
         />
       </div>
     </n-form>

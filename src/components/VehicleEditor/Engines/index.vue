@@ -6,6 +6,7 @@
         :key="engine.id"
         :title="engine.displayName"
         hoverable
+        size="small"
         class="shadow"
       >
         <n-table :bordered="false" :single-line="false" size="small">

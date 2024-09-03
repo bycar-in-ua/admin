@@ -56,6 +56,7 @@ const deleteComplectation = async (cmplId) => {
         v-for="complectation in vehicleStore.car.complectations"
         :key="complectation.id"
         :title="complectation.displayName"
+        size="small"
       >
         <template #action>
           <div class="flex flex-wrap justify-between">
