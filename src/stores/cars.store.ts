@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { PaginationMeta, VehicleDto as Car } from "@bycar-in-ua/common";
+import type { Vehicle, PaginationMeta } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient.js";
 
 interface State {
-  items: Car[];
+  items: Vehicle[];
   meta: PaginationMeta;
   filters: {
     status?: string[];
@@ -29,22 +29,12 @@ export const useCarsStore = defineStore("cars", {
       try {
         this.isFetching = true;
 
-        const queryParams = new URLSearchParams({
-          page: page.toString(),
-          limit: this.meta.itemsPerPage.toString(),
+        const cars = await apiClient.post(`/vehicles/search/all`, {
+          ...this.filters,
+          page,
+          limit: this.meta.itemsPerPage,
         });
 
-        if (this.filters.status?.length) {
-          queryParams.set("status", this.filters.status.join(","));
-        }
-
-        if (this.filters.brand?.length) {
-          queryParams.set("brand", this.filters.brand.join(","));
-        }
-
-        const cars = await apiClient.get(
-          `/vehicles/all?${queryParams.toString()}`
-        );
         this.items = cars.items;
         this.meta = cars.meta;
       } catch (e) {
