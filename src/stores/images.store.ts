@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { PaginationMeta, ImageDto as Image } from "@bycar-in-ua/common";
+import type { PaginationMeta, Image } from "@bycar-in-ua/sdk";
 import { get } from "@/helpers/apiClient";
 
 interface State {

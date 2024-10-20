@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { h, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { PostStatus } from "@bycar-in-ua/common";
+import { PostStatus } from "@bycar-in-ua/sdk";
 import type { DataTableColumns, DataTableFilterState } from "naive-ui";
 import { NDataTable, NTag, NPagination, NButton } from "naive-ui";
 import { getStatusTag } from "@/helpers/postStatuses";

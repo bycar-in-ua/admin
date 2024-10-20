@@ -22,22 +22,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Profile.vue"),
   },
   {
-    path: "/posts",
-    name: "Posts",
-    component: () => import("@/views/Posts.vue"),
-    meta: {
-      title: ["posts.title"],
-    },
-  },
-  {
-    path: "/post-categories",
-    name: "PostCategories",
-    component: () => import("@/views/PostCategories.vue"),
-    meta: {
-      title: ["posts.category", 2],
-    },
-  },
-  {
     path: "/vehicles",
     name: "Vehicles",
     component: () => import("@/views/Vehicles.vue"),

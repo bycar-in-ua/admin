@@ -34,13 +34,14 @@ import { NButton, useNotification } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useImagesStore } from "@/stores/images.store";
+import { cdnPathToSaveKey } from "./keys";
 
 const imagesStore = useImagesStore();
 const { t } = useI18n();
 const notification = useNotification();
 const { getImages } = useClipboard();
 
-const cdnPathToSave = inject<string>("cdnPathToSave");
+const cdnPathToSave = inject(cdnPathToSaveKey);
 
 const isUploading = ref(false);
 

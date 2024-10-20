@@ -8,7 +8,7 @@ import {
   complectations,
   notifications,
   colors,
-} from "@bycar-in-ua/common";
+} from "@bycar-in-ua/sdk";
 
 export default {
   ua: {

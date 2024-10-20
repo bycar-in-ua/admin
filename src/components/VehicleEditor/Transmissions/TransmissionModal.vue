@@ -140,7 +140,7 @@ import {
 } from "naive-ui";
 import i18n from "@/i18n";
 import { useTransmissionStore } from "@/stores/vehicleEditor/transmission.store";
-import { getTransmissionDisplayName } from "@/helpers/transmission.helper";
+import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 
 defineProps<{ isEdit: boolean }>();
 
@@ -230,7 +230,9 @@ const createAction = async () => {
       duration: 3000,
     });
     emit("update:show", false);
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -250,7 +252,9 @@ const updateAction = async () => {
       duration: 3000,
     });
     emit("update:show", false);
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

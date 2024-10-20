@@ -4,7 +4,7 @@
       <n-card
         v-for="engine in vehicleStore.car.engines"
         :key="engine.id"
-        :title="engine.displayName"
+        :title="getEngineLabel(engine)"
         hoverable
         size="small"
         class="shadow"
@@ -59,6 +59,7 @@ import PlusButton from "@/components/common/PlusButton.vue";
 import { NCard, NTable, NButton } from "naive-ui";
 import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { getEngineLabel } from "@/helpers/engine.helpers";
 
 const engineStore = useEngineStore();
 const vehicleStore = useVehicleStore();

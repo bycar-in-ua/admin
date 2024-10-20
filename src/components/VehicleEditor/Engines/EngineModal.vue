@@ -2,7 +2,9 @@
   <n-modal
     preset="card"
     :title="
-      isEdit ? engineStore.engine.displayName : t('vehicle.engine.addingNew')
+      isEdit
+        ? getEngineLabel(engineStore.engine)
+        : t('vehicle.engine.addingNew')
     "
     :mask-closable="false"
     class="max-w-4xl"
@@ -324,6 +326,7 @@ import {
   useNotification,
 } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
+import { getEngineLabel } from "@/helpers/engine.helpers";
 import i18n from "@/i18n";
 import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
 
@@ -395,7 +398,9 @@ const saveHelper = async (action: () => Promise<void>) => {
       duration: 3000,
     });
     emit("update:show", false);
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error?.message,

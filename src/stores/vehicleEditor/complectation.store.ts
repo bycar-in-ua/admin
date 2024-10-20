@@ -1,19 +1,17 @@
 import { defineStore } from "pinia";
-import {
-  ComplectationDto as Complectation,
-  PowerUnitDto as PowerUnit,
-} from "@bycar-in-ua/common";
+import type { Complectation, PowerUnit } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 
 export const useComplectationStore = defineStore("complectation", {
-  state: (): Complectation => ({
-    id: undefined,
-    displayName: "",
-    powerUnits: [],
-    options: [],
-    base: undefined,
-  }),
+  state: (): Complectation =>
+    ({
+      id: undefined,
+      displayName: "",
+      powerUnits: [],
+      options: [],
+      base: undefined,
+    } as Complectation),
   actions: {
     async saveComplectation(options) {
       const vehicleStore = useVehicleStore();

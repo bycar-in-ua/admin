@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { inject } from "vue";
-import type { ImageDto as Image } from "@bycar-in-ua/common";
+import type { Image } from "@bycar-in-ua/sdk";
 import { cdnLink } from "@/helpers/cdn";
 import { NImage } from "naive-ui";
+import { addImageToSelectionKey, removeImageFromSelectionKey } from "./keys";
 
 const props = defineProps<{
   image: Image;
@@ -10,8 +11,8 @@ const props = defineProps<{
   selected?: boolean;
 }>();
 
-const selectImage = inject("addImageToSelection");
-const unselectImage = inject("removeImageFromSelection");
+const selectImage = inject(addImageToSelectionKey);
+const unselectImage = inject(removeImageFromSelectionKey);
 
 const clickHandler = () => {
   if (props.selected) {

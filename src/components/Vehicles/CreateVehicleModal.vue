@@ -137,7 +137,9 @@ const submitHandler = async () => {
     await formRef.value.validate();
     const newVehicle = await apiClient.post("/vehicles", formModel.value);
     router.push({ name: "EditVehicle", params: { slug: newVehicle.slug } });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

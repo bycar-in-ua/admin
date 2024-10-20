@@ -1,28 +1,29 @@
 import { defineStore } from "pinia";
-import { TransmissionDto as Transmission } from "@bycar-in-ua/common";
+import type { Transmission } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 
 export const useTransmissionStore = defineStore("transmission", {
-  state: (): Transmission => ({
-    id: undefined,
-    drive: "",
-    driveName: "",
-    gearbox: {
-      type: "",
-      subType: "",
-      numberOfGears: null,
-      technology: "",
-      manufactureIndex: "",
-      made: "",
-    },
-    brakingSystemTypeFront: "",
-    brakingSystemTypeRear: "",
-    suspensionTypeFront: "",
-    suspensionWorkItemFront: "",
-    suspensionTypeRear: "",
-    suspensionWorkItemRear: "",
-  }),
+  state: (): Transmission =>
+    ({
+      id: undefined,
+      drive: "",
+      driveName: "",
+      gearbox: {
+        type: "",
+        subType: "",
+        numberOfGears: null,
+        technology: "",
+        manufactureIndex: "",
+        made: "",
+      },
+      brakingSystemTypeFront: "",
+      brakingSystemTypeRear: "",
+      suspensionTypeFront: "",
+      suspensionWorkItemFront: "",
+      suspensionTypeRear: "",
+      suspensionWorkItemRear: "",
+    } as Transmission),
   actions: {
     async createNewTransmission() {
       const vehicleStore = useVehicleStore();

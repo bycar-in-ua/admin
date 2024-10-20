@@ -61,7 +61,7 @@ const renderBrandLabel = () => {
       }),
       h("p", { className: "pl-2" }, brand.displayName),
     ]);
-  } catch (error) {
+  } catch {
     return "";
   }
 };

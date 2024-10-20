@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { BrandDto as Brand } from "@bycar-in-ua/common";
+import type { Brand } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 
 interface State {
@@ -66,10 +66,11 @@ export const useBrandsStore = defineStore("brands", {
 });
 
 export const useBrandModalStore = defineStore("brand-modal", {
-  state: (): Brand => ({
-    id: undefined,
-    slug: "",
-    displayName: "",
-    logo: "",
-  }),
+  state: (): Brand =>
+    ({
+      id: undefined,
+      slug: "",
+      displayName: "",
+      logo: "",
+    } as Brand),
 });

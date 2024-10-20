@@ -52,7 +52,7 @@ import ColorsList from "./ColorsList.vue";
 import ColorForm from "./ColorForm.vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
-import { ColorDto as Color } from "@bycar-in-ua/common";
+import type { Color } from "@bycar-in-ua/sdk";
 
 defineEmits(["update:show"]);
 

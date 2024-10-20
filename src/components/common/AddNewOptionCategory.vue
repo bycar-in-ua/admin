@@ -49,7 +49,9 @@ const createOptionCategory = async () => {
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

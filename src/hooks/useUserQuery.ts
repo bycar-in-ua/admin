@@ -1,6 +1,6 @@
 import { useQuery } from "vue-query";
 import { get } from "@/helpers/apiClient";
-import { UserDto as User } from "common/dto";
+import type { User } from "@bycar-in-ua/sdk";
 import { Ref } from "vue";
 
 interface UsersData {

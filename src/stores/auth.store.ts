@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { UserDto as User, LoginUserDto } from "@bycar-in-ua/common";
+import type { ReducedUser, LoginUserPayload } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 
 interface State {
-  user: User | null;
+  user: ReducedUser | null;
   isFetched: boolean;
 }
 
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore("auth", {
     isFetched: false,
   }),
   actions: {
-    async loginUser(payload: LoginUserDto) {
+    async loginUser(payload: LoginUserPayload) {
       const user = await apiClient.post("/auth/login", payload);
       this.user = user;
       this.isFetched = true;
@@ -37,7 +37,7 @@ export const useAuthStore = defineStore("auth", {
   },
   getters: {
     isLoggedIn(state) {
-      return state.user !== null
-    }
-  }
+      return state.user !== null;
+    },
+  },
 });

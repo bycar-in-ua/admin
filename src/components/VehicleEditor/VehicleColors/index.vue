@@ -36,7 +36,7 @@ import { NCard, NButton } from "naive-ui";
 import VehicleColorsModal from "./VehicleColorsModal/index.vue";
 import ColorCard from "./ColorCard.vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
-import { ColorDto as Color } from "@bycar-in-ua/common";
+import type { Color } from "@bycar-in-ua/sdk";
 
 const vehicleStore = useVehicleStore();
 const { t } = useI18n();

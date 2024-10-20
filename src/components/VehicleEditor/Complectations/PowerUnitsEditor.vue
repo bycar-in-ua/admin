@@ -129,7 +129,7 @@ import {
   useNotification,
 } from "naive-ui";
 import { CloseSharp } from "@vicons/ionicons5";
-import { PowerUnitDto as PowerUnit } from "@bycar-in-ua/common";
+import type { PowerUnit } from "@bycar-in-ua/sdk";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 
@@ -177,7 +177,9 @@ const deleteHandler = async (powerUnit) => {
       title: t("notifications.powerUnit.deleting.success"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

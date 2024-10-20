@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { EngineDto as Engine } from "@bycar-in-ua/common";
+import { Engine } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 import { useVehicleStore } from "./vehicle.store";
 
@@ -14,7 +14,7 @@ export const useEngineStore = defineStore("engine", {
       turbo: {},
       hybrid: {},
       electric: {},
-    },
+    } as Engine,
     isFetching: false,
   }),
   actions: {

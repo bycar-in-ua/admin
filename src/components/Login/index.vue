@@ -93,7 +93,9 @@ async function submitHandler() {
     await authStore.loginUser(model.value);
     router.push({ name: "Dashboard" });
     loading.finish();
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     loading.error();
     notification.error({
       title: error.message,

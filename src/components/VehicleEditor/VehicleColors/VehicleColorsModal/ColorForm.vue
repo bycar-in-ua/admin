@@ -77,7 +77,7 @@ import i18n from "@/i18n/index.js";
 import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
-import { ColorDto as Color } from "@bycar-in-ua/common";
+import type { Color } from "@bycar-in-ua/sdk";
 
 const props = defineProps<{ color: Color }>();
 const emit = defineEmits(["toggle-form"]);
@@ -105,7 +105,9 @@ const createHandler = async () => {
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -125,7 +127,9 @@ const updateHandler = async () => {
       title: t("notifications.success.title.default"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,
@@ -145,7 +149,9 @@ const uploader = async (file) => {
       title: t("images.save.success"),
       duration: 3000,
     });
-  } catch (error: Error) {
+  } catch (e) {
+    const error = e as Error;
+
     notification.error({
       title: t("notifications.error.title.default"),
       description: error.message,

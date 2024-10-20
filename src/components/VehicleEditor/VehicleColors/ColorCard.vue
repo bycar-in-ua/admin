@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 import { cdnLink } from "@/helpers/cdn";
 import { NIcon, NSpin, NP } from "naive-ui";
 import { CloseCircleOutline, Pencil } from "@vicons/ionicons5";
-import { ColorDto as Color } from "@bycar-in-ua/common";
+import type { Color } from "@bycar-in-ua/sdk";
 
 interface IProps {
   color: Color;

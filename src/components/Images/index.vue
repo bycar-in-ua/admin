@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { ref, provide, type Component } from "vue";
 import { useI18n } from "vue-i18n";
-import ImagesToolBar from "./ImagesToolBar.vue";
-import Image from "./Image.vue";
-import { NImageGroup, NPagination, NSkeleton, NEmpty } from "naive-ui";
 import { useImagesStore } from "@/stores/images.store";
+import { NImageGroup, NPagination, NSkeleton, NEmpty } from "naive-ui";
+import Image from "./Image.vue";
+import ImagesToolBar from "./ImagesToolBar.vue";
+import {
+  setImagesSelectableKey,
+  addImageToSelectionKey,
+  setImagesUnselectableKey,
+  removeImageFromSelectionKey,
+  cdnPathToSaveKey,
+} from "./keys";
 
 export interface ToolbarAction {
   component: Component;
@@ -39,16 +46,16 @@ const selectable = ref(props.isSelectable);
 
 const selectedImages = ref([...props.preselectedImages]);
 
-provide("setImagesSelectable", () => {
+provide(setImagesSelectableKey, () => {
   selectable.value = true;
 });
 
-provide("setImagesUnselectable", () => {
+provide(setImagesUnselectableKey, () => {
   selectable.value = false;
   selectedImages.value = [];
 });
 
-provide("addImageToSelection", (imageId) => {
+provide(addImageToSelectionKey, (imageId) => {
   if (props.singleSelection) {
     selectedImages.value = [imageId];
     return;
@@ -56,15 +63,13 @@ provide("addImageToSelection", (imageId) => {
   selectedImages.value.push(imageId);
 });
 
-provide("removeImageFromSelection", (imageId) => {
+provide(removeImageFromSelectionKey, (imageId) => {
   selectedImages.value = selectedImages.value.filter(
     (item) => item !== imageId
   );
 });
 
-provide("cdnPathToSave", props.cdnPathToSave);
-
-provide("isUploadble", props.isUploadble);
+provide(cdnPathToSaveKey, props.cdnPathToSave);
 </script>
 
 <template>

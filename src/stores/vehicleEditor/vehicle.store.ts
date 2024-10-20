@@ -1,10 +1,10 @@
-import { VehicleDto as Car, PostStatus, BodyType } from "@bycar-in-ua/common";
+import { Vehicle, PostStatus, BodyType } from "@bycar-in-ua/sdk";
 import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";
 import apiClient from "@/helpers/apiClient";
 
 export const useVehicleStore = defineStore("vehicle", {
-  state: (): { car: Car } => ({
+  state: (): { car: Vehicle } => ({
     car: {
       id: undefined,
       status: PostStatus.DRAFT,
@@ -23,7 +23,7 @@ export const useVehicleStore = defineStore("vehicle", {
         slug: "",
         logo: "",
       },
-    },
+    } as Vehicle,
   }),
   actions: {
     async saveCar() {
@@ -93,7 +93,9 @@ export const useVehicleStore = defineStore("vehicle", {
     },
     enginesOptions(state) {
       return state.car.engines?.map((engine) => ({
-        label: engine.displayName + ` ${engine.power} hp`,
+        label: `${engine.tradename ?? ""} ${engine.displacement ?? ""} ${
+          engine.injection ?? ""
+        } ${engine.power} hp`,
         value: engine.id,
       }));
     },

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ColorDto as Color } from "@bycar-in-ua/common";
+import type { Color } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 
 export const useColorsStore = defineStore("colors", {

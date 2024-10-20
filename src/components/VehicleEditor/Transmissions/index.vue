@@ -71,7 +71,7 @@ import PlusButton from "@/components/common/PlusButton.vue";
 import TransmissionModal from "./TransmissionModal.vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useTransmissionStore } from "@/stores/vehicleEditor/transmission.store";
-import { getTransmissionDisplayName } from "@/helpers/transmission.helper";
+import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 
 const vehicleStore = useVehicleStore();
 const transmissionStore = useTransmissionStore();

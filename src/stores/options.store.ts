@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { OptionCategoryDto as OptionCategory } from "@bycar-in-ua/common";
+import type { OptionCategory } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 
 interface State {

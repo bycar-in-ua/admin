@@ -1,4 +1,4 @@
-import { TransmissionDto as Transmission } from "@bycar-in-ua/common";
+import type { Transmission } from "@bycar-in-ua/sdk";
 import { ComposerTranslation } from "vue-i18n";
 
 export function getTransmissionDisplayName(
@@ -13,7 +13,6 @@ export function getTransmissionDisplayName(
   displayName += " - " + String(transmission.gearbox.numberOfGears);
   displayName +=
     " " + t("vehicle.transmission.gearbox.types." + transmission.gearbox.type);
-  console.log("transmission.gearbox.type", transmission.gearbox.type);
 
   return displayName;
 }

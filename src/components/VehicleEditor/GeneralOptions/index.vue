@@ -12,7 +12,7 @@ import {
   NSelect,
   NIcon,
 } from "naive-ui";
-import { VehicleSizeClass } from "@bycar-in-ua/common";
+import { VehicleSizeClass } from "@bycar-in-ua/sdk";
 import { Close, InformationCircle } from "@vicons/ionicons5";
 import i18n from "@/i18n";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";

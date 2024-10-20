@@ -6,7 +6,7 @@ import ComplectationModal from "./ComplectationModal.vue";
 import PlusButton from "@/components/common/PlusButton.vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
-import { ComplectationDto } from "@bycar-in-ua/common";
+import type { Complectation } from "@bycar-in-ua/sdk";
 
 const vehicleStore = useVehicleStore();
 const complectationStore = useComplectationStore();
@@ -17,7 +17,7 @@ const newComplectationName = ref("");
 const showModal = ref(false);
 const isDeleting = ref(false);
 
-const openEditModal = (complectation: ComplectationDto) => {
+const openEditModal = (complectation: Complectation) => {
   const { id, displayName, powerUnits, options, base } = complectation;
   complectationStore.$patch({ id, displayName, powerUnits, options, base });
   showModal.value = true;
