@@ -11,7 +11,7 @@
     "lint": "vue-tsc --noEmit && eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "@bycar-in-ua/sdk": "^0.1.0",
+    "@bycar-in-ua/sdk": "^0.2.4",
     "@mdi/font": "5.9.55",
     "@tinymce/tinymce-vue": "^4",
     "@vicons/ionicons5": "^0.12.0",

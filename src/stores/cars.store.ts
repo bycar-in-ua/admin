@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import type { Vehicle, PaginationMeta } from "@bycar-in-ua/sdk";
+import type {
+  Vehicle,
+  PaginationMeta,
+  VehiclesSearchSchema,
+} from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient.js";
 
 interface State {
@@ -29,16 +33,21 @@ export const useCarsStore = defineStore("cars", {
       try {
         this.isFetching = true;
 
-        const cars = await apiClient.post(`/vehicles/search/all`, {
-          ...this.filters,
-          page,
-          limit: this.meta.itemsPerPage,
-        });
+        const searchSchema: VehiclesSearchSchema = {
+          filters: this.filters as VehiclesSearchSchema["filters"],
+          pagination: {
+            page,
+            limit: this.meta.itemsPerPage,
+          },
+        };
+
+        const cars = await apiClient.post(`/vehicles/search/all`, searchSchema);
 
         this.items = cars.items;
         this.meta = cars.meta;
       } catch (e) {
-        throw Error();
+        const error = e as Error;
+        throw error;
       } finally {
         this.isFetching = false;
       }
@@ -52,7 +61,8 @@ export const useCarsStore = defineStore("cars", {
         this.isFetching = true;
         return await apiClient.post(`/vehicles/duplicate/${targetCarId}`, {});
       } catch (e) {
-        throw Error();
+        const error = e as Error;
+        throw error;
       } finally {
         this.isFetching = false;
       }
@@ -63,7 +73,8 @@ export const useCarsStore = defineStore("cars", {
         await apiClient.delete(`/vehicles/${type}`, carsIds);
         await this.fetchCars(1);
       } catch (e) {
-        throw Error();
+        const error = e as Error;
+        throw error;
       } finally {
         this.isFetching = false;
       }
