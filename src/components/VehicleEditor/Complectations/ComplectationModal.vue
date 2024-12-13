@@ -28,7 +28,7 @@ import { useComplectationStore } from "@/stores/vehicleEditor/complectation.stor
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useOptionsStore } from "@/stores/options.store";
 
-const show = defineModel<boolean, "show">();
+const show = defineModel<boolean>("show");
 
 const vehicleStore = useVehicleStore();
 const complectationStore = useComplectationStore();
@@ -81,7 +81,6 @@ const saveHandler = async () => {
       duration: 5000,
     });
     show.value = false;
-    // emit("update:show", false);
   } catch (error) {
     notification.error({
       title: t("notifications.error.title.default"),
@@ -125,7 +124,7 @@ recalcOptions();
 
 <template>
   <n-modal
-    :show="show"
+    v-model:show="show"
     preset="card"
     :mask-closable="false"
     :title="complectationStore.displayName"
