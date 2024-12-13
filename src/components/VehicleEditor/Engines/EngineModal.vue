@@ -30,6 +30,7 @@
             v-model:value="engineStore.engine.tradename"
             :options="tradenames"
             filterable
+            clearable
             tag
           />
         </n-form-item>
