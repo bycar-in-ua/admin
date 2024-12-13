@@ -28,13 +28,11 @@ export const useComplectationStore = defineStore("complectation", {
           cmpl.id == updatedComplectation.id ? updatedComplectation : cmpl
       );
     },
-    async createNewPowerUnit() {
-      const newPowerUnit = await apiClient.post("/power-units", {
+    createNewPowerUnit() {
+      this.powerUnits.push({
         complectationId: this.id,
-      });
-      this.powerUnits?.push(newPowerUnit);
-
-      return newPowerUnit.id;
+        consumption: {},
+      } as PowerUnit);
     },
     async deletePowerUnit(powerUnit: PowerUnit) {
       await apiClient.delete(`/power-units/${powerUnit.id}`);
