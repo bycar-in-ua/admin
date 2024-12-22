@@ -13,7 +13,7 @@
   "dependencies": {
     "@bycar-in-ua/sdk": "^0.2.4",
     "@mdi/font": "5.9.55",
-    "@tinymce/tinymce-vue": "^4",
+    "@tinymce/tinymce-vue": "6.1.0",
     "@vicons/ionicons5": "^0.12.0",
     "lodash": "^4.17.21",
     "naive-ui": "^2.38",
