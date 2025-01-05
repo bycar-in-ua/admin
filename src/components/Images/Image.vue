@@ -31,7 +31,7 @@ const clickHandler = () => {
     @click="clickHandler"
   >
     <n-image
-      :src="cdnLink(image.path, 300, 300)"
+      :src="cdnLink(image.path, 'thumbnail')"
       class="w-full object-cover aspect-square"
       object-fit="cover"
       width="100%"
@@ -40,7 +40,7 @@ const clickHandler = () => {
   </div>
   <n-image
     v-else
-    :src="cdnLink(image.path, 300, 300)"
+    :src="cdnLink(image.path, 'thumbnail')"
     :preview-src="cdnLink(image.path)"
     class="rounded-lg"
     object-fit="cover"

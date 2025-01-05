@@ -39,7 +39,7 @@ const deleteHandler = async () => {
       <n-spin size="medium" stroke="red" />
     </div>
     <n-image
-      :src="cdnLink(image.path, 300, 300)"
+      :src="cdnLink(image.path, 'thumbnail')"
       :preview-src="cdnLink(image.path)"
     />
   </div>

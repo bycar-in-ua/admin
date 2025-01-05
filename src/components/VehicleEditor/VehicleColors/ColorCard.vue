@@ -44,7 +44,7 @@ const closeHandler = async () => {
   <div>
     <div class="relative image-wrapper">
       <img
-        :src="cdnLink(color.reference, 300, 300)"
+        :src="cdnLink(color.reference, 'thumbnail')"
         :title="color?.name"
         class="rounded-full cursor-pointer"
         :class="selected ? 'border-solid border-2 border-primary' : ''"

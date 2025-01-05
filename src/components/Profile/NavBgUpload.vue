@@ -1,13 +1,8 @@
 <template>
   <n-thing title="Настройка фонового изображение навигации">
-    <template #description>
-      Текущее изображение:
-    </template>
+    <template #description> Текущее изображение: </template>
     <div class="">
-      <img
-        :src="navBgImage"
-        class="max-w-3xl"
-      >
+      <img :src="navBgImage" class="max-w-3xl" />
     </div>
     <template #action>
       <n-upload :on-change="uploadHandler">
@@ -36,7 +31,7 @@ const uploadHandler = async (options) => {
   const response = await apiClient.uploadFiles(
     options.fileList.map((fileInfo) => fileInfo.file)
   );
-  memory.set("navBgImage", cdnLink(response[0].path, 0, 1920));
+  memory.set("navBgImage", cdnLink(response[0].path, "large"));
   location.reload();
 };
 </script>

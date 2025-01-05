@@ -10,7 +10,10 @@
       @click="openBrandModal(brand)"
     >
       <template #cover>
-        <img :src="cdnLink(brand.logo, 300)" class="h-32 p-2 object-contain" />
+        <img
+          :src="cdnLink(brand.logo, 'thumbnail')"
+          class="h-32 p-2 object-contain"
+        />
       </template>
       <n-h3 class="text-center mb-0 break-all" v-text="brand.displayName" />
     </n-card>

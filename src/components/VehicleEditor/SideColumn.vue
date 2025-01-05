@@ -52,7 +52,7 @@ const renderBrandLabel = () => {
 
     return h("div", { className: "flex items-center" }, [
       h(NImage, {
-        src: cdnLink(brand.logo, 100),
+        src: cdnLink(brand.logo, "thumbnail"),
         previewDisabled: true,
         objectFit: "contain",
         height: 27,
@@ -204,7 +204,7 @@ const toolbarActions: ToolbarAction[] = [
       >
         <n-image
           v-if="vehicleStore.car.featureImage"
-          :src="cdnLink(vehicleStore.car.featureImage.path, 300, 300)"
+          :src="cdnLink(vehicleStore.car.featureImage.path, 'thumbnail')"
           class="w-full"
           object-fit="cover"
           width="100%"

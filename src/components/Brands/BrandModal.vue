@@ -31,7 +31,7 @@
           </div>
           <img
             v-if="brandModalStore.logo"
-            :src="cdnLink(brandModalStore.logo, 300)"
+            :src="cdnLink(brandModalStore.logo, 'thumbnail')"
             :alt="brandModalStore.displayName"
             class="h-28 object-contain mx-auto"
           />
