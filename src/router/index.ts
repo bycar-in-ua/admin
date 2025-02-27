@@ -24,7 +24,11 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/vehicles",
     name: "Vehicles",
-    component: () => import("@/views/Vehicles.vue"),
+    components: {
+      default: () => import("@/views/Vehicles.vue"),
+      "title-extra": () =>
+        import("@/components/Vehicles/CreateVehicleModal.vue"),
+    },
     meta: {
       title: ["car", 2],
     },
@@ -37,7 +41,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/brands",
     name: "Brands",
-    component: () => import("@/views/Brands.vue"),
+    components: {
+      default: () => import("@/views/Brands.vue"),
+      "title-extra": () => import("@/components/Brands/AddBrandButton.vue"),
+    },
     meta: {
       title: ["brand", 2],
     },
@@ -66,7 +73,10 @@ const routes: RouteRecordRaw[] = [
   {
     name: "Dealers",
     path: "/dealers",
-    component: () => import("@/views/Dealers.vue"),
+    components: {
+      default: () => import("@/views/Dealers.vue"),
+      "title-extra": () => import("@/Dealers/AddDealer.vue"),
+    },
     meta: {
       title: "Дилери",
     },

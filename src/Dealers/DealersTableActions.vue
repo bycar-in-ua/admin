@@ -31,7 +31,7 @@ const { isPending, mutate } = useMutation({
         params: { id: props.dealer.id },
       }"
     >
-      <NButton size="small" type="primary"> Редагувати </NButton>
+      <NButton size="small" type="primary"> Переглянути </NButton>
     </RouterLink>
     <NPopconfirm
       positive-text="Видалити"

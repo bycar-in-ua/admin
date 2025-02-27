@@ -1,8 +1,5 @@
 <template>
   <div class="mb-6 flex">
-    <n-button type="primary" class="mr-auto" @click="isModalOpen = true">
-      {{ t("create") }}
-    </n-button>
     <template v-if="selectedRows.length">
       <n-button
         type="error"
@@ -44,7 +41,6 @@
       @update:page-size="handlePageSize"
     />
   </div>
-  <create-vehicle-modal v-model:show="isModalOpen" />
 </template>
 
 <script setup lang="ts">

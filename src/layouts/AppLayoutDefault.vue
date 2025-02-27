@@ -9,6 +9,7 @@ import {
   NLayoutHeader,
   NLayoutSider,
   NH2,
+  NSpace,
 } from "naive-ui";
 import TopNav from "../components/Nav/TopNav.vue";
 import SideNav from "../components/Nav/SideNav.vue";
@@ -84,7 +85,11 @@ const navStyle = {
         <top-nav />
       </n-layout-header>
       <n-layout-content class="pt-16 p-8 container mx-auto">
-        <n-h2 v-if="pageTitle" strong v-text="pageTitle" />
+        <n-space justify="space-between">
+          <n-h2 v-if="pageTitle" strong v-text="pageTitle" />
+
+          <RouterView name="title-extra" />
+        </n-space>
         <slot />
       </n-layout-content>
     </n-layout>
