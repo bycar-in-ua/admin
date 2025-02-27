@@ -89,6 +89,20 @@ const routes: RouteRecordRaw[] = [
       title: "Редагування дилера",
     },
   },
+  {
+    name: "AvailableVehicles",
+    path: "/available-vehicles",
+    components: {
+      default: () => import("@/views/AvailableVehicles.vue"),
+    },
+  },
+  {
+    name: "EditAvailableVehicle",
+    path: "/available-vehicles/:id",
+    components: {
+      default: () => import("@/views/EditAvailableVehicle.vue"),
+    },
+  },
 ];
 
 const router = createRouter({

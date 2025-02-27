@@ -8,6 +8,7 @@ import {
   PodiumSharp,
   CaretDownOutline,
   CarSport,
+  Car,
   Albums,
   Library,
   Images,
@@ -45,6 +46,10 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
   {
     key: "Dealers",
     icon: Business,
+  },
+  {
+    key: "AvailableVehicles",
+    icon: Car,
   },
   {
     key: "Library",

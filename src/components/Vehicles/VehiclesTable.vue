@@ -51,7 +51,6 @@ import type { DataTableColumns, DataTableFilterState } from "naive-ui";
 import { NDataTable, NTag, NPagination, NButton } from "naive-ui";
 import { getStatusTag } from "@/helpers/postStatuses";
 import { prepareCarTitle } from "@/helpers/preparers";
-import CreateVehicleModal from "./CreateVehicleModal.vue";
 import TableRowActions from "./TableRowActions.vue";
 import { useCarsStore } from "@/stores/cars.store";
 import { useBrandsStore } from "@/stores/brands.store";
@@ -68,7 +67,6 @@ const carsStore = useCarsStore();
 const brandsStore = useBrandsStore();
 const { t } = useI18n();
 
-const isModalOpen = ref(false);
 const selectedRows = ref([]);
 
 const tableData = computed(() =>
