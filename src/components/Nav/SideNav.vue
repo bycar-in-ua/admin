@@ -1,27 +1,3 @@
-<template>
-  <n-menu
-    :collapsed="collapsed"
-    :collapsed-width="64"
-    :collapsed-icon-size="22"
-    :options="createMenuOptions(menuOptions)"
-    :render-label="renderMenuLabel"
-    :expand-icon="expandIcon"
-    :value="($route.name as string)"
-    inverted
-  />
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "SideNav",
-  props: {
-    collapsed: Boolean,
-  },
-});
-</script>
-
 <script setup lang="ts">
 import { h } from "vue";
 import { RouterLink } from "vue-router";
@@ -35,9 +11,16 @@ import {
   Albums,
   Library,
   Images,
-  // Newspaper,
-  // People,
+  Business,
 } from "@vicons/ionicons5";
+
+defineOptions({
+  name: "SideNav",
+});
+
+defineProps({
+  collapsed: Boolean,
+});
 
 function renderMenuIcon(icon) {
   if (icon) return () => h(NIcon, null, { default: () => h(icon) });
@@ -51,19 +34,6 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
     exact: true,
     icon: PodiumSharp,
   },
-  // {
-  //   key: "Posts",
-  //   icon: Newspaper,
-  //   children: [
-  //     {
-  //       key: "Posts",
-  //     },
-  //     {
-  //       key: "PostCategories",
-  //       pluralism: 2,
-  //     },
-  //   ],
-  // },
   {
     key: "Vehicles",
     icon: CarSport,
@@ -73,6 +43,10 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
     icon: Albums,
   },
   {
+    key: "Dealers",
+    icon: Business,
+  },
+  {
     key: "Library",
     icon: Library,
   },
@@ -80,11 +54,6 @@ const menuOptions: Omit<MenuOption, "icon">[] = [
     key: "Images",
     icon: Images,
   },
-  // {
-  //   key: "Users",
-  //   icon: People,
-  //   pluralism: 2,
-  // },
 ];
 
 const { t } = useI18n();
@@ -108,3 +77,16 @@ const renderMenuLabel = (option) => {
 
 const expandIcon = () => h(NIcon, null, { default: () => h(CaretDownOutline) });
 </script>
+
+<template>
+  <n-menu
+    :collapsed="collapsed"
+    :collapsed-width="64"
+    :collapsed-icon-size="22"
+    :options="createMenuOptions(menuOptions)"
+    :render-label="renderMenuLabel"
+    :expand-icon="expandIcon"
+    :value="String($route.name)"
+    :inverted="true"
+  />
+</template>

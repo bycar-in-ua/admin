@@ -63,6 +63,22 @@ const routes: RouteRecordRaw[] = [
       title: ["users.title", 2],
     },
   },
+  {
+    name: "Dealers",
+    path: "/dealers",
+    component: () => import("@/views/Dealers.vue"),
+    meta: {
+      title: "Дилери",
+    },
+  },
+  {
+    name: "EditDealer",
+    path: "/dealers/:id",
+    component: () => import("@/views/EditDealer.vue"),
+    meta: {
+      title: "Редагування дилера",
+    },
+  },
 ];
 
 const router = createRouter({

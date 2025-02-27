@@ -12,17 +12,18 @@
   "dependencies": {
     "@bycar-in-ua/sdk": "^0.2.6",
     "@mdi/font": "5.9.55",
+    "@tanstack/vue-query": "^5.66.9",
     "@tinymce/tinymce-vue": "6.1.0",
     "@vicons/ionicons5": "^0.12.0",
     "lodash": "^4.17.21",
     "naive-ui": "^2.41",
+    "ofetch": "^1.4.1",
     "pinia": "^3.0.1",
     "roboto-fontface": "*",
     "serve": "^14.2.3",
     "vfonts": "^0.1.0",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.1",
-    "vue-query": "^1.26.0",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {

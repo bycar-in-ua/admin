@@ -7,7 +7,7 @@ import "./assets/global.css";
 import "./assets/tailwind.css";
 import { getCookie } from "./helpers/cookieHelpers";
 import { createPinia } from "pinia";
-import { VueQueryPlugin } from "vue-query";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 
 const i18n = createI18n({
   legacy: false,
@@ -22,6 +22,14 @@ const app = createApp(App);
 app.use(router);
 app.use(pinia);
 app.use(i18n);
-app.use(VueQueryPlugin);
+app.use(VueQueryPlugin, {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  },
+});
 
 app.mount("#app");
