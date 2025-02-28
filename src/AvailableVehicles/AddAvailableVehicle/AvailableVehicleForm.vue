@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import {
   NButton,
-  NModal,
   NForm,
   NFormItem,
   NSelect,
   NInputNumber,
+  NCard,
+  NIcon,
 } from "naive-ui";
 import { useI18n } from "vue-i18n";
-import { useAddAvailableVehicle } from "./useAddAvailableVehicle";
+import { Close, Add } from "@vicons/ionicons5";
+import { useAddAvailableVehicle } from "../useAddAvailableVehicle";
+
+defineEmits<{ cancel: [] }>();
 
 const { t } = useI18n();
-
-const show = ref(false);
 
 const {
   formState,
@@ -42,15 +43,17 @@ const {
 </script>
 
 <template>
-  <NButton type="primary" @click="show = true">
-    {{ t("add") }}
-  </NButton>
-  <NModal
-    v-model:show="show"
-    preset="card"
-    title="Додати авто в наявності"
-    class="max-w-xl"
-  >
+  <NCard title="Додати авто в наявності" class="max-w-xl">
+    <template #header-extra>
+      <NButton quaternary @click="$emit('cancel')">
+        <template #icon>
+          <NIcon>
+            <Close />
+          </NIcon>
+        </template>
+      </NButton>
+    </template>
+
     <NForm :model="formState">
       <NFormItem :label="t('brand')">
         <NSelect
@@ -121,7 +124,13 @@ const {
 
     <template #footer>
       <div class="flex justify-end gap-4">
-        <NButton @click="show = false">
+        <NButton @click="$emit('cancel')">
+          <template #icon>
+            <NIcon>
+              <Close />
+            </NIcon>
+          </template>
+
           {{ t("discard") }}
         </NButton>
         <NButton
@@ -130,9 +139,14 @@ const {
           :loading="createAvailableVehiclePending"
           @click="() => createAvailableVehicle()"
         >
+          <template #icon>
+            <NIcon>
+              <Add />
+            </NIcon>
+          </template>
           {{ t("create") }}
         </NButton>
       </div>
     </template>
-  </NModal>
+  </NCard>
 </template>

@@ -30,7 +30,7 @@ const clickHandler = () => {
     :class="selected ? 'outline-primary' : 'outline-gray-400'"
     @click="clickHandler"
   >
-    <n-image
+    <img
       :src="cdnLink(image.path, 'thumbnail')"
       class="w-full object-cover aspect-square"
       object-fit="cover"

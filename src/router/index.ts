@@ -95,7 +95,7 @@ const routes: RouteRecordRaw[] = [
     components: {
       default: () => import("@/views/AvailableVehicles.vue"),
       "title-extra": () =>
-        import("@/AvailableVehicles/AddAvailableVehicle.vue"),
+        import("@/AvailableVehicles/AddAvailableVehicle/AddAvailableVehicleButton.vue"),
     },
     meta: {
       title: "Автомобілі в наявності",

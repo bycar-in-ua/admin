@@ -11,6 +11,7 @@ import {
   setImagesUnselectableKey,
   removeImageFromSelectionKey,
   cdnPathToSaveKey,
+  clearSelectionKey,
 } from "./keys";
 
 export interface ToolbarAction {
@@ -67,6 +68,10 @@ provide(removeImageFromSelectionKey, (imageId) => {
   selectedImages.value = selectedImages.value.filter(
     (item) => item !== imageId
   );
+});
+
+provide(clearSelectionKey, () => {
+  selectedImages.value = [];
 });
 
 provide(cdnPathToSaveKey, props.cdnPathToSave);
