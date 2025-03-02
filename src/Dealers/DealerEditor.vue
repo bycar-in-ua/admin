@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { NForm, NFormItem, NInput, NCard, NButton } from "naive-ui";
+import { NForm, NFormItem, NInput, NCard, NButton, NTag } from "naive-ui";
+import { useI18n } from "vue-i18n";
 import { cdnLink } from "@/helpers/cdn";
 import { useDealerEditorStore } from "@/stores/dealerEditor.store";
 import CarTitle from "@/components/common/CarTitle.vue";
 import AddBrandsPopover from "./AddBrandsPopover.vue";
+import { getStatusTag } from "@/helpers/postStatuses";
+
+const { t } = useI18n();
 
 const dealerEditorStore = useDealerEditorStore();
 </script>
@@ -30,7 +34,10 @@ const dealerEditorStore = useDealerEditorStore();
         :title="brand.displayName"
       >
         <template #cover>
-          <img :src="cdnLink(brand.logo, 'medium')" class="aspect-video object-contain" />
+          <img
+            :src="cdnLink(brand.logo, 'medium')"
+            class="aspect-video object-contain"
+          />
         </template>
       </NCard>
     </NCard>
@@ -48,6 +55,9 @@ const dealerEditorStore = useDealerEditorStore();
 
         <template #header>
           <CarTitle :car="car.vehicle" />
+          <NTag :type="getStatusTag(car.status)">
+            {{ t(`vehicle.status.${car.status}`) }}
+          </NTag>
         </template>
 
         <template #footer>

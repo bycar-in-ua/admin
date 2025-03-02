@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import { computed, inject } from "vue";
 import { PostStatus } from "@bycar-in-ua/sdk";
 import { useAvailableVehicleEditorStore } from "@/stores/availableVehicleEditor.store";
 import {
@@ -11,6 +11,7 @@ import {
   useNotification,
 } from "naive-ui";
 import { useI18n } from "vue-i18n";
+import { getPowerUnitName } from "../useAddAvailableVehicle";
 
 const { t } = useI18n();
 const notification = useNotification();
@@ -26,6 +27,25 @@ async function removeHandler() {
     duration: 3000,
   });
 }
+
+const activeComplecttaion = computed(() =>
+  availalbeVehicleEditorStore.car?.vehicle?.complectations.find(
+    (cmpl) =>
+      cmpl.id ===
+      availalbeVehicleEditorStore.availableVehicleEditorState.complectationId
+  )
+);
+
+const powerUnits = computed(() => {
+  if (!activeComplecttaion.value) {
+    return [];
+  }
+
+  return activeComplecttaion.value.powerUnits.map((pu) => ({
+    value: pu.id,
+    label: getPowerUnitName(pu, t),
+  }));
+});
 
 const statusOptions = Object.values(PostStatus).map((status) => ({
   value: status,
@@ -82,6 +102,26 @@ const statusOptions = Object.values(PostStatus).map((status) => ({
       label-field="name"
       :options="[availalbeVehicleEditorStore.car?.dealer].filter(Boolean)"
       disabled
+    />
+  </NFormItem>
+
+  <NFormItem label="Комплектація">
+    <NSelect
+      v-model:value="
+        availalbeVehicleEditorStore.availableVehicleEditorState.complectationId
+      "
+      value-field="id"
+      label-field="displayName"
+      :options="availalbeVehicleEditorStore.car?.vehicle?.complectations"
+    />
+  </NFormItem>
+
+  <NFormItem label="Силова установка">
+    <NSelect
+      v-model:value="
+        availalbeVehicleEditorStore.availableVehicleEditorState.powerUnitId
+      "
+      :options="powerUnits"
     />
   </NFormItem>
 

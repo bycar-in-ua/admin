@@ -22,7 +22,7 @@ type FormModel = {
 /**
  * @deprecated Should be used from UI lib
  */
-const getPowerUnitName = (powerUnit: PowerUnit, t: Composer["t"]) => {
+export function getPowerUnitName(powerUnit: PowerUnit, t: Composer["t"]) {
   const transmission = powerUnit.transmission;
 
   const titleParts = [getEngineLabel(powerUnit.engine)];
@@ -44,7 +44,7 @@ const getPowerUnitName = (powerUnit: PowerUnit, t: Composer["t"]) => {
   }
 
   return titleParts.join(" ");
-};
+}
 
 export function useAddAvailableVehicle() {
   const { t } = useI18n();

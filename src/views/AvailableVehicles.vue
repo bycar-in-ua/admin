@@ -51,7 +51,11 @@ const columns: DataTableColumn<AvailableVehicle>[] = [
     title: "Назва",
     key: "name",
     render(rowData: AvailableVehicle) {
-      return `${rowData.vehicle?.brand?.displayName} ${rowData?.vehicle?.model}`;
+      const complectation = rowData?.vehicle?.complectations.find(
+        (cmpl) => cmpl.id === rowData.complectationId
+      );
+
+      return `${rowData.vehicle?.brand?.displayName} ${rowData?.vehicle?.model} ${complectation?.displayName ?? ""}`;
     },
   },
   {
