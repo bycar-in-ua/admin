@@ -7,9 +7,12 @@ import {
   NForm,
   NFormItem,
   NInput,
+  NIcon,
   type FormRules,
   type FormInst,
 } from "naive-ui";
+import { Add } from "@vicons/ionicons5";
+
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@tanstack/vue-query";
 import { useDealersService } from "./useDealersService";
@@ -74,10 +77,15 @@ async function onSubmit(e: Event) {
           type="primary"
           strong
           attr-type="submit"
+          size="small"
           :disabled="!formModel.name"
           :loading="isPending"
         >
-          +
+          <template #icon>
+            <NIcon>
+              <Add />
+            </NIcon>
+          </template>
         </NButton>
       </NFormItem>
     </NForm>

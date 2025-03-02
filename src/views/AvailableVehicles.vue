@@ -43,9 +43,7 @@ const columns: DataTableColumn<AvailableVehicle>[] = [
         {
           type: getStatusTag(row.status),
         },
-        {
-          default: () => t("vehicle.status." + row.status),
-        }
+        () => t("vehicle.status." + row.status)
       );
     },
   },
@@ -53,7 +51,7 @@ const columns: DataTableColumn<AvailableVehicle>[] = [
     title: "Назва",
     key: "name",
     render(rowData: AvailableVehicle) {
-      return `${rowData.vehicle?.brand?.displayName} ${rowData?.vehicle.model}`;
+      return `${rowData.vehicle?.brand?.displayName} ${rowData?.vehicle?.model}`;
     },
   },
   {
@@ -85,14 +83,15 @@ const columns: DataTableColumn<AvailableVehicle>[] = [
             },
           },
         },
-        h(
-          NButton,
-          {
-            type: "primary",
-            size: "small",
-          },
-          t("edit")
-        )
+        () =>
+          h(
+            NButton,
+            {
+              type: "primary",
+              size: "small",
+            },
+            () => t("edit")
+          )
       );
     },
   },

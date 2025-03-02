@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import VehicleEditorTemplate from "@/components/common/VehicleEditorTemplate.vue";
+import { onUnmounted, provide } from "vue";
+import { useNotification } from "naive-ui";
+import VehicleEditorTemplate from "@/components/common/EditorTemplate.vue";
 import { useAvailableVehicleEditorStore } from "@/stores/availableVehicleEditor.store";
 import CarTitle from "@/components/common/CarTitle.vue";
 import {
@@ -8,6 +10,22 @@ import {
 } from "@/AvailableVehicles/AvailableVehicleEditor";
 
 const availalbeVehicleEditorStore = useAvailableVehicleEditorStore();
+const notification = useNotification();
+
+async function saveHandler() {
+  await availalbeVehicleEditorStore.saveAvailableVehicle();
+
+  notification.success({
+    title: "Дані про автомобіль успішно збережено",
+    duration: 3000,
+  });
+}
+
+provide("saveAvailableVehicle", saveHandler);
+
+onUnmounted(() => {
+  availalbeVehicleEditorStore.$dispose();
+});
 </script>
 
 <template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inject } from "vue";
 import { PostStatus } from "@bycar-in-ua/sdk";
 import { useAvailableVehicleEditorStore } from "@/stores/availableVehicleEditor.store";
 import { NFormItem, NSelect, NInputNumber, NButton } from "naive-ui";
@@ -6,6 +7,8 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const availalbeVehicleEditorStore = useAvailableVehicleEditorStore();
+
+const saveHandler = inject<() => void>("saveAvailableVehicle");
 
 const statusOptions = Object.values(PostStatus).map((status) => ({
   value: status,
@@ -18,7 +21,7 @@ const statusOptions = Object.values(PostStatus).map((status) => ({
     <NButton
       type="primary"
       :loading="availalbeVehicleEditorStore.savingPending"
-      @click="() => availalbeVehicleEditorStore.saveAvailableVehicle()"
+      @click="saveHandler"
     >
       {{ t("save") }}
     </NButton>

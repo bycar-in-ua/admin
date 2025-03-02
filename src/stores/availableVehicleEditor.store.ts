@@ -61,6 +61,7 @@ export const useAvailableVehicleEditorStore = defineStore(
           availableVehicleEditorState.value =
             availableVehicleToUpdatePayload(response);
         },
+        onSuccess: () => refetchCar(),
       });
 
     return {

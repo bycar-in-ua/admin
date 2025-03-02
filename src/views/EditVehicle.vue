@@ -3,7 +3,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useDialog } from "naive-ui";
 import CarTitle from "@/components/common/CarTitle.vue";
-import VehicleEditorTemplate from "@/components/common/VehicleEditorTemplate.vue";
+import VehicleEditorTemplate from "@/components/common/EditorTemplate.vue";
 import SideColumn from "@/components/VehicleEditor/SideColumn.vue";
 import DescriptionEditor from "@/components/VehicleEditor/DescriptionEditor.vue";
 import GeneralOptions from "@/components/VehicleEditor/GeneralOptions/index.vue";

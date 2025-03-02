@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, h } from "vue";
+import { ref, h, inject } from "vue";
 import { NImageGroup, NImage, NCard, NButton, NEmpty, NModal } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import Images, { type ToolbarAction } from "@/components/Images/index.vue";
@@ -14,6 +14,8 @@ const imagesStore = useImagesStore();
 
 const showModal = ref(false);
 
+const saveHandler = inject<() => void>("saveAvailableVehicle");
+
 function openModal() {
   imagesStore.fetchImages(1);
   showModal.value = true;
@@ -24,7 +26,7 @@ function saveImages(selectedImages: number[]) {
     selectedImages;
 
   availalbeVehicleEditorStore.saveAvailableVehicle().then(() => {
-    availalbeVehicleEditorStore.refetchCar();
+    saveHandler();
     showModal.value = false;
   });
 }
