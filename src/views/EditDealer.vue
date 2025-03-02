@@ -45,8 +45,8 @@ onUnmounted(() => {
     <template #sidebar>
       <NSpace justify="end">
         <NPopconfirm
-          positive-text="Видалити"
-          negative-text="Скасувати"
+          :positive-text="t('delete')"
+          :negative-text="t('discard')"
           :loading="dealerEditorStore.deletePending"
           @positive-click="deleteHandler"
         >

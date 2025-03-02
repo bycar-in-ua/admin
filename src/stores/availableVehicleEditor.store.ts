@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { useQuery, useMutation } from "@tanstack/vue-query";
 import type {
@@ -22,10 +22,10 @@ function availableVehicleToUpdatePayload(
 export const useAvailableVehicleEditorStore = defineStore(
   "availableVehicleEditor",
   () => {
-    const route = useRoute();
+    const router = useRouter();
     const availableVehicleService = useAvailableVehiclesService();
 
-    const id = computed(() => Number(route.params.id));
+    const id = computed(() => Number(router.currentRoute.value.params.id));
 
     const availableVehicleEditorState = ref<UpdateAvailableVehiclePayload>({});
 
@@ -64,6 +64,16 @@ export const useAvailableVehicleEditorStore = defineStore(
         onSuccess: () => refetchCar(),
       });
 
+    const { isPending: removePending, mutateAsync: removeAvailableVehicle } =
+      useMutation({
+        mutationKey: ["deleteAvailableVehicle", id],
+        mutationFn: () =>
+          availableVehicleService.removeAvailableVehicle(id.value),
+        onSuccess: () => {
+          router.push({ name: "AvailableVehicles" });
+        },
+      });
+
     return {
       car,
       carFetching,
@@ -73,6 +83,9 @@ export const useAvailableVehicleEditorStore = defineStore(
 
       saveAvailableVehicle,
       savingPending,
+
+      removeAvailableVehicle,
+      removePending,
     };
   }
 );
