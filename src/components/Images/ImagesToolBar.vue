@@ -25,12 +25,21 @@
       :key="index"
       @click="action.clickCallback(selectedImages)"
     />
-    <template v-if="selectedImages.length && uploadble">
+
+    <template v-if="selectedImages.length">
+      <n-button
+        v-if="selectedImages.length > 0"
+        class="mr-4"
+        @click="clearSelection"
+      >
+        {{ t("clear") }}
+      </n-button>
       <n-button
         type="error"
         class="mr-4"
         :disabled="isFetching"
         :loading="isFetching"
+        ghost
         @click="deleteHandler"
       >
         {{ t("delete") }}
@@ -57,6 +66,11 @@ import { NButton } from "naive-ui";
 import apiClient from "@/helpers/apiClient";
 import { type ToolbarAction } from "@/components/Images/index.vue";
 import { useImagesStore } from "@/stores/images.store";
+import {
+  setImagesSelectableKey,
+  setImagesUnselectableKey,
+  clearSelectionKey,
+} from "./keys";
 
 interface IProps {
   uploadble: boolean;
@@ -75,9 +89,9 @@ const props = withDefaults(defineProps<IProps>(), {
 const imagesStore = useImagesStore();
 const { t } = useI18n();
 
-const setSelectable = inject<() => void>("setImagesSelectable");
-
-const setUnselectable = inject<() => void>("setImagesUnselectable");
+const setSelectable = inject(setImagesSelectableKey);
+const setUnselectable = inject(setImagesUnselectableKey);
+const clearSelection = inject(clearSelectionKey);
 
 const isFetching = ref(false);
 

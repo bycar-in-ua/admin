@@ -1,8 +1,5 @@
 <template>
   <div class="mb-6 flex">
-    <n-button type="primary" class="mr-auto" @click="isModalOpen = true">
-      {{ t("create") }}
-    </n-button>
     <template v-if="selectedRows.length">
       <n-button
         type="error"
@@ -44,7 +41,6 @@
       @update:page-size="handlePageSize"
     />
   </div>
-  <create-vehicle-modal v-model:show="isModalOpen" />
 </template>
 
 <script setup lang="ts">
@@ -55,7 +51,6 @@ import type { DataTableColumns, DataTableFilterState } from "naive-ui";
 import { NDataTable, NTag, NPagination, NButton } from "naive-ui";
 import { getStatusTag } from "@/helpers/postStatuses";
 import { prepareCarTitle } from "@/helpers/preparers";
-import CreateVehicleModal from "./CreateVehicleModal.vue";
 import TableRowActions from "./TableRowActions.vue";
 import { useCarsStore } from "@/stores/cars.store";
 import { useBrandsStore } from "@/stores/brands.store";
@@ -72,7 +67,6 @@ const carsStore = useCarsStore();
 const brandsStore = useBrandsStore();
 const { t } = useI18n();
 
-const isModalOpen = ref(false);
 const selectedRows = ref([]);
 
 const tableData = computed(() =>

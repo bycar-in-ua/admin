@@ -1,5 +1,100 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import apiClient from "@/helpers/apiClient";
+import { yearValidator, slugValidator } from "@/helpers/validators";
+import { InformationCircleOutline } from "@vicons/ionicons5";
+import {
+  NButton,
+  NModal,
+  NForm,
+  NFormItem,
+  NSelect,
+  NInput,
+  NInputNumber,
+  NInputGroup,
+  NIcon,
+  NPopover,
+  useNotification,
+} from "naive-ui";
+import { useBrandsStore } from "@/stores/brands.store";
+
+defineOptions({
+  name: "CreateVehicleModal",
+});
+
+const rules = {
+  brandId: {
+    required: true,
+    message: "Поле Бренд не может быть пустым",
+  },
+  model: {
+    required: true,
+    message: "Поле Модель не может быть пустым",
+  },
+  yearFrom: {
+    required: true,
+    validator: yearValidator,
+  },
+  slug: {
+    required: true,
+    validator: slugValidator,
+  },
+};
+
+const brandsStore = useBrandsStore();
+const router = useRouter();
+const { t } = useI18n();
+const notification = useNotification();
+
+const formRef = ref(null);
+const isModalOpen = ref(false);
+
+const formModel = ref({
+  brandId: null,
+  model: null,
+  yearFrom: null,
+  yearTo: null,
+  bodyName: null,
+  slug: null,
+});
+
+const createOptions = (options) =>
+  options.map((option) => ({
+    label: option.displayName,
+    value: option.id,
+  }));
+
+const submitHandler = async () => {
+  try {
+    await formRef.value.validate();
+    const newVehicle = await apiClient.post("/vehicles", formModel.value);
+    router.push({ name: "EditVehicle", params: { slug: newVehicle.slug } });
+  } catch (e) {
+    const error = e as Error;
+
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error.message,
+      content: t("notifications.vehicle.creating.error"),
+      duration: 5000,
+    });
+  }
+};
+</script>
+
 <template>
-  <n-modal preset="card" :title="t('vehicle.addNew')" class="max-w-xl">
+  <n-button type="primary" class="mr-auto" @click="isModalOpen = true">
+    {{ t("create") }}
+  </n-button>
+
+  <n-modal
+    v-model:show="isModalOpen"
+    preset="card"
+    :title="t('vehicle.addNew')"
+    class="max-w-xl"
+  >
     <n-form ref="formRef" :model="formModel" :rules="rules">
       <n-form-item :label="t('brand', 1)" path="brandId">
         <n-select
@@ -60,92 +155,3 @@
     </template>
   </n-modal>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "CreateVehicleModal",
-});
-</script>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
-import apiClient from "@/helpers/apiClient";
-import { yearValidator, slugValidator } from "@/helpers/validators";
-import { InformationCircleOutline } from "@vicons/ionicons5";
-import {
-  NButton,
-  NModal,
-  NForm,
-  NFormItem,
-  NSelect,
-  NInput,
-  NInputNumber,
-  NInputGroup,
-  NIcon,
-  NPopover,
-  useNotification,
-} from "naive-ui";
-import { useBrandsStore } from "@/stores/brands.store";
-
-const rules = {
-  brandId: {
-    required: true,
-    message: "Поле Бренд не может быть пустым",
-  },
-  model: {
-    required: true,
-    message: "Поле Модель не может быть пустым",
-  },
-  yearFrom: {
-    required: true,
-    validator: yearValidator,
-  },
-  slug: {
-    required: true,
-    validator: slugValidator,
-  },
-};
-
-const brandsStore = useBrandsStore();
-const router = useRouter();
-const { t } = useI18n();
-const notification = useNotification();
-
-const formRef = ref(null);
-
-const formModel = ref({
-  brandId: null,
-  model: null,
-  yearFrom: null,
-  yearTo: null,
-  bodyName: null,
-  slug: null,
-});
-
-const createOptions = (options) =>
-  options.map((option) => ({
-    label: option.displayName,
-    value: option.id,
-  }));
-
-const submitHandler = async () => {
-  try {
-    await formRef.value.validate();
-    const newVehicle = await apiClient.post("/vehicles", formModel.value);
-    router.push({ name: "EditVehicle", params: { slug: newVehicle.slug } });
-  } catch (e) {
-    const error = e as Error;
-
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: error.message,
-      content: t("notifications.vehicle.creating.error"),
-      duration: 5000,
-    });
-  }
-};
-</script>

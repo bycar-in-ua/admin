@@ -12,5 +12,7 @@ export const addImageToSelectionKey: InjectionKey<(imageId: number) => void> =
 export const removeImageFromSelectionKey: InjectionKey<
   (imageId: number) => void
 > = Symbol("removeImageFromSelection");
+export const clearSelectionKey: InjectionKey<() => void> =
+  Symbol("clearSelection");
 
 export const cdnPathToSaveKey: InjectionKey<string> = Symbol("cdnPathToSave");

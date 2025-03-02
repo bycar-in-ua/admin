@@ -24,7 +24,11 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/vehicles",
     name: "Vehicles",
-    component: () => import("@/views/Vehicles.vue"),
+    components: {
+      default: () => import("@/views/Vehicles.vue"),
+      "title-extra": () =>
+        import("@/components/Vehicles/CreateVehicleModal.vue"),
+    },
     meta: {
       title: ["car", 2],
     },
@@ -37,7 +41,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/brands",
     name: "Brands",
-    component: () => import("@/views/Brands.vue"),
+    components: {
+      default: () => import("@/views/Brands.vue"),
+      "title-extra": () => import("@/components/Brands/AddBrandButton.vue"),
+    },
     meta: {
       title: ["brand", 2],
     },
@@ -56,11 +63,41 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: "/users",
-    name: "Users",
-    component: () => import("@/views/Users.vue"),
+    name: "Dealers",
+    path: "/dealers",
+    components: {
+      default: () => import("@/views/Dealers.vue"),
+      "title-extra": () => import("@/Dealers/AddDealer.vue"),
+    },
     meta: {
-      title: ["users.title", 2],
+      title: "Дилери",
+    },
+  },
+  {
+    name: "EditDealer",
+    path: "/dealers/:id",
+    component: () => import("@/views/EditDealer.vue"),
+    meta: {
+      title: "Редагування дилера",
+    },
+  },
+  {
+    name: "AvailableVehicles",
+    path: "/available-vehicles",
+    components: {
+      default: () => import("@/views/AvailableVehicles.vue"),
+      "title-extra": () =>
+        import("@/AvailableVehicles/AddAvailableVehicle/AddAvailableVehicleButton.vue"),
+    },
+    meta: {
+      title: "Автомобілі в наявності",
+    },
+  },
+  {
+    name: "EditAvailableVehicle",
+    path: "/available-vehicles/:id",
+    components: {
+      default: () => import("@/views/EditAvailableVehicle.vue"),
     },
   },
 ];

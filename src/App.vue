@@ -1,37 +1,3 @@
-<template>
-  <n-config-provider
-    :locale="ruRU"
-    :date-locale="dateRuRU"
-    :theme-overrides="themeOverrides"
-    :theme="theme"
-  >
-    <n-loading-bar-provider>
-      <n-dialog-provider>
-        <n-notification-provider>
-          <app-layout v-if="authStore.isFetched">
-            <Suspense>
-              <router-view :key="locale" />
-              <template #fallback>
-                <n-skeleton :repeat="5" />
-              </template>
-            </Suspense>
-          </app-layout>
-          <div v-else class="h-screen flex justify-center items-center">
-            <n-spin :size="100" />
-          </div>
-        </n-notification-provider>
-      </n-dialog-provider>
-    </n-loading-bar-provider>
-  </n-config-provider>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "App",
-});
-</script>
-
 <script setup lang="ts">
 import { provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -50,6 +16,10 @@ import colors from "./colors.json";
 import AppLayout from "./layouts/AppLayout.vue";
 import useMemory from "./hooks/useMemory";
 import { useAuthStore } from "@/stores/auth.store";
+
+defineOptions({
+  name: "App",
+});
 
 const themeOverrides = {
   common: {
@@ -93,3 +63,30 @@ const themeSwitcher = () => {
 
 provide("themeSwitcher", themeSwitcher);
 </script>
+
+<template>
+  <n-config-provider
+    :locale="ruRU"
+    :date-locale="dateRuRU"
+    :theme-overrides="themeOverrides"
+    :theme="theme"
+  >
+    <n-loading-bar-provider>
+      <n-dialog-provider>
+        <n-notification-provider>
+          <app-layout v-if="authStore.isFetched">
+            <Suspense>
+              <router-view :key="locale" />
+              <template #fallback>
+                <n-skeleton :repeat="5" />
+              </template>
+            </Suspense>
+          </app-layout>
+          <div v-else class="h-screen flex justify-center items-center">
+            <n-spin :size="100" />
+          </div>
+        </n-notification-provider>
+      </n-dialog-provider>
+    </n-loading-bar-provider>
+  </n-config-provider>
+</template>
