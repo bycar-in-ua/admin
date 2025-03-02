@@ -48,16 +48,15 @@ const deleteHandler = async () => {
 <style>
 .vehicle-image-card {
   @apply relative;
-  &:hover {
-    .vehicle-image-card__delete-icon {
-      @apply opacity-100;
-    }
-  }
-  &__delete-icon {
-    @apply absolute -left-4 -top-4 text-3xl transition-all opacity-0 cursor-pointer;
-    &:hover {
-      @apply text-red-600;
-    }
-  }
+}
+.vehicle-image-card:hover .vehicle-image-card__delete-icon {
+  @apply opacity-100;
+}
+
+.vehicle-image-card__delete-icon {
+  @apply absolute -left-4 -top-4 text-3xl transition-all opacity-0 cursor-pointer;
+}
+.vehicle-image-card__delete-icon:hover {
+  @apply text-red-600;
 }
 </style>
