@@ -18,7 +18,7 @@ const isModalOpen = ref(false);
     <n-image-group>
       <div class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
         <vehicle-image-card
-          v-for="image in vehicleStore.car.images"
+          v-for="{ image } in vehicleStore.car.images"
           :key="image.id"
           :image="image"
         />

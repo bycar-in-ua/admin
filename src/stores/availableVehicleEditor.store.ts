@@ -17,7 +17,7 @@ function availableVehicleToUpdatePayload(
     price: availableVehicle.price,
     complectationId: availableVehicle.complectationId,
     powerUnitId: availableVehicle.powerUnitId,
-    images: availableVehicle.images.map((image) => image.id),
+    images: availableVehicle.images.map((image) => image.imageId),
   };
 }
 

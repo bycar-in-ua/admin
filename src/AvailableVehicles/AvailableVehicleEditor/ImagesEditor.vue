@@ -51,7 +51,7 @@ const toolbarActions: ToolbarAction[] = [
     <NImageGroup v-if="availalbeVehicleEditorStore.car?.images?.length">
       <div class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
         <NImage
-          v-for="image in availalbeVehicleEditorStore.car.images"
+          v-for="{ image } in availalbeVehicleEditorStore.car.images"
           :key="image.id"
           :src="cdnLink(image.path, 'small')"
           :preview-src="cdnLink(image.path, 'large')"
