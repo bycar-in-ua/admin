@@ -72,5 +72,8 @@ export const useBrandModalStore = defineStore("brand-modal", {
       slug: "",
       displayName: "",
       logo: "",
-    } as Brand),
+      h1: "",
+      metaTitle: "",
+      metaDescription: "",
+    }) as Brand,
 });

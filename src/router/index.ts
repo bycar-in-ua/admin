@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
     name: "Brands",
     components: {
       default: () => import("@/views/Brands.vue"),
-      "title-extra": () => import("@/components/Brands/AddBrandButton.vue"),
+      "title-extra": () => import("@/Brands/AddBrandButton.vue"),
     },
     meta: {
       title: ["brand", 2],
