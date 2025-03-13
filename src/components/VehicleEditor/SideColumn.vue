@@ -82,7 +82,7 @@ const rules = {
 };
 
 const afterModalEnter = () => {
-  imagesStore.images = vehicleStore.car.images;
+  imagesStore.images = vehicleStore.car.images.map(({ image }) => image);
 };
 
 const saveAction = async () => {
@@ -119,9 +119,9 @@ const toolbarActions: ToolbarAction[] = [
     ),
     clickCallback: async (selectedImagesIds) => {
       const selectedImage = vehicleStore.car.images.find(
-        (image) => image.id == selectedImagesIds[0]
+        (image) => image.imageId == selectedImagesIds[0]
       );
-      vehicleStore.car.featureImage = selectedImage;
+      vehicleStore.car.featureImage = selectedImage.image;
       await saveAction();
       showImageModal.value = false;
     },

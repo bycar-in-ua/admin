@@ -16,11 +16,8 @@ interface IProps {
 }
 
 const props = withDefaults(defineProps<IProps>(), {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   selectAction: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   closeAction: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   editAction: () => {},
   selected: false,
   editable: false,
@@ -76,7 +73,9 @@ const closeHandler = async () => {
         <n-spin size="medium" />
       </div>
     </div>
-    <n-p class="text-center" v-text="color?.name" />
+    <n-p class="text-center">
+      {{ color?.name }}
+    </n-p>
   </div>
 </template>
 

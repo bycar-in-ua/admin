@@ -13,8 +13,8 @@ export default [
   {
     files: ["**/*.vue"],
     languageOptions: { parserOptions: { parser: tseslint.parser } },
-  },
-  {
-    "vue/multi-word-component-names": ["error", 0],
+    rules: {
+      "vue/multi-word-component-names": "off"
+    },
   },
 ];

@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
     components: {
       default: () => import("@/views/Vehicles.vue"),
       "title-extra": () =>
-        import("@/components/Vehicles/CreateVehicleModal.vue"),
+        import("@/Vehicles/CreateVehicleModal.vue"),
     },
     meta: {
       title: ["car", 2],

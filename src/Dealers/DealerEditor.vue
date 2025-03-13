@@ -50,7 +50,7 @@ const dealerEditorStore = useDealerEditorStore();
         footer-class="flex justify-end"
       >
         <template #cover>
-          <img :src="cdnLink(car.images?.[0]?.path ?? '', 'medium')" />
+          <img :src="cdnLink(car.images?.[0]?.image.path ?? '', 'medium')" />
         </template>
 
         <template #header>

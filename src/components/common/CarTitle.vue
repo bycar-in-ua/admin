@@ -30,5 +30,5 @@ const title = computed(() => {
 </script>
 
 <template>
-  <NH3 v-text="title" />
+  <NH3>{{ title }}</NH3>
 </template>

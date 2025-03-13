@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import VehiclesTable from "@/components/Vehicles/VehiclesTable.vue";
+import VehiclesTable from "@/Vehicles/VehiclesTable.vue";
 import { useBrandsStore } from "@/stores/brands.store";
 import { useCarsStore } from "@/stores/cars.store";
 
