@@ -1,23 +1,35 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
-import { useQuery, useMutation } from "@tanstack/vue-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import type {
   AvailableVehicle,
+  AvailableVehicleImage,
   UpdateAvailableVehiclePayload,
+  Image,
 } from "@bycar-in-ua/sdk";
 import { useAvailableVehiclesService } from "@/AvailableVehicles";
 
 function availableVehicleToUpdatePayload(
   availableVehicle: AvailableVehicle
 ): UpdateAvailableVehiclePayload {
+  const sortedImages = availableVehicle.images.sort(
+    (a, b) =>
+      (a?.order ?? Number.MAX_SAFE_INTEGER) -
+      (b?.order ?? Number.MAX_SAFE_INTEGER)
+  );
+
   return {
     dealerId: availableVehicle.dealerId,
     status: availableVehicle.status,
     price: availableVehicle.price,
     complectationId: availableVehicle.complectationId,
     powerUnitId: availableVehicle.powerUnitId,
-    images: availableVehicle.images.map((image) => image.id),
+    images: sortedImages,
+    mileage: availableVehicle.mileage,
+    h1: availableVehicle.h1,
+    metaTitle: availableVehicle.metaTitle,
+    metaDescription: availableVehicle.metaDescription,
   };
 }
 
@@ -29,7 +41,9 @@ export const useAvailableVehicleEditorStore = defineStore(
 
     const id = computed(() => Number(router.currentRoute.value.params.id));
 
-    const availableVehicleEditorState = ref<UpdateAvailableVehiclePayload>({});
+    const editor = ref<UpdateAvailableVehiclePayload>({});
+
+    const queryClient = useQueryClient();
 
     const {
       data: car,
@@ -44,7 +58,7 @@ export const useAvailableVehicleEditorStore = defineStore(
 
         const av = await availableVehicleService.getAvailableVehicle(id.value);
 
-        availableVehicleEditorState.value = availableVehicleToUpdatePayload(av);
+        editor.value = availableVehicleToUpdatePayload(av);
 
         return av;
       },
@@ -54,16 +68,21 @@ export const useAvailableVehicleEditorStore = defineStore(
     const { isPending: savingPending, mutateAsync: saveAvailableVehicle } =
       useMutation({
         mutationKey: ["updateAvailableVehicle", id],
-        mutationFn: async () => {
-          const response = await availableVehicleService.updateAvailableVehicle(
+        mutationFn: () => {
+          return availableVehicleService.updateAvailableVehicle(
             id.value,
-            availableVehicleEditorState.value
+            editor.value
           );
-
-          availableVehicleEditorState.value =
-            availableVehicleToUpdatePayload(response);
         },
-        onSuccess: () => refetchCar(),
+        onSuccess: (availableVehicle) => {
+          editor.value = availableVehicleToUpdatePayload(availableVehicle);
+          queryClient.setQueryData(["availableVehicle", id], availableVehicle);
+        },
+        onError: (error, _, ctx) => {
+          console.error(error);
+
+          console.log(ctx, _);
+        },
       });
 
     const { isPending: removePending, mutateAsync: removeAvailableVehicle } =
@@ -76,12 +95,34 @@ export const useAvailableVehicleEditorStore = defineStore(
         },
       });
 
+    function handleSelectedImages(selectedImages: Image[]) {
+      const images: AvailableVehicleImage[] = selectedImages.map(
+        (selectedImage) => {
+          const existedImage = car.value.images.find(
+            (image) => image.imageId === selectedImage.id
+          );
+
+          return (
+            existedImage ||
+            ({
+              imageId: selectedImage.id,
+              availableVehicleId: id.value,
+              image: selectedImage,
+            } as AvailableVehicleImage)
+          );
+        }
+      );
+
+      editor.value.images = images;
+    }
+
     return {
       car,
       carFetching,
       refetchCar,
 
-      availableVehicleEditorState,
+      editor,
+      handleSelectedImages,
 
       saveAvailableVehicle,
       savingPending,

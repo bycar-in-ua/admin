@@ -1,4 +1,5 @@
-import { Vehicle, PostStatus, BodyType } from "@bycar-in-ua/sdk";
+import { PostStatus, BodyType } from "@bycar-in-ua/sdk";
+import type { Vehicle, Image, VehicleImage } from "@bycar-in-ua/sdk";
 import { defineStore } from "pinia";
 import { useEditorStore } from "./editor.store";
 import apiClient from "@/helpers/apiClient";
@@ -9,6 +10,9 @@ export const useVehicleStore = defineStore("vehicle", {
       id: undefined,
       status: PostStatus.DRAFT,
       slug: "",
+      h1: "",
+      metaTitle: "",
+      metaDescription: "",
       model: "",
       yearFrom: 0,
       bodyType: BodyType.sedan,
@@ -38,7 +42,8 @@ export const useVehicleStore = defineStore("vehicle", {
         editorStore.isModified = false;
       } catch (error: unknown) {
         console.log(error);
-        if (error instanceof Error) throw new Error(error.message);
+
+        throw error;
       } finally {
         editorStore.isFetching = false;
       }
@@ -73,6 +78,25 @@ export const useVehicleStore = defineStore("vehicle", {
         (complectation) => complectation.id !== complectationId
       );
     },
+
+    handleSelectedImages(selectedImages: Image[]) {
+      const images: VehicleImage[] = selectedImages.map((selectedImage) => {
+        const existedImage = this.car.images.find(
+          (image) => image.imageId === selectedImage.id
+        );
+
+        return (
+          existedImage ||
+          ({
+            imageId: selectedImage.id,
+            vehicleId: this.car.id,
+            image: selectedImage,
+          } as VehicleImage)
+        );
+      });
+
+      this.car.images = images;
+    },
   },
   getters: {
     getVehicleTitle(state) {
@@ -87,9 +111,6 @@ export const useVehicleStore = defineStore("vehicle", {
       if (state.car.yearTo) title += "- " + state.car.yearTo;
 
       return title;
-    },
-    carImagesIds(state) {
-      return state.car.images?.map((image) => image.id);
     },
     enginesOptions(state) {
       return state.car.engines?.map((engine) => ({

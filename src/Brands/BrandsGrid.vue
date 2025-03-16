@@ -15,7 +15,9 @@
           class="h-32 p-2 object-contain"
         />
       </template>
-      <n-h3 class="text-center mb-0 break-all" v-text="brand.displayName" />
+      <n-h3 class="text-center mb-0 break-all">
+        {{ brand.displayName }}
+      </n-h3>
     </n-card>
   </div>
 </template>

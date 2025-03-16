@@ -10,7 +10,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import Images from "@/components/Images/index.vue";
+import Images from "@/components/Images/Images.vue";
 import { useImagesStore } from "@/stores/images.store";
 
 const imagesStore = useImagesStore();

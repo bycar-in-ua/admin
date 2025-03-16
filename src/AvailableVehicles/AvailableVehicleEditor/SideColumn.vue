@@ -11,13 +11,19 @@ import {
   useNotification,
 } from "naive-ui";
 import { useI18n } from "vue-i18n";
+import {
+  H1Input,
+  MetaTitleInput,
+  MetaDescriptionInput,
+} from "@/components/SeoInputs";
 import { getPowerUnitName } from "../useAddAvailableVehicle";
+import { saveAvailableVehicleHandlerKey } from "../keys";
 
 const { t } = useI18n();
 const notification = useNotification();
 const availalbeVehicleEditorStore = useAvailableVehicleEditorStore();
 
-const saveHandler = inject<() => void>("saveAvailableVehicle");
+const saveHandler = inject(saveAvailableVehicleHandlerKey);
 
 async function removeHandler() {
   await availalbeVehicleEditorStore.removeAvailableVehicle();
@@ -30,9 +36,7 @@ async function removeHandler() {
 
 const activeComplecttaion = computed(() =>
   availalbeVehicleEditorStore.car?.vehicle?.complectations.find(
-    (cmpl) =>
-      cmpl.id ===
-      availalbeVehicleEditorStore.availableVehicleEditorState.complectationId
+    (cmpl) => cmpl.id === availalbeVehicleEditorStore.editor.complectationId
   )
 );
 
@@ -86,18 +90,14 @@ const statusOptions = Object.values(PostStatus).map((status) => ({
 
   <NFormItem :label="t('status')">
     <NSelect
-      v-model:value="
-        availalbeVehicleEditorStore.availableVehicleEditorState.status
-      "
+      v-model:value="availalbeVehicleEditorStore.editor.status"
       :options="statusOptions"
     />
   </NFormItem>
 
   <NFormItem label="Дилер">
     <NSelect
-      v-model:value="
-        availalbeVehicleEditorStore.availableVehicleEditorState.dealerId
-      "
+      v-model:value="availalbeVehicleEditorStore.editor.dealerId"
       value-field="id"
       label-field="name"
       :options="[availalbeVehicleEditorStore.car?.dealer].filter(Boolean)"
@@ -107,9 +107,7 @@ const statusOptions = Object.values(PostStatus).map((status) => ({
 
   <NFormItem label="Комплектація">
     <NSelect
-      v-model:value="
-        availalbeVehicleEditorStore.availableVehicleEditorState.complectationId
-      "
+      v-model:value="availalbeVehicleEditorStore.editor.complectationId"
       value-field="id"
       label-field="displayName"
       :options="availalbeVehicleEditorStore.car?.vehicle?.complectations"
@@ -118,19 +116,32 @@ const statusOptions = Object.values(PostStatus).map((status) => ({
 
   <NFormItem label="Силова установка">
     <NSelect
-      v-model:value="
-        availalbeVehicleEditorStore.availableVehicleEditorState.powerUnitId
-      "
+      v-model:value="availalbeVehicleEditorStore.editor.powerUnitId"
       :options="powerUnits"
     />
   </NFormItem>
 
   <NFormItem :label="t('price') + ' (грн)'">
     <NInputNumber
-      v-model:value="
-        availalbeVehicleEditorStore.availableVehicleEditorState.price
-      "
+      v-model:value="availalbeVehicleEditorStore.editor.price"
       class="w-full"
     />
   </NFormItem>
+
+  <NFormItem label="Пробіг" show-feedback feedback-class="mb-4">
+    <NInputNumber
+      v-model:value="availalbeVehicleEditorStore.editor.mileage"
+      class="w-full"
+    />
+
+    <template #feedback> Якщо авто з трейд-ін, вкажіть пробіг авто </template>
+  </NFormItem>
+
+  <H1Input v-model="availalbeVehicleEditorStore.editor.h1" />
+
+  <MetaTitleInput v-model="availalbeVehicleEditorStore.editor.metaTitle" />
+
+  <MetaDescriptionInput
+    v-model="availalbeVehicleEditorStore.editor.metaDescription"
+  />
 </template>

@@ -16,10 +16,10 @@ const unselectImage = inject(removeImageFromSelectionKey);
 
 const clickHandler = () => {
   if (props.selected) {
-    unselectImage(props.image.id);
+    unselectImage(props.image);
     return;
   }
-  selectImage(props.image.id);
+  selectImage(props.image);
 };
 </script>
 

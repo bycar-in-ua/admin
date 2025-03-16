@@ -21,8 +21,8 @@ defineProps<{ loading?: boolean }>();
       <slot />
     </NScrollbar>
 
-    <div class="basis-1/4">
+    <NScrollbar class="basis-1/4" style="max-height: calc(100vh - 100px)">
       <slot name="sidebar" />
-    </div>
+    </NScrollbar>
   </div>
 </template>

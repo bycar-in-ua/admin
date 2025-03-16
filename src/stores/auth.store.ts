@@ -27,7 +27,8 @@ export const useAuthStore = defineStore("auth", {
       let user = null;
       try {
         user = await apiClient.get("/auth");
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {
         user = await apiClient.get("/auth/refresh");
       } finally {
         this.user = user;

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, provide, type Component } from "vue";
+import { ref, provide, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useImagesStore } from "@/stores/images.store";
 import { NImageGroup, NPagination, NSkeleton, NEmpty } from "naive-ui";
+import type { Image as BycarImage } from "@bycar-in-ua/sdk";
 import Image from "./Image.vue";
 import ImagesToolBar from "./ImagesToolBar.vue";
 import {
@@ -13,18 +14,14 @@ import {
   cdnPathToSaveKey,
   clearSelectionKey,
 } from "./keys";
-
-export interface ToolbarAction {
-  component: Component;
-  clickCallback: (...args) => void | Promise<void>;
-}
+import { ToolbarAction } from "./types";
 
 interface IProps {
   isUploadble?: boolean;
   isSelectable?: boolean;
   discardable?: boolean;
   singleSelection?: boolean;
-  preselectedImages?: Array<number | string>;
+  preselectedImages?: BycarImage[];
   toolbarActions?: ToolbarAction[];
   cdnPathToSave?: string;
 }
@@ -45,7 +42,11 @@ const { t } = useI18n();
 
 const selectable = ref(props.isSelectable);
 
-const selectedImages = ref([...props.preselectedImages]);
+const selectedImages = ref<BycarImage[]>([...props.preselectedImages]);
+
+const selectedImagesIds = computed(() =>
+  selectedImages.value.map((image) => image.id)
+);
 
 provide(setImagesSelectableKey, () => {
   selectable.value = true;
@@ -56,12 +57,12 @@ provide(setImagesUnselectableKey, () => {
   selectedImages.value = [];
 });
 
-provide(addImageToSelectionKey, (imageId) => {
+provide(addImageToSelectionKey, (image) => {
   if (props.singleSelection) {
-    selectedImages.value = [imageId];
+    selectedImages.value = [image];
     return;
   }
-  selectedImages.value.push(imageId);
+  selectedImages.value.push(image);
 });
 
 provide(removeImageFromSelectionKey, (imageId) => {
@@ -99,7 +100,7 @@ provide(cdnPathToSaveKey, props.cdnPathToSave);
           :key="image.id"
           :image="image"
           :selectable="selectable"
-          :selected="selectedImages.includes(image.id)"
+          :selected="selectedImagesIds.includes(image.id)"
         />
       </template>
     </n-image-group>

@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
     components: {
       default: () => import("@/views/Vehicles.vue"),
       "title-extra": () =>
-        import("@/components/Vehicles/CreateVehicleModal.vue"),
+        import("@/Vehicles/CreateVehicleModal.vue"),
     },
     meta: {
       title: ["car", 2],
@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
     name: "Brands",
     components: {
       default: () => import("@/views/Brands.vue"),
-      "title-extra": () => import("@/components/Brands/AddBrandButton.vue"),
+      "title-extra": () => import("@/Brands/AddBrandButton.vue"),
     },
     meta: {
       title: ["brand", 2],

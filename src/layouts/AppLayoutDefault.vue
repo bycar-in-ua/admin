@@ -86,8 +86,9 @@ const navStyle = {
       </n-layout-header>
       <n-layout-content class="pt-16 p-8 container mx-auto">
         <n-space justify="space-between">
-          <n-h2 v-if="pageTitle" strong v-text="pageTitle" />
-
+          <n-h2 v-if="pageTitle" strong>
+            {{ pageTitle }}
+          </n-h2>
           <RouterView name="title-extra" />
         </n-space>
         <slot />
