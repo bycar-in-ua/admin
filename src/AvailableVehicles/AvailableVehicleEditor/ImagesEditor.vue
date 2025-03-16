@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, h, inject } from "vue";
-import { NImageGroup, NImage, NCard, NButton, NEmpty, NModal } from "naive-ui";
+import { ref, h } from "vue";
 import { useI18n } from "vue-i18n";
-import Images, { type ToolbarAction } from "@/components/Images/index.vue";
+import { NImageGroup, NCard, NButton, NEmpty, NModal } from "naive-ui";
+import { Image } from "@bycar-in-ua/sdk";
 import { useAvailableVehicleEditorStore } from "@/stores/availableVehicleEditor.store";
 import { useImagesStore } from "@/stores/images.store";
-import { cdnLink } from "@/helpers/cdn";
+import {
+  Images,
+  DraggableImageCard,
+  type ToolbarAction,
+} from "@/components/Images";
 
 const { t } = useI18n();
 
@@ -14,21 +18,9 @@ const imagesStore = useImagesStore();
 
 const showModal = ref(false);
 
-const saveHandler = inject<() => void>("saveAvailableVehicle");
-
 function openModal() {
   imagesStore.fetchImages(1);
   showModal.value = true;
-}
-
-function saveImages(selectedImages: number[]) {
-  availalbeVehicleEditorStore.availableVehicleEditorState.images =
-    selectedImages;
-
-  availalbeVehicleEditorStore.saveAvailableVehicle().then(() => {
-    saveHandler();
-    showModal.value = false;
-  });
 }
 
 const toolbarActions: ToolbarAction[] = [
@@ -41,22 +33,66 @@ const toolbarActions: ToolbarAction[] = [
       },
       () => t("save")
     ),
-    clickCallback: saveImages,
+    clickCallback: (slectedImages) => {
+      availalbeVehicleEditorStore.handleSelectedImages(slectedImages);
+      showModal.value = false;
+    },
   },
 ];
+
+function onDrop(evt: DragEvent) {
+  const draggableImageId = Number(evt.dataTransfer.getData("imageId"));
+  const draggedImageIndex = availalbeVehicleEditorStore.editor.images.findIndex(
+    ({ imageId }) => imageId === draggableImageId
+  );
+
+  const targetImageIndex = Number(
+    (evt.target as HTMLElement)?.parentElement?.dataset.index
+  );
+
+  if (isNaN(targetImageIndex) || draggedImageIndex === targetImageIndex) {
+    return;
+  }
+
+  const images = [...availalbeVehicleEditorStore.editor.images];
+
+  images.splice(targetImageIndex, 0, images.splice(draggedImageIndex, 1)[0]);
+
+  availalbeVehicleEditorStore.editor.images = images.map((image, index) => ({
+    ...image,
+    order: index + 1,
+  }));
+}
+
+function deleteImageHandler(image: Image) {
+  const targetImageIndex = availalbeVehicleEditorStore.editor.images.findIndex(
+    ({ imageId }) => image.id === imageId
+  );
+
+  if (targetImageIndex === -1) {
+    return;
+  }
+
+  availalbeVehicleEditorStore.editor.images.splice(targetImageIndex, 1);
+}
 </script>
 
 <template>
   <NCard :title="t('images.title', 2)" class="my-4 shadow">
-    <NImageGroup v-if="availalbeVehicleEditorStore.car?.images?.length">
-      <div class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
-        <NImage
-          v-for="{ image } in availalbeVehicleEditorStore.car.images"
-          :key="image.id"
-          :src="cdnLink(image.path, 'small')"
-          :preview-src="cdnLink(image.path, 'large')"
-          :alt="image.alt"
-          object-fit="cover"
+    <NImageGroup v-if="availalbeVehicleEditorStore.editor?.images?.length">
+      <div
+        class="grid gap-4 grid-cols-3 md:grid-cols-5 xl:grid-cols-7"
+        @drop="onDrop"
+        @dragover.prevent
+        @dragenter.prevent
+      >
+        <DraggableImageCard
+          v-for="({ imageId, image }, index) in availalbeVehicleEditorStore
+            .editor.images"
+          :key="imageId"
+          :index
+          :image
+          @delete="deleteImageHandler"
         />
       </div>
     </NImageGroup>
@@ -73,7 +109,7 @@ const toolbarActions: ToolbarAction[] = [
         :is-selectable="true"
         :toolbar-actions="toolbarActions"
         :preselected-images="
-          availalbeVehicleEditorStore.availableVehicleEditorState.images
+          availalbeVehicleEditorStore.editor.images.map(({ image }) => image)
         "
         :cdn-path-to-save="
           availalbeVehicleEditorStore?.car?.vehicle?.brand?.slug || ''

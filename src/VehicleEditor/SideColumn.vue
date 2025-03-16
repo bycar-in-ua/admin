@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { h, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import Images, { type ToolbarAction } from "@/components/Images/index.vue";
-import { yearValidator, slugValidator } from "@/helpers/validators";
-import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
   NButton,
   NForm,
@@ -20,6 +17,14 @@ import {
   useLoadingBar,
   FormInst,
 } from "naive-ui";
+import { InformationCircleOutline } from "@vicons/ionicons5";
+import { Images, type ToolbarAction } from "@/components/Images";
+import {
+  H1Input,
+  MetaTitleInput,
+  MetaDescriptionInput,
+} from "@/components/SeoInputs";
+import { yearValidator, slugValidator } from "@/helpers/validators";
 import { cdnLink } from "@/helpers/cdn";
 import { statuses } from "@/helpers/postStatuses";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
@@ -117,12 +122,8 @@ const toolbarActions: ToolbarAction[] = [
       },
       t("save")
     ),
-    clickCallback: async (selectedImagesIds) => {
-      const selectedImage = vehicleStore.car.images.find(
-        (image) => image.imageId == selectedImagesIds[0]
-      );
-      vehicleStore.car.featureImage = selectedImage.image;
-      await saveAction();
+    clickCallback: (selectedImages) => {
+      vehicleStore.car.featureImage = selectedImages[0];
       showImageModal.value = false;
     },
   },
@@ -130,107 +131,108 @@ const toolbarActions: ToolbarAction[] = [
 </script>
 
 <template>
-  <div>
-    <n-form ref="formRef" :model="vehicleStore.car" :rules="rules">
-      <div class="text-right mb-4">
-        <n-button
-          type="primary"
-          :loading="editorStore.isFetching"
-          :disabled="!editorStore.isModified"
-          @click="saveAction"
-        >
-          {{ t("save") }}
-        </n-button>
-      </div>
-      <n-form-item :label="t('status')">
-        <n-select
-          v-model:value="vehicleStore.car.status"
-          size="medium"
-          :options="statusOptions"
-        />
-      </n-form-item>
-      <n-form-item :label="t('brand')" required>
-        <n-select
-          :value="vehicleStore.car.brand.id"
-          size="medium"
-          disabled
-          :render-label="renderBrandLabel"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.model')" path="model">
-        <n-input
-          v-model:value="vehicleStore.car.model"
-          :placeholder="t('vehicle.enterModel')"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.modelYear')">
-        <n-input-group>
-          <n-input-number
-            v-model:value="vehicleStore.car.yearFrom"
-            class="w-full"
-            :placeholder="t('vehicle.enterModelYear')"
-          />
-          <n-input-number
-            v-model:value="vehicleStore.car.yearTo"
-            class="w-full"
-            :placeholder="t('vehicle.enterModelYear')"
-          />
-        </n-input-group>
-      </n-form-item>
-      <n-form-item :label="t('vehicle.bodyName')">
-        <n-input v-model:value="vehicleStore.car.bodyName" />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.slug')" path="slug">
-        <n-input v-model:value="vehicleStore.car.slug">
-          <template #suffix>
-            <n-popover trigger="hover">
-              <template #trigger>
-                <n-icon size="20" class="cursor-help">
-                  <InformationCircleOutline />
-                </n-icon>
-              </template>
-              {{ t("vehicle.slugDescription") }}
-            </n-popover>
-          </template>
-        </n-input>
-      </n-form-item>
-      <p>
-        {{ t("vehicle.featureImage") }}
-      </p>
-      <div
-        class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer flex justify-center"
-        style="min-height: 60px"
-        @click="showImageModal = true"
+  <n-form ref="formRef" :model="vehicleStore.car" :rules="rules">
+    <div class="text-right mb-4">
+      <n-button
+        type="primary"
+        :loading="editorStore.isFetching"
+        :disabled="!editorStore.isModified"
+        @click="saveAction"
       >
-        <n-image
-          v-if="vehicleStore.car.featureImage"
-          :src="cdnLink(vehicleStore.car.featureImage.path, 'thumbnail')"
-          class="w-full"
-          object-fit="cover"
-          width="100%"
-          review-disabled
-          lazy
-        />
-      </div>
-    </n-form>
-    <n-modal
-      v-model:show="showImageModal"
-      preset="card"
-      class="max-w-6xl"
-      :on-after-enter="afterModalEnter"
-    >
-      <Images
-        :is-uploadble="false"
-        :is-selectable="true"
-        :single-selection="true"
-        :discardable="false"
-        :toolbar-actions="toolbarActions"
-        :preselected-images="[
-          vehicleStore.car.featureImage
-            ? vehicleStore.car.featureImage.id
-            : NaN,
-        ]"
+        {{ t("save") }}
+      </n-button>
+    </div>
+    <n-form-item :label="t('status')">
+      <n-select
+        v-model:value="vehicleStore.car.status"
+        size="medium"
+        :options="statusOptions"
       />
-    </n-modal>
-  </div>
+    </n-form-item>
+    <n-form-item :label="t('brand')" required>
+      <n-select
+        :value="vehicleStore.car.brand.id"
+        size="medium"
+        disabled
+        :render-label="renderBrandLabel"
+      />
+    </n-form-item>
+    <n-form-item :label="t('vehicle.model')" path="model">
+      <n-input
+        v-model:value="vehicleStore.car.model"
+        :placeholder="t('vehicle.enterModel')"
+      />
+    </n-form-item>
+    <n-form-item :label="t('vehicle.modelYear')">
+      <n-input-group>
+        <n-input-number
+          v-model:value="vehicleStore.car.yearFrom"
+          class="w-full"
+          :placeholder="t('vehicle.enterModelYear')"
+        />
+        <n-input-number
+          v-model:value="vehicleStore.car.yearTo"
+          class="w-full"
+          :placeholder="t('vehicle.enterModelYear')"
+        />
+      </n-input-group>
+    </n-form-item>
+    <n-form-item :label="t('vehicle.bodyName')">
+      <n-input v-model:value="vehicleStore.car.bodyName" />
+    </n-form-item>
+    <n-form-item :label="t('vehicle.slug')" path="slug">
+      <n-input v-model:value="vehicleStore.car.slug">
+        <template #suffix>
+          <n-popover trigger="hover">
+            <template #trigger>
+              <n-icon size="20" class="cursor-help">
+                <InformationCircleOutline />
+              </n-icon>
+            </template>
+            {{ t("vehicle.slugDescription") }}
+          </n-popover>
+        </template>
+      </n-input>
+    </n-form-item>
+
+    <H1Input v-model="vehicleStore.car.h1" />
+
+    <MetaTitleInput v-model="vehicleStore.car.metaTitle" />
+
+    <MetaDescriptionInput v-model="vehicleStore.car.metaDescription" />
+
+    <p>
+      {{ t("vehicle.featureImage") }}
+    </p>
+    <div
+      class="w-full bg-primary-light rounded-lg border-dashed border-4 border-primary bg-opacity-30 hover:bg-opacity-70 transition-all cursor-pointer flex justify-center"
+      style="min-height: 60px"
+      @click="showImageModal = true"
+    >
+      <n-image
+        v-if="vehicleStore.car.featureImage"
+        :src="cdnLink(vehicleStore.car.featureImage.path, 'thumbnail')"
+        class="w-full"
+        object-fit="cover"
+        width="100%"
+        review-disabled
+        lazy
+      />
+    </div>
+  </n-form>
+  <n-modal
+    v-model:show="showImageModal"
+    preset="card"
+    class="max-w-6xl"
+    :on-after-enter="afterModalEnter"
+  >
+    <Images
+      :is-uploadble="false"
+      :is-selectable="true"
+      :single-selection="true"
+      :discardable="false"
+      :toolbar-actions="toolbarActions"
+      :preselected-images="[vehicleStore.car.featureImage].filter(Boolean)"
+    />
+  </n-modal>
 </template>

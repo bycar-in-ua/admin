@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { inject, ref, provide } from "vue";
+import { useI18n } from "vue-i18n";
+import type { Image } from "@bycar-in-ua/sdk";
+import AddNewImage from "./AddNewImage.vue";
+import { NButton } from "naive-ui";
+import apiClient from "@/helpers/apiClient";
+import type { ToolbarAction } from "@/components/Images";
+import { useImagesStore } from "@/stores/images.store";
+import {
+  setImagesSelectableKey,
+  setImagesUnselectableKey,
+  clearSelectionKey,
+} from "./keys";
+
+defineOptions({
+  name: "ImagesToolBar",
+});
+
+interface IProps {
+  uploadble: boolean;
+  selectable: boolean;
+  selectedImages?: Image[];
+  additionalActions?: ToolbarAction[];
+  discardable?: boolean;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  selectedImages: () => [],
+  additionalActions: () => [],
+  discardable: true,
+});
+
+const imagesStore = useImagesStore();
+const { t } = useI18n();
+
+const setSelectable = inject(setImagesSelectableKey);
+const setUnselectable = inject(setImagesUnselectableKey);
+const clearSelection = inject(clearSelectionKey);
+
+const isFetching = ref(false);
+
+const deleteHandler = async () => {
+  try {
+    isFetching.value = true;
+
+    await apiClient.delete("/images", props.selectedImages);
+
+    imagesStore.fetchImages(imagesStore.meta.currentPage);
+    setUnselectable();
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+provide("seImagesToolbarFetching", (value) => {
+  isFetching.value = value;
+});
+</script>
+
 <template>
   <div class="flex my-4">
     <n-button
@@ -49,66 +109,3 @@
     <AddNewImage v-if="uploadble" class="ml-auto" />
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "ImagesToolBar",
-});
-</script>
-
-<script setup lang="ts">
-import { inject, ref, provide } from "vue";
-import { useI18n } from "vue-i18n";
-import AddNewImage from "./AddNewImage.vue";
-import { NButton } from "naive-ui";
-import apiClient from "@/helpers/apiClient";
-import { type ToolbarAction } from "@/components/Images/index.vue";
-import { useImagesStore } from "@/stores/images.store";
-import {
-  setImagesSelectableKey,
-  setImagesUnselectableKey,
-  clearSelectionKey,
-} from "./keys";
-
-interface IProps {
-  uploadble: boolean;
-  selectable: boolean;
-  selectedImages?: Array<number | string>;
-  additionalActions?: ToolbarAction[];
-  discardable?: boolean;
-}
-
-const props = withDefaults(defineProps<IProps>(), {
-  selectedImages: () => [],
-  additionalActions: () => [],
-  discardable: true,
-});
-
-const imagesStore = useImagesStore();
-const { t } = useI18n();
-
-const setSelectable = inject(setImagesSelectableKey);
-const setUnselectable = inject(setImagesUnselectableKey);
-const clearSelection = inject(clearSelectionKey);
-
-const isFetching = ref(false);
-
-const deleteHandler = async () => {
-  try {
-    isFetching.value = true;
-
-    await apiClient.delete("/images", props.selectedImages);
-
-    imagesStore.fetchImages(imagesStore.meta.currentPage);
-    setUnselectable();
-  } finally {
-    isFetching.value = false;
-  }
-};
-
-provide("seImagesToolbarFetching", (value) => {
-  isFetching.value = value;
-});
-</script>

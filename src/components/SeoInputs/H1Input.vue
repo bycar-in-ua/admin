@@ -9,8 +9,7 @@ const model = defineModel<string>();
     <NInput v-model:value="model" show-count />
 
     <template #feedback>
-      Має бути унікальним, до 70 символів, не дублювати meta-title,<br />
-      відповідати тематиці сторінки та підходити за сенсом
+      Має бути унікальним, до 70 символів, не дублювати meta-title, відповідати тематиці сторінки та підходити за сенсом
     </template>
   </NFormItem>
 </template>
