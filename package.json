@@ -1,6 +1,6 @@
 {
   "name": "@bycar-in-ua/admin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "vue-tsc --noEmit && eslint src"
   },
   "dependencies": {
-    "@bycar-in-ua/sdk": "^0.2.7",
+    "@bycar-in-ua/sdk": "^0.2.9",
     "@mdi/font": "5.9.55",
     "@tanstack/vue-query": "^5.66.9",
     "@tinymce/tinymce-vue": "6.1.0",
