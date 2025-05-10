@@ -33,6 +33,7 @@ jobs:
           VITE_API_HOST: ${{ vars.VITE_API_HOST }}
           VITE_CDN_HOST: ${{ vars.VITE_CDN_HOST }}
           VITE_COOKIE_DOMAIN: ${{ vars.VITE_COOKIE_DOMAIN }}
+          VITE_N8N_HOST: ${{ vars.VITE_N8N_HOST }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

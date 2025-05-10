@@ -195,7 +195,7 @@ const toolbarActions: ToolbarAction[] = [
       </n-input>
     </n-form-item>
 
-    <H1Input v-model="vehicleStore.car.h1" />
+    <H1Input v-model="vehicleStore.car.h1" :generate="vehicleStore.generateSEO"  />
 
     <MetaTitleInput v-model="vehicleStore.car.metaTitle" />
 
