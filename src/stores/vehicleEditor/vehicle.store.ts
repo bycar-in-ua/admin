@@ -1,20 +1,9 @@
-import { ofetch } from "ofetch";
 import { defineStore } from "pinia";
 import { PostStatus, BodyType } from "@bycar-in-ua/sdk";
 import type { Vehicle, Image, VehicleImage } from "@bycar-in-ua/sdk";
-import { N8N_URL } from "@/constants";
 import apiClient from "@/helpers/apiClient";
+import { n8nService } from "@/services/n8n.service";
 import { useEditorStore } from "./editor.store";
-
-const n8nClient = ofetch.create({
-  baseURL: N8N_URL,
-});
-
-type SEOResponse = {
-  h1: string;
-  metaTitle: string;
-  metaDescription: string;
-};
 
 export const useVehicleStore = defineStore("vehicle", {
   state: (): { car: Vehicle } => ({
@@ -110,12 +99,9 @@ export const useVehicleStore = defineStore("vehicle", {
       this.car.images = images;
     },
     async generateSEO() {
-      const response = await n8nClient<SEOResponse>("/webhook/seo-generation", {
-        method: "POST",
-        body: {
-          model: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
-        },
-      });
+      const response = await n8nService.generateSEOData(
+        `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`
+      );
 
       this.car.h1 = response.h1;
       this.car.metaTitle = response.metaTitle;
