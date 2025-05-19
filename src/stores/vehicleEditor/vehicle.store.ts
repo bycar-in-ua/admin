@@ -4,6 +4,7 @@ import type { Vehicle, Image, VehicleImage } from "@bycar-in-ua/sdk";
 import apiClient from "@/helpers/apiClient";
 import { n8nService } from "@/services/n8n.service";
 import { useEditorStore } from "./editor.store";
+import { isNil, omitBy } from "lodash";
 
 export const useVehicleStore = defineStore("vehicle", {
   state: (): { car: Vehicle } => ({
@@ -39,7 +40,7 @@ export const useVehicleStore = defineStore("vehicle", {
           `/vehicles/${this.car.id}`,
           this.car
         );
-        this.$patch(updatedCar);
+        this.car = updatedCar;
         editorStore.isModified = false;
       } catch (error: unknown) {
         console.log(error);
@@ -106,6 +107,33 @@ export const useVehicleStore = defineStore("vehicle", {
       this.car.h1 = response.h1;
       this.car.metaTitle = response.metaTitle;
       this.car.metaDescription = response.metaDescription;
+    },
+    async generateGeneralInfo() {
+      const response = await n8nService.generateVehicleInfo({
+        part: "general-info",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      const sanitizedResponse = omitBy(response, isNil);
+
+      this.car = {
+        ...this.car,
+        ...sanitizedResponse,
+      };
+    },
+    async generateEngines() {
+      if (this.car.engines.length > 0) {
+        return;
+      }
+
+      const response = await n8nService.generateVehicleInfo({
+        part: "engines",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      this.car.engines = response.engines;
     },
   },
   getters: {

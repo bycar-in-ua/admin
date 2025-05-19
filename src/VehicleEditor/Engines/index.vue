@@ -1,5 +1,56 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { NCard, NTable, NButton } from "naive-ui";
+import { useMutation } from "@tanstack/vue-query";
+import PlusButton from "@/components/common/PlusButton.vue";
+import AIButton from "@/components/common/AIButton.vue";
+import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
+import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import { getEngineLabel } from "@/helpers/engine.helpers";
+
+import EngineModal from "./EngineModal.vue";
+
+defineOptions({
+  name: "Engines",
+});
+
+const engineStore = useEngineStore();
+const vehicleStore = useVehicleStore();
+const { t } = useI18n();
+
+const showModal = ref(false);
+const isEdit = ref(false);
+
+const openCreateModal = () => {
+  isEdit.value = false;
+  showModal.value = true;
+};
+
+const openEditModal = (engine) => {
+  engineStore.engine = engine;
+  isEdit.value = true;
+  showModal.value = true;
+};
+
+const { isPending, mutate: generateEngines } = useMutation({
+  mutationKey: ["ai-engines"],
+  mutationFn: vehicleStore.generateEngines,
+});
+</script>
+
 <template>
   <n-card :title="t('vehicle.engine.title', 2)" size="small" class="my-4">
+    <template #header-extra>
+      <AIButton
+        v-if="!vehicleStore.car.engines.length"
+        quaternary
+        size="small"
+        @click="generateEngines"
+        :loading="isPending"
+      />
+    </template>
+
     <div class="editors-cards-grid">
       <n-card
         v-for="engine in vehicleStore.car.engines"
@@ -42,40 +93,3 @@
     <engine-modal v-model:show="showModal" :is-edit="isEdit" />
   </n-card>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "Engines",
-});
-</script>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import EngineModal from "./EngineModal.vue";
-import PlusButton from "@/components/common/PlusButton.vue";
-import { NCard, NTable, NButton } from "naive-ui";
-import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
-import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
-import { getEngineLabel } from "@/helpers/engine.helpers";
-
-const engineStore = useEngineStore();
-const vehicleStore = useVehicleStore();
-const { t } = useI18n();
-
-const showModal = ref(false);
-const isEdit = ref(false);
-
-const openCreateModal = () => {
-  isEdit.value = false;
-  showModal.value = true;
-};
-
-const openEditModal = (engine) => {
-  engineStore.engine = engine;
-  isEdit.value = true;
-  showModal.value = true;
-};
-</script>

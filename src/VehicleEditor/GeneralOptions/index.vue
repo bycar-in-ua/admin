@@ -13,9 +13,11 @@ import {
   NIcon,
 } from "naive-ui";
 import { VehicleSizeClass } from "@bycar-in-ua/sdk";
+import { useMutation } from "@tanstack/vue-query";
 import { Close, InformationCircle } from "@vicons/ionicons5";
 import i18n from "@/i18n";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
+import AIButton from "@/components/common/AIButton.vue";
 import SizeClassesHint from "./SizeClassesHint.vue";
 
 const vehicleTranslations = i18n.ua.vehicle;
@@ -35,6 +37,11 @@ const sizeOptions = Object.values(VehicleSizeClass).map((size) => ({
   value: size,
   label: size,
 }));
+
+const { isPending, mutate: generateGeneralInfo } = useMutation({
+  mutationKey: ["ai-general-info"],
+  mutationFn: vehicleStore.generateGeneralInfo,
+});
 </script>
 
 <template>
@@ -43,6 +50,15 @@ const sizeOptions = Object.values(VehicleSizeClass).map((size) => ({
     size="small"
     class="my-4 shadow"
   >
+    <template #header-extra>
+      <AIButton
+        quaternary
+        size="small"
+        @click="generateGeneralInfo"
+        :loading="isPending"
+      />
+    </template>
+
     <n-form class="general-data grid sm:grid-cols-2 md:grid-cols-3 gap-4">
       <n-form-item :label="t('vehicle.bodyTypes.title')">
         <n-select

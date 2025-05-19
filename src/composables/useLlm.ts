@@ -2,12 +2,16 @@ import { readonly, ref } from "vue";
 
 const LLM_NAME_STORAGE_KEY = "bycar-ai-model";
 
-const DEFAULT_LLM = import.meta.env.VITE_DEFAULT_LLM || "openai/gpt-4.1-mini";
+const DEFAULT_LLM =
+  import.meta.env.VITE_DEFAULT_LLM || "anthropic/claude-3.5-haiku";
 
 const availableModels = [
   "openai/gpt-4.1-mini",
   "openai/gpt-4.1-nano",
   "google/gemini-2.5-flash-preview",
+  "anthropic/claude-3.5-haiku",
+  "anthropic/claude-3.7-sonnet",
+  "mistralai/mistral-medium-3",
   "mistralai/ministral-8b",
   "meta-llama/llama-3.1-70b-instruct",
   "deepseek/deepseek-chat",
