@@ -9,11 +9,11 @@
       :rules="rules"
       :disabled="isFetching"
     >
-      <n-form-item :label="t('userName')" path="username">
+      <n-form-item :label="t('email')" path="email">
         <n-input
-          v-model:value="model.username"
+          v-model:value="model.email"
           type="text"
-          :placeholder="t('enterUserName')"
+          :placeholder="t('enterEmail')"
         />
       </n-form-item>
       <n-form-item :label="t('password')" path="password">
@@ -67,13 +67,13 @@ const authStore = useAuthStore();
 
 const loginForm = ref<FormInst>();
 const model = ref({
-  username: "",
+  email: "",
   password: "",
 });
 const isFetching = ref(false);
 
 const rules = {
-  username: {
+  email: {
     required: true,
     trigger: ["blur", "input"],
     message: "Это обязательное поле",
