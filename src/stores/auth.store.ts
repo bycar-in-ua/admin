@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
-import { type ReducedUser, type LoginUserPayload } from "@bycar-in-ua/sdk";
-import auth from "@/plugins/auth";
+import { ofetch } from "ofetch";
+import {
+  type ReducedUser,
+  type LoginUserPayload,
+  AuthService,
+} from "@bycar-in-ua/sdk";
+import { API_URL } from "@/constants";
+
+const authService = new AuthService(API_URL, ofetch);
 
 interface State {
   user: ReducedUser | null;
@@ -14,24 +21,22 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     async loginUser(payload: LoginUserPayload) {
-      const user = await auth.login(payload); // .login(): Promise<never> but I got User here
+      const user = await authService.login(payload);
       this.user = user;
       this.isFetched = true;
     },
     async logoutUser() {
-      await auth.logout();
+      await authService.logout();
       this.user = null;
       this.isFetched = false;
     },
     async fetchUser() {
-      console.log("fetchUser");
-
       let user = null;
       try {
-        user = await auth.getUser();
+        user = await authService.authenticate();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        user = await auth.refresh();
+        user = await authService.refresh();
       } finally {
         this.user = user;
         this.isFetched = true;
