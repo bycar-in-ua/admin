@@ -135,6 +135,19 @@ export const useVehicleStore = defineStore("vehicle", {
 
       this.car.engines = response.engines;
     },
+    async generateTransmissions() {
+      if (this.car.transmissions.length > 0) {
+        return;
+      }
+
+      const response = await n8nService.generateVehicleInfo({
+        part: "transmissions",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      this.car.transmissions = response.transmissions;
+    },
   },
   getters: {
     getVehicleTitle(state) {

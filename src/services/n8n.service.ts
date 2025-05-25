@@ -41,7 +41,7 @@ type SEOResponse = {
   metaDescription: string;
 };
 
-type GenerationParts = "general-info" | "engines";
+type GenerationParts = "general-info" | "engines" | "transmissions";
 
 type GeneralInfoPayload = {
   part: GenerationParts;

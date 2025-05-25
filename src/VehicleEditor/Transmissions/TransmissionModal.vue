@@ -1,128 +1,3 @@
-х
-<template>
-  <n-modal
-    :on-update:show="(val) => $emit('update:show', val)"
-    :on-after-leave="onModalClose"
-    preset="card"
-    :title="
-      isEdit
-        ? getTransmissionDisplayName(transmission.$state, t)
-        : t('vehicle.transmission.addingNew')
-    "
-    :mask-closable="false"
-    class="max-w-4xl"
-  >
-    <n-form class="grid md:grid-cols-2 gap-4">
-      <n-form-item :label="t('vehicle.transmission.drive')">
-        <n-select
-          v-model:value="transmission.drive"
-          :options="driveTypesOptions"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.driveName')">
-        <n-input v-model:value="transmission.driveName" />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.suspensionTypeFront')">
-        <n-input-group>
-          <n-select
-            v-model:value="transmission.suspensionTypeFront"
-            :options="suspensionTypesOptions"
-          />
-          <n-select
-            v-model:value="transmission.suspensionWorkItemFront"
-            :options="workItemsOptions"
-          />
-        </n-input-group>
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.suspensionTypeRear')">
-        <n-input-group>
-          <n-select
-            v-model:value="transmission.suspensionTypeRear"
-            :options="suspensionTypesOptions"
-          />
-          <n-select
-            v-model:value="transmission.suspensionWorkItemRear"
-            :options="workItemsOptions"
-          />
-        </n-input-group>
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeFront')">
-        <n-select
-          v-model:value="transmission.brakingSystemTypeFront"
-          :options="breakingSystemOptions"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeRear')">
-        <n-select
-          v-model:value="transmission.brakingSystemTypeRear"
-          :options="breakingSystemOptions"
-        />
-      </n-form-item>
-
-      <n-h4 class="md:col-span-2 mt-0">
-        {{ t("vehicle.transmission.gearbox.abbr") }}
-      </n-h4>
-      <n-form-item :label="t('vehicle.transmission.gearbox.type')">
-        <n-select
-          v-model:value="transmission.gearbox.type"
-          :options="gearboxTypesOptions"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.gearbox.subType')">
-        <n-select
-          v-model:value="transmission.gearbox.subType"
-          :options="gearboxSubTypesOptions"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.gearbox.numberOfGears')">
-        <n-input-number
-          v-model:value="transmission.gearbox.numberOfGears"
-          class="w-full"
-          :show-button="false"
-        />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.transmission.gearbox.technology')">
-        <n-input v-model:value="transmission.gearbox.technology" />
-      </n-form-item>
-      <n-form-item :label="t('vehicle.manufactureIndex')">
-        <n-input v-model:value="transmission.gearbox.manufactureIndex" />
-      </n-form-item>
-      <n-form-item :label="t('manufacturer')">
-        <n-input v-model:value="transmission.gearbox.made" />
-      </n-form-item>
-    </n-form>
-    <template #action>
-      <div class="text-right">
-        <n-button
-          v-if="isEdit"
-          type="primary"
-          :loading="isFetching"
-          @click="updateAction"
-        >
-          {{ t("update") }}
-        </n-button>
-        <n-button
-          v-else
-          type="primary"
-          :loading="isFetching"
-          @click="createAction"
-        >
-          {{ t("create") }}
-        </n-button>
-      </div>
-    </template>
-  </n-modal>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { SelectMixedOption } from "naive-ui/lib/select/src/interface";
-
-export default defineComponent({
-  name: "TransmissionModal",
-});
-</script>
-
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -138,9 +13,15 @@ import {
   NH4,
   useNotification,
 } from "naive-ui";
+import type { SelectMixedOption } from "naive-ui/lib/select/src/interface";
+
 import i18n from "@/i18n";
 import { useTransmissionStore } from "@/stores/vehicleEditor/transmission.store";
 import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
+
+defineOptions({
+  name: "TransmissionModal",
+});
 
 defineProps<{ isEdit: boolean }>();
 
@@ -269,3 +150,118 @@ const onModalClose = () => {
   transmission.$reset();
 };
 </script>
+
+<template>
+  <n-modal
+    :on-update:show="(val) => $emit('update:show', val)"
+    :on-after-leave="onModalClose"
+    preset="card"
+    :title="
+      isEdit
+        ? getTransmissionDisplayName(transmission.$state, t)
+        : t('vehicle.transmission.addingNew')
+    "
+    :mask-closable="false"
+    class="max-w-4xl"
+  >
+    <n-form class="grid md:grid-cols-2 gap-4">
+      <n-form-item :label="t('vehicle.transmission.drive')">
+        <n-select
+          v-model:value="transmission.drive"
+          :options="driveTypesOptions"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.driveName')">
+        <n-input v-model:value="transmission.driveName" />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.suspensionTypeFront')">
+        <n-input-group>
+          <n-select
+            v-model:value="transmission.suspensionTypeFront"
+            :options="suspensionTypesOptions"
+          />
+          <n-select
+            v-model:value="transmission.suspensionWorkItemFront"
+            :options="workItemsOptions"
+          />
+        </n-input-group>
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.suspensionTypeRear')">
+        <n-input-group>
+          <n-select
+            v-model:value="transmission.suspensionTypeRear"
+            :options="suspensionTypesOptions"
+          />
+          <n-select
+            v-model:value="transmission.suspensionWorkItemRear"
+            :options="workItemsOptions"
+          />
+        </n-input-group>
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeFront')">
+        <n-select
+          v-model:value="transmission.brakingSystemTypeFront"
+          :options="breakingSystemOptions"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.brakingSystemTypeRear')">
+        <n-select
+          v-model:value="transmission.brakingSystemTypeRear"
+          :options="breakingSystemOptions"
+        />
+      </n-form-item>
+
+      <n-h4 class="md:col-span-2 mt-0">
+        {{ t("vehicle.transmission.gearbox.abbr") }}
+      </n-h4>
+      <n-form-item :label="t('vehicle.transmission.gearbox.type')">
+        <n-select
+          v-model:value="transmission.gearbox.type"
+          :options="gearboxTypesOptions"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.gearbox.subType')">
+        <n-select
+          v-model:value="transmission.gearbox.subType"
+          :options="gearboxSubTypesOptions"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.gearbox.numberOfGears')">
+        <n-input-number
+          v-model:value="transmission.gearbox.numberOfGears"
+          class="w-full"
+          :show-button="false"
+        />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.transmission.gearbox.technology')">
+        <n-input v-model:value="transmission.gearbox.technology" />
+      </n-form-item>
+      <n-form-item :label="t('vehicle.manufactureIndex')">
+        <n-input v-model:value="transmission.gearbox.manufactureIndex" />
+      </n-form-item>
+      <n-form-item :label="t('manufacturer')">
+        <n-input v-model:value="transmission.gearbox.made" />
+      </n-form-item>
+    </n-form>
+    <template #action>
+      <div class="text-right">
+        <n-button
+          v-if="isEdit"
+          type="primary"
+          :loading="isFetching"
+          @click="updateAction"
+        >
+          {{ t("update") }}
+        </n-button>
+        <n-button
+          v-else
+          type="primary"
+          :loading="isFetching"
+          @click="createAction"
+        >
+          {{ t("create") }}
+        </n-button>
+      </div>
+    </template>
+  </n-modal>
+</template>

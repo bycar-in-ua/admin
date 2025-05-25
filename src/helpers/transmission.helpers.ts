@@ -5,14 +5,15 @@ export function getTransmissionDisplayName(
   transmission: Transmission,
   t: ComposerTranslation
 ) {
-  let displayName = "";
-
-  displayName += String(transmission.drive);
-
-  displayName += " " + String(transmission.driveName || "");
-  displayName += " - " + String(transmission.gearbox.numberOfGears);
-  displayName +=
-    " " + t("vehicle.transmission.gearbox.types." + transmission.gearbox.type);
-
-  return displayName;
+  return [
+    [transmission.drive, transmission.driveName].filter(Boolean).join(" "),
+    [
+      transmission.gearbox.numberOfGears,
+      t("vehicle.transmission.gearbox.types." + transmission.gearbox.type),
+    ]
+      .filter(Boolean)
+      .join(" "),
+  ]
+    .filter(Boolean)
+    .join(" - ");
 }
