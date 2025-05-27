@@ -10,7 +10,7 @@
     "lint": "vue-tsc --noEmit && eslint src"
   },
   "dependencies": {
-    "@bycar-in-ua/sdk": "^0.2.13",
+    "@bycar-in-ua/sdk": "^0.2.14",
     "@mdi/font": "5.9.55",
     "@tanstack/vue-query": "^5.66.9",
     "@tinymce/tinymce-vue": "6.1.0",

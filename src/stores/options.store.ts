@@ -63,5 +63,10 @@ export const useOptionsStore = defineStore("options", {
         label: optCat.displayName,
       }));
     },
+    options(state) {
+      return Object.values(state.categories).flatMap(
+        (optCat) => optCat.options
+      );
+    },
   },
 });

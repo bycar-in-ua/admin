@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useMutation } from "@tanstack/vue-query";
 import {
   NModal,
   NCheckbox,
@@ -18,6 +19,7 @@ import {
 import type { SelectBaseOption } from "naive-ui/es/select/src/interface";
 import { AddCircleOutline, Copy } from "@vicons/ionicons5";
 import AddNewOption from "@/components/common/AddNewOption.vue";
+import AiButton from "@/components/common/AIButton.vue";
 import AddNewOptionCategory from "@/components/common/AddNewOptionCategory.vue";
 import PowerUnitsEditor from "./PowerUnitsEditor.vue";
 import {
@@ -27,6 +29,8 @@ import {
 import { useComplectationStore } from "@/stores/vehicleEditor/complectation.store";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import { useOptionsStore } from "@/stores/options.store";
+import { getEngineLabel } from "@/helpers/engine.helpers";
+import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 
 const show = defineModel<boolean>("show");
 
@@ -47,18 +51,15 @@ const complectationsForCopy = computed<SelectBaseOption[]>(() =>
   vehicleStore.car.complectations.map((cmpl) => ({
     label: cmpl.displayName,
     value: cmpl.id,
-    disabled: cmpl.id === complectationStore.id,
+    disabled: cmpl.id === complectationStore.complectation.id,
   }))
 );
-
-const getOptions = (options = []) =>
-  options.map((option) => prepareOption(option));
 
 const optionsCopyHandler = (referenceComplectationId) => {
   const referenceComplectation = vehicleStore.car.complectations.find(
     (cmpl) => cmpl.id === referenceComplectationId
   );
-  complectationStore.options = referenceComplectation?.options;
+  complectationStore.complectation.options = referenceComplectation?.options;
 
   recalcOptions();
 };
@@ -75,7 +76,7 @@ const createPowerUnit = async () => {
 const saveHandler = async () => {
   try {
     isFetching.value = true;
-    await complectationStore.saveComplectation(prepareOptionsForSaving());
+    await complectationStore.saveComplectation();
     notification.success({
       title: t("notifications.complectation.saving.success"),
       duration: 5000,
@@ -97,29 +98,34 @@ const afterModalClose = () => {
   optionsTransferModelValue.value = {};
 };
 
-function prepareOptionsForSaving() {
-  const options = [];
-
-  for (const [catId, optionsIds] of Object.entries(
-    optionsTransferModelValue.value
-  )) {
-    optionsStore.categories[catId].options.forEach((op) => {
-      if (optionsIds.includes(op.id)) {
-        options.push(op);
-      }
-    });
-  }
-
-  return options;
-}
-
 function recalcOptions() {
-  optionsTransferModelValue.value = complectationStore.options?.reduce(
-    prepareOptionIdsByCategoties,
-    {}
-  );
+  optionsTransferModelValue.value =
+    complectationStore.complectation.options?.reduce(
+      prepareOptionIdsByCategoties,
+      {}
+    );
 }
 recalcOptions();
+
+const { mutate: generateComplectation, isPending: generatingComplectation } =
+  useMutation({
+    mutationKey: ["generate-complectation"],
+    mutationFn: () => {
+      return complectationStore.generateComplectation({
+        carName: `${vehicleStore.car.brand.displayName} ${vehicleStore.car.model}`,
+        slug: vehicleStore.car.slug,
+        engines: vehicleStore.car.engines.map((engine) => ({
+          id: engine.id,
+          name: getEngineLabel(engine),
+        })),
+        transmissions: vehicleStore.car.transmissions.map((transmission) => ({
+          id: transmission.id,
+          name: getTransmissionDisplayName(transmission, t),
+        })),
+      });
+    },
+    onSuccess: recalcOptions,
+  });
 </script>
 
 <template>
@@ -127,7 +133,7 @@ recalcOptions();
     v-model:show="show"
     preset="card"
     :mask-closable="false"
-    :title="complectationStore.displayName"
+    :title="complectationStore.complectation.displayName"
     class="max-w-5xl"
     @after-enter="recalcOptions"
     @after-leave="afterModalClose"
@@ -135,7 +141,7 @@ recalcOptions();
     <n-scrollbar class="max-h-4/5 pr-4">
       <div class="flex">
         <n-input
-          v-model:value="complectationStore.displayName"
+          v-model:value="complectationStore.complectation.displayName"
           type="text"
           class="mr-4"
         />
@@ -171,9 +177,8 @@ recalcOptions();
             v-model:value="optionsTransferModelValue[category.id]"
             virtual-scroll
             filterable
-            :options="getOptions(category.options)"
+            :options="category.options.map(prepareOption)"
             size="large"
-            class="options-transfer"
           />
           <add-new-option :category-id="category.id" form-class="mt-4" />
         </n-collapse-item>
@@ -196,7 +201,7 @@ recalcOptions();
 
       <power-units-editor
         v-model:expanded-names="expandedPowerUnit"
-        :power-units="complectationStore?.powerUnits || []"
+        :power-units="complectationStore?.complectation?.powerUnits || []"
       />
 
       <div class="pt-6">
@@ -217,18 +222,23 @@ recalcOptions();
       <n-divider />
       <div class="flex mb-4">
         <n-checkbox
-          v-model:checked="complectationStore.base"
+          v-model:checked="complectationStore.complectation.base"
           :label="t('complectations.base')"
           class="mr-auto"
         />
       </div>
     </n-scrollbar>
     <template #action>
-      <div class="flex justify-end">
+      <div class="flex gap-2 justify-end">
+        <AiButton
+          type="primary"
+          @click="generateComplectation"
+          :loading="generatingComplectation"
+        />
+
         <n-button
           type="primary"
           size="medium"
-          class="ml-4"
           :loading="isFetching"
           @click="saveHandler"
         >
@@ -238,20 +248,3 @@ recalcOptions();
     </template>
   </n-modal>
 </template>
-
-<style>
-.options-transfer {
-  &.n-transfer {
-    width: 100%;
-    .n-transfer-list
-      .n-transfer-list-body
-      .n-transfer-list-flex-container
-      .n-transfer-list-content
-      .n-transfer-list-item {
-      height: auto;
-      max-height: 100%;
-      @apply py-1;
-    }
-  }
-}
-</style>

@@ -5,6 +5,7 @@ import apiClient from "@/helpers/apiClient";
 import { n8nService } from "@/services/n8n.service";
 import { useEditorStore } from "./editor.store";
 import { isNil, omitBy } from "lodash";
+import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 
 export const useVehicleStore = defineStore("vehicle", {
   state: (): { car: Vehicle } => ({
@@ -174,11 +175,7 @@ export const useVehicleStore = defineStore("vehicle", {
     transmissionsOptions(state) {
       return (t) =>
         state.car.transmissions?.map((transmission) => ({
-          label: `${transmission.drive} - ${
-            transmission?.gearbox?.numberOfGears
-          } ${t(
-            "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
-          )}`,
+          label: getTransmissionDisplayName(transmission, t),
           value: transmission.id,
         }));
     },
