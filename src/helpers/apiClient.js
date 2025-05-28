@@ -1,9 +1,13 @@
-import { API_URL, } from "@/constants";
+import { API_URL } from "@/constants";
 import validateResponse from "./validateResponse";
+import { getCookie, ACCESS_TOKEN_COOKIE_NAME } from "@bycar-in-ua/sdk";
 
 export const get = async (path) => {
   try {
     const response = await fetch(API_URL + path, {
+      headers: {
+        Authorization: `Bearer ${getCookie(ACCESS_TOKEN_COOKIE_NAME)}`,
+      },
       credentials: "include",
     });
     return await validateResponse(response);
@@ -18,6 +22,7 @@ export const post = async (path, body) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${getCookie(ACCESS_TOKEN_COOKIE_NAME)}`,
       },
       credentials: "include",
       body: JSON.stringify(body),
@@ -34,6 +39,7 @@ export const put = async (path, body) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${getCookie(ACCESS_TOKEN_COOKIE_NAME)}`,
       },
       credentials: "include",
       body: JSON.stringify(body),
@@ -50,6 +56,7 @@ export const remove = async (path, body) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${getCookie(ACCESS_TOKEN_COOKIE_NAME)}`,
       },
       credentials: "include",
       body: JSON.stringify(body),
@@ -74,6 +81,9 @@ export const uploadFiles = async (files, path = "") => {
     formData.append("path", path);
     const response = await fetch(`${API_URL}/images`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${getCookie(ACCESS_TOKEN_COOKIE_NAME)}`,
+      },
       credentials: "include",
       body: formData,
     });

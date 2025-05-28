@@ -18,8 +18,9 @@ const showModal = ref(false);
 const isDeleting = ref(false);
 
 const openEditModal = (complectation: Complectation) => {
-  const { id, displayName, powerUnits, options, base } = complectation;
-  complectationStore.$patch({ id, displayName, powerUnits, options, base });
+  complectationStore.complectation = {
+    ...complectation,
+  };
   showModal.value = true;
 };
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineModel } from "vue";
 import { NModal, NCard, NDataTable } from "naive-ui";
 
 const show = defineModel<boolean>();

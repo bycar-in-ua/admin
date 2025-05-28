@@ -1,20 +1,11 @@
-import { ofetch } from "ofetch";
 import { defineStore } from "pinia";
 import { PostStatus, BodyType } from "@bycar-in-ua/sdk";
 import type { Vehicle, Image, VehicleImage } from "@bycar-in-ua/sdk";
-import { N8N_URL } from "@/constants";
 import apiClient from "@/helpers/apiClient";
+import { n8nService } from "@/services/n8n.service";
 import { useEditorStore } from "./editor.store";
-
-const n8nClient = ofetch.create({
-  baseURL: N8N_URL,
-});
-
-type SEOResponse = {
-  h1: string;
-  metaTitle: string;
-  metaDescription: string;
-};
+import { isNil, omitBy } from "lodash";
+import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 
 export const useVehicleStore = defineStore("vehicle", {
   state: (): { car: Vehicle } => ({
@@ -50,7 +41,7 @@ export const useVehicleStore = defineStore("vehicle", {
           `/vehicles/${this.car.id}`,
           this.car
         );
-        this.$patch(updatedCar);
+        this.car = updatedCar;
         editorStore.isModified = false;
       } catch (error: unknown) {
         console.log(error);
@@ -110,16 +101,53 @@ export const useVehicleStore = defineStore("vehicle", {
       this.car.images = images;
     },
     async generateSEO() {
-      const response = await n8nClient<SEOResponse>("/webhook/seo-generation", {
-        method: "POST",
-        body: {
-          model: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
-        },
-      });
+      const response = await n8nService.generateSEOData(
+        `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`
+      );
 
       this.car.h1 = response.h1;
       this.car.metaTitle = response.metaTitle;
       this.car.metaDescription = response.metaDescription;
+    },
+    async generateGeneralInfo() {
+      const response = await n8nService.generateVehicleInfo({
+        part: "general-info",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      const sanitizedResponse = omitBy(response, isNil);
+
+      this.car = {
+        ...this.car,
+        ...sanitizedResponse,
+      };
+    },
+    async generateEngines() {
+      if (this.car.engines.length > 0) {
+        return;
+      }
+
+      const response = await n8nService.generateVehicleInfo({
+        part: "engines",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      this.car.engines = response.engines;
+    },
+    async generateTransmissions() {
+      if (this.car.transmissions.length > 0) {
+        return;
+      }
+
+      const response = await n8nService.generateVehicleInfo({
+        part: "transmissions",
+        carName: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        slug: this.car.slug,
+      });
+
+      this.car.transmissions = response.transmissions;
     },
   },
   getters: {
@@ -147,11 +175,7 @@ export const useVehicleStore = defineStore("vehicle", {
     transmissionsOptions(state) {
       return (t) =>
         state.car.transmissions?.map((transmission) => ({
-          label: `${transmission.drive} - ${
-            transmission?.gearbox?.numberOfGears
-          } ${t(
-            "vehicle.transmission.gearbox.types." + transmission?.gearbox?.type
-          )}`,
+          label: getTransmissionDisplayName(transmission, t),
           value: transmission.id,
         }));
     },

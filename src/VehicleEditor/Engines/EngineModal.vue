@@ -144,6 +144,7 @@
             <n-select
               v-model:value="engineStore.engine.turbo.turboType"
               :options="turboTypes"
+              clearable
             />
           </n-form-item>
         </template>
