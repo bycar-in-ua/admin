@@ -224,6 +224,7 @@ const onModalClose = () => {
         <n-select
           v-model:value="transmission.gearbox.subType"
           :options="gearboxSubTypesOptions"
+          clearable
         />
       </n-form-item>
       <n-form-item :label="t('vehicle.transmission.gearbox.numberOfGears')">
