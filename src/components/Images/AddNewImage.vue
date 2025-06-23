@@ -1,40 +1,15 @@
-<template>
-  <form>
-    <n-button
-      type="primary"
-      size="medium"
-      :loading="isUploading"
-      :disabled="isUploading"
-      @click="handleClick"
-    >
-      {{ t("images.upload", 2) }}
-    </n-button>
-    <input
-      ref="fileInput"
-      type="file"
-      name="imagesArray"
-      class="hidden"
-      multiple
-      @change="uploadHandler"
-    />
-  </form>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "AddNewImage",
-});
-</script>
-
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, inject } from "vue";
 import { useI18n } from "vue-i18n";
 import { NButton, useNotification } from "naive-ui";
-import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useImagesStore } from "@/stores/images.store";
 import { cdnPathToSaveKey } from "./keys";
+import { useImagesService } from "@/composables/useImagesService";
+
+defineOptions({
+  name: "AddNewImage",
+});
 
 const imagesStore = useImagesStore();
 const { t } = useI18n();
@@ -51,10 +26,12 @@ const handleClick = () => {
   fileInput.value.click();
 };
 
+const imagesService = useImagesService();
+
 const uploader = async (files: Array<File>) => {
   try {
     isUploading.value = true;
-    await apiClient.uploadFiles(files, cdnPathToSave);
+    await imagesService.uploadImagesWithPath(files, cdnPathToSave);
     await imagesStore.fetchImages(1);
     notification.success({
       title: t("images.save.success"),
@@ -93,3 +70,25 @@ onBeforeUnmount(() => {
   window.removeEventListener("paste", pasteListener);
 });
 </script>
+
+<template>
+  <form>
+    <n-button
+      type="primary"
+      size="medium"
+      :loading="isUploading"
+      :disabled="isUploading"
+      @click="handleClick"
+    >
+      {{ t("images.upload", 2) }}
+    </n-button>
+    <input
+      ref="fileInput"
+      type="file"
+      name="imagesArray"
+      class="hidden"
+      multiple
+      @change="uploadHandler"
+    />
+  </form>
+</template>

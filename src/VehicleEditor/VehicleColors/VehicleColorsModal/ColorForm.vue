@@ -1,62 +1,3 @@
-<template>
-  <n-form class="max-w-xl mx-auto" :disabled="isFetching">
-    <n-form-item :label="t('colors.name')">
-      <n-input v-model:value="formModel.name" />
-    </n-form-item>
-    <n-form-item :label="t('colors.closestShade')">
-      <n-select v-model:value="formModel.closestShade" :options="colorItems" />
-    </n-form-item>
-    <n-form-item :label="t('colors.title')">
-      <n-upload
-        v-if="!formModel.reference"
-        class="w-full"
-        :show-file-list="false"
-        @change="formColorUploadHandler"
-      >
-        <n-upload-dragger>
-          <n-icon size="48" :depth="3">
-            <archive-outline />
-          </n-icon>
-        </n-upload-dragger>
-      </n-upload>
-      <color-card
-        v-else
-        class="mx-auto"
-        :color="formModel"
-        :close-action="() => (formModel.reference = null)"
-      />
-    </n-form-item>
-    <div class="flex justify-end">
-      <n-button
-        v-if="color.id"
-        type="primary"
-        :loading="isFetching"
-        :disabled="isFetching"
-        @click="updateHandler"
-      >
-        {{ t("save") }}
-      </n-button>
-      <n-button
-        v-else
-        type="primary"
-        :loading="isFetching"
-        :disabled="isFetching"
-        @click="createHandler"
-      >
-        {{ t("create") }}
-      </n-button>
-    </div>
-  </n-form>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "ColorForm",
-});
-</script>
-
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
@@ -74,10 +15,14 @@ import {
 import ColorCard from "../ColorCard.vue";
 import { ArchiveOutline } from "@vicons/ionicons5";
 import i18n from "@/i18n/index.js";
-import apiClient from "@/helpers/apiClient";
 import useClipboard from "@/hooks/useClipboard";
 import { useColorsStore } from "@/stores/vehicleEditor/colors.store";
 import type { Color } from "@bycar-in-ua/sdk";
+import { useImagesService } from "@/composables/useImagesService";
+
+defineOptions({
+  name: "ColorForm",
+});
 
 const props = defineProps<{ color: Color }>();
 const emit = defineEmits(["toggle-form"]);
@@ -140,10 +85,15 @@ const updateHandler = async () => {
   }
 };
 
+const imagesService = useImagesService();
+
 const uploader = async (file) => {
   try {
     isFetching.value = true;
-    const colorImageLink = await apiClient.uploadFiles([file], "colors");
+    const colorImageLink = await imagesService.uploadImagesWithPath(
+      [file],
+      "colors"
+    );
     formModel.value.reference = colorImageLink[0].path;
     notification.success({
       title: t("images.save.success"),
@@ -184,3 +134,54 @@ onBeforeUnmount(() => {
   window.removeEventListener("paste", pasteListener);
 });
 </script>
+
+<template>
+  <n-form class="max-w-xl mx-auto" :disabled="isFetching">
+    <n-form-item :label="t('colors.name')">
+      <n-input v-model:value="formModel.name" />
+    </n-form-item>
+    <n-form-item :label="t('colors.closestShade')">
+      <n-select v-model:value="formModel.closestShade" :options="colorItems" />
+    </n-form-item>
+    <n-form-item :label="t('colors.title')">
+      <n-upload
+        v-if="!formModel.reference"
+        class="w-full"
+        :show-file-list="false"
+        @change="formColorUploadHandler"
+      >
+        <n-upload-dragger>
+          <n-icon size="48" :depth="3">
+            <archive-outline />
+          </n-icon>
+        </n-upload-dragger>
+      </n-upload>
+      <color-card
+        v-else
+        class="mx-auto"
+        :color="formModel"
+        :close-action="() => (formModel.reference = null)"
+      />
+    </n-form-item>
+    <div class="flex justify-end">
+      <n-button
+        v-if="color.id"
+        type="primary"
+        :loading="isFetching"
+        :disabled="isFetching"
+        @click="updateHandler"
+      >
+        {{ t("save") }}
+      </n-button>
+      <n-button
+        v-else
+        type="primary"
+        :loading="isFetching"
+        :disabled="isFetching"
+        @click="createHandler"
+      >
+        {{ t("create") }}
+      </n-button>
+    </div>
+  </n-form>
+</template>

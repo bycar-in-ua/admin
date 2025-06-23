@@ -26,8 +26,7 @@ const routes: RouteRecordRaw[] = [
     name: "Vehicles",
     components: {
       default: () => import("@/views/Vehicles.vue"),
-      "title-extra": () =>
-        import("@/Vehicles/CreateVehicleModal.vue"),
+      "title-extra": () => import("@/Vehicles/CreateVehicleModal.vue"),
     },
     meta: {
       title: ["car", 2],
@@ -87,7 +86,9 @@ const routes: RouteRecordRaw[] = [
     components: {
       default: () => import("@/views/AvailableVehicles.vue"),
       "title-extra": () =>
-        import("@/AvailableVehicles/AddAvailableVehicle/AddAvailableVehicleButton.vue"),
+        import(
+          "@/AvailableVehicles/AddAvailableVehicle/AddAvailableVehicleButton.vue"
+        ),
     },
     meta: {
       title: "Автомобілі в наявності",
@@ -113,9 +114,15 @@ router.beforeEach(async (to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
   if (!authStore.isLoggedIn && !authStore.isFetched) {
     try {
+      console.log("fetchUser middleware");
+
       await authStore.fetchUser();
+
+      console.log("fetchUser middleware done");
     } catch (error) {
-      console.log(error);
+      console.error("fetchUser middleware error");
+
+      console.error(error);
     }
   }
 

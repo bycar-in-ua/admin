@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
-import { Engine } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
+import { EnginesPrivateService, type Engine } from "@bycar-in-ua/sdk";
 import { useVehicleStore } from "./vehicle.store";
+import { API_URL } from "@/constants";
+
+const enginesService = EnginesPrivateService.create(API_URL);
 
 interface State {
   engine: Engine;
@@ -21,17 +23,17 @@ export const useEngineStore = defineStore("engine", {
     async createNewEngine() {
       const vehicleStore = useVehicleStore();
 
-      const newEngine = await apiClient.post("/engines", {
+      const newEngine = await enginesService.createEngine({
         ...this.engine,
         vehicleId: vehicleStore.car.id,
       });
       useVehicleStore().car.engines.push(newEngine);
     },
     async updateEngine() {
-      const updatedEngine = await apiClient.put(`/engines/${this.engine.id}`, {
-        ...this.engine,
-        displayName: undefined,
-      });
+      const updatedEngine = await enginesService.updateEngine(
+        this.engine.id,
+        this.engine
+      );
 
       const vehicleStore = useVehicleStore();
 
@@ -43,7 +45,7 @@ export const useEngineStore = defineStore("engine", {
       });
     },
     async deleteEngine(engineId: string | number) {
-      await apiClient.delete(`/engines/${engineId}`);
+      await enginesService.deleteEngine(Number(engineId));
       const vehicleStore = useVehicleStore();
 
       vehicleStore.car.engines = vehicleStore.car.engines.filter(

@@ -4,7 +4,7 @@ import type {
   PaginationMeta,
   VehiclesSearchSchema,
 } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient.js";
+import { useVehiclesService } from "@/composables/useVehiclesService";
 
 interface State {
   items: Vehicle[];
@@ -15,6 +15,8 @@ interface State {
   };
   isFetching: boolean;
 }
+
+const vehiclesService = useVehiclesService();
 
 export const useCarsStore = defineStore("cars", {
   state: (): State => ({
@@ -41,7 +43,7 @@ export const useCarsStore = defineStore("cars", {
           },
         };
 
-        const cars = await apiClient.post(`/vehicles/search/all`, searchSchema);
+        const cars = await vehiclesService.searchAllVehicles(searchSchema);
 
         this.items = cars.items;
         this.meta = cars.meta;
@@ -59,7 +61,7 @@ export const useCarsStore = defineStore("cars", {
     async duplicateCar(targetCarId: number) {
       try {
         this.isFetching = true;
-        return await apiClient.post(`/vehicles/duplicate/${targetCarId}`, {});
+        return await vehiclesService.duplicateVehicle(targetCarId);
       } catch (e) {
         const error = e as Error;
         throw error;
@@ -70,7 +72,11 @@ export const useCarsStore = defineStore("cars", {
     async deleteCars(type: "soft" | "hard", carsIds: number[]) {
       try {
         this.isFetching = true;
-        await apiClient.delete(`/vehicles/${type}`, carsIds);
+        if (type === "hard") {
+          await vehiclesService.hardDeleteVehicle(carsIds);
+        } else {
+          await vehiclesService.softDeleteVehicle(carsIds);
+        }
         await this.fetchCars(1);
       } catch (e) {
         const error = e as Error;

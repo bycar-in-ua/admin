@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import type { PaginationMeta, Image } from "@bycar-in-ua/sdk";
-import { get } from "@/helpers/apiClient";
+import { useImagesService } from "@/composables/useImagesService";
+
+const imageService = useImagesService();
 
 interface State {
   images: Image[];
@@ -23,7 +25,7 @@ export const useImagesStore = defineStore("images", {
     async fetchImages(page = 1) {
       try {
         this.isFetching = true;
-        const images = await get(`/images?page=${page}`);
+        const images = await imageService.getImages(page);
         this.images = images.items;
         this.meta = images.meta;
       } finally {

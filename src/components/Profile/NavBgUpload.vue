@@ -19,16 +19,18 @@ export default {
 
 <script setup>
 import useMemory from "@/hooks/useMemory";
-import apiClient from "@/helpers/apiClient";
 import { NUpload, NButton, NThing } from "naive-ui";
 import { cdnLink } from "@/helpers/cdn";
+import { useImagesService } from "@/composables/useImagesService";
 
 const memory = useMemory();
 
 const navBgImage = memory.get("navBgImage", null);
 
+const imagesService = useImagesService();
+
 const uploadHandler = async (options) => {
-  const response = await apiClient.uploadFiles(
+  const response = await imagesService.uploadImagesWithPath(
     options.fileList.map((fileInfo) => fileInfo.file)
   );
   memory.set("navBgImage", cdnLink(response[0].path, "large"));

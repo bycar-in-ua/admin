@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { NInput, NInputGroup, NButton, NIcon } from "naive-ui";
+import { Checkmark, Close } from "@vicons/ionicons5";
+
+defineOptions({
+  name: "OptionEditor",
+});
+
+const props = defineProps({
+  value: String,
+  positiveClick: Function,
+  negativeClick: Function,
+  loading: Boolean,
+});
+
+const { t } = useI18n();
+
+const inputModel = ref(props.value);
+</script>
+
 <template>
   <n-input-group>
     <n-input
@@ -27,27 +49,3 @@
     </n-button>
   </n-input-group>
 </template>
-
-<script>
-export default {
-  name: "OptionEditor",
-};
-</script>
-
-<script setup>
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { NInput, NInputGroup, NButton, NIcon } from "naive-ui";
-import { Checkmark, Close } from "@vicons/ionicons5";
-
-const props = defineProps({
-  value: String,
-  positiveClick: Function,
-  negativeClick: Function,
-  loading: Boolean,
-});
-
-const { t } = useI18n();
-
-const inputModel = ref(props.value);
-</script>

@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
 import { PostStatus, BodyType } from "@bycar-in-ua/sdk";
 import type { Vehicle, Image, VehicleImage } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
 import { n8nService } from "@/services/n8n.service";
-import { useEditorStore } from "./editor.store";
 import { isNil, omitBy } from "lodash";
 import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
+import { useVehiclesService } from "@/composables/useVehiclesService";
+import { useComplectationsService } from "@/composables/useComplectationsService";
+import { useEditorStore } from "./editor.store";
+
+const vehiclesService = useVehiclesService();
+const complectationsService = useComplectationsService();
 
 export const useVehicleStore = defineStore("vehicle", {
   state: (): { car: Vehicle } => ({
@@ -37,8 +41,8 @@ export const useVehicleStore = defineStore("vehicle", {
       const editorStore = useEditorStore();
       try {
         editorStore.isFetching = true;
-        const updatedCar = await apiClient.put(
-          `/vehicles/${this.car.id}`,
+        const updatedCar = await vehiclesService.updateVehicle(
+          this.car.id,
           this.car
         );
         this.car = updatedCar;
@@ -56,19 +60,27 @@ export const useVehicleStore = defineStore("vehicle", {
       someIds: Array<number>,
       whatToSave: "images" | "colors"
     ) {
-      const savedItems = await apiClient.put(
+      /**
+       * TODO: rework it to 2 handlers
+       */
+      const savedItems = await vehiclesService.client.put<Array<never>>(
         `/vehicles/${this.car.id}/${whatToSave}`,
-        someIds
+        {
+          body: someIds,
+        }
       );
+
       this.car[whatToSave] = savedItems;
     },
 
     async createComplectation(name: string) {
       try {
-        const newComplectation = await apiClient.post("/complectations", {
-          displayName: name,
-          vehicleId: this.car.id,
-        });
+        const newComplectation =
+          await complectationsService.createComplectation({
+            displayName: name,
+            vehicleId: this.car.id,
+            base: false,
+          });
         this.car.complectations.push(newComplectation);
       } catch (error) {
         console.log(error);
@@ -76,7 +88,8 @@ export const useVehicleStore = defineStore("vehicle", {
     },
 
     async deleteComplectation(complectationId) {
-      await apiClient.delete(`/complectations/${complectationId}`);
+      await complectationsService.deleteComplectation(complectationId);
+
       this.car.complectations = this.car.complectations.filter(
         (complectation) => complectation.id !== complectationId
       );

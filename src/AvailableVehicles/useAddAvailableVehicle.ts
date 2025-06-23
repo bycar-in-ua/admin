@@ -2,12 +2,12 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Composer, useI18n } from "vue-i18n";
 import { useQuery, useMutation } from "@tanstack/vue-query";
-import { Vehicle, PowerUnit } from "@bycar-in-ua/sdk";
+import { PowerUnit } from "@bycar-in-ua/sdk";
 import { useDealersService } from "@/Dealers";
-import apiClient from "@/helpers/apiClient";
 import { getEngineLabel } from "@/helpers/engine.helpers";
 import { useBrandsStore } from "@/stores/brands.store";
 import { useCarsStore } from "@/stores/cars.store";
+import { useVehiclesService } from "@/composables/useVehiclesService";
 import { useAvailableVehiclesService } from "./useAvailableVehiclesService";
 
 type FormModel = {
@@ -85,6 +85,8 @@ export function useAddAvailableVehicle() {
     enabled: false,
   });
 
+  const vehiclesService = useVehiclesService();
+
   const {
     data: car,
     isFetching: carFetching,
@@ -100,7 +102,7 @@ export function useAddAvailableVehicle() {
         (car) => car.id === formState.value.vehicleId
       );
 
-      return apiClient.get(`/vehicles/${chosenCar.slug}`) as Promise<Vehicle>;
+      return vehiclesService.getVehicleBySlug(chosenCar.slug);
     },
     enabled: false,
   });

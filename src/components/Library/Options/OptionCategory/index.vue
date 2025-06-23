@@ -1,3 +1,55 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { NList, NCard, NIcon, NScrollbar } from "naive-ui";
+import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
+import OptionCategoryListItem from "./OptionCategoryListItem.vue";
+import OptionEditor from "./OptionEditor.vue";
+import AddNewOption from "@/components/common/AddNewOption.vue";
+import { useOptionsStore } from "@/stores/options.store";
+import { type OptionCategory } from "@bycar-in-ua/sdk";
+import { useOptionsService } from "@/composables/useOptionsService";
+
+defineOptions({
+  name: "OptionCategory",
+});
+
+const props = defineProps({
+  optionCategory: Object,
+  openDeleteDrawer: Function,
+});
+
+const optionsStore = useOptionsStore();
+const { t } = useI18n();
+
+const isEdit = ref(false);
+const isFetching = ref(false);
+
+const optionsService = useOptionsService();
+
+const hadnleSave = async (val) => {
+  isFetching.value = true;
+  const updatedOptCat = await optionsService.updateOptionCategory(
+    props.optionCategory.id,
+    {
+      displayName: val,
+    }
+  );
+  /**
+   * TODO: This might a bug, re-check
+   */
+  optionsStore.updateOptionCategory(updatedOptCat as unknown as OptionCategory);
+  isEdit.value = false;
+  isFetching.value = false;
+};
+
+const hadleClose = () => (isEdit.value = false);
+
+const handleDelete = async () => {
+  props.openDeleteDrawer(props.optionCategory.id);
+};
+</script>
+
 <template>
   <n-card>
     <template #header>
@@ -45,56 +97,6 @@
     </template>
   </n-card>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "OptionCategory",
-});
-</script>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { NList, NCard, NIcon, NScrollbar } from "naive-ui";
-import { PencilSharp, CloseSharp } from "@vicons/ionicons5";
-import OptionCategoryListItem from "./OptionCategoryListItem.vue";
-import OptionEditor from "./OptionEditor.vue";
-import AddNewOption from "@/components/common/AddNewOption.vue";
-import apiClient from "@/helpers/apiClient";
-import { useOptionsStore } from "@/stores/options.store";
-
-const props = defineProps({
-  optionCategory: Object,
-  openDeleteDrawer: Function,
-});
-
-const optionsStore = useOptionsStore();
-const { t } = useI18n();
-
-const isEdit = ref(false);
-const isFetching = ref(false);
-
-const hadnleSave = async (val) => {
-  isFetching.value = true;
-  const updatedOptCat = await apiClient.put(
-    `/option-categories/${props.optionCategory.id}`,
-    {
-      displayName: val,
-    }
-  );
-  optionsStore.updateOptionCategory(updatedOptCat);
-  isEdit.value = false;
-  isFetching.value = false;
-};
-
-const hadleClose = () => (isEdit.value = false);
-
-const handleDelete = async () => {
-  props.openDeleteDrawer(props.optionCategory.id);
-};
-</script>
 
 <style lang="postcss">
 .title-icon {

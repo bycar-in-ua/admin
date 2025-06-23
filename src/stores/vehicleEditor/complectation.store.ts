@@ -1,13 +1,18 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { Complectation, PowerUnit } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
+import { PowerUnitsPrivateService } from "@bycar-in-ua/sdk";
 import {
-  GenerateComplectationPayload,
+  type GenerateComplectationPayload,
   n8nService,
 } from "@/services/n8n.service";
+import { API_URL } from "@/constants";
+import { useComplectationsService } from "@/composables/useComplectationsService";
 import { useVehicleStore } from "./vehicle.store";
 import { useOptionsStore } from "../options.store";
+
+const complectationsService = useComplectationsService();
+const powerUnitsService = PowerUnitsPrivateService.create(API_URL);
 
 export const useComplectationStore = defineStore("complectation", () => {
   // State
@@ -22,10 +27,11 @@ export const useComplectationStore = defineStore("complectation", () => {
   // Actions
   async function saveComplectation() {
     const vehicleStore = useVehicleStore();
-    const updatedComplectation = await apiClient.put(
-      `/complectations/${complectation.value.id}`,
-      complectation.value
-    );
+    const updatedComplectation =
+      await complectationsService.updateComplectation(
+        complectation.value.id,
+        complectation.value
+      );
 
     if (vehicleStore.car.complectations) {
       vehicleStore.car.complectations = vehicleStore.car.complectations.map(
@@ -43,7 +49,7 @@ export const useComplectationStore = defineStore("complectation", () => {
   }
 
   async function deletePowerUnit(powerUnit: PowerUnit) {
-    await apiClient.delete(`/power-units/${powerUnit.id}`);
+    await powerUnitsService.deletePowerUnit(powerUnit.id);
     complectation.value.powerUnits = complectation.value.powerUnits?.filter(
       (unit) => unit.id !== powerUnit.id
     );

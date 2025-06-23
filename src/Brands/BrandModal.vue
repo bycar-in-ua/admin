@@ -14,7 +14,6 @@ import {
 } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
-import apiClient from "@/helpers/apiClient";
 import { cdnLink } from "@/helpers/cdn";
 import useClipboard from "@/hooks/useClipboard";
 import {
@@ -23,6 +22,7 @@ import {
   MetaDescriptionInput,
 } from "@/components/SeoInputs";
 import { useBrandsStore, useBrandModalStore } from "@/stores/brands.store";
+import { useImagesService } from "@/composables/useImagesService";
 
 defineOptions({
   name: "BrandModal",
@@ -57,9 +57,11 @@ const rules = {
   },
 };
 
+const imagesService = useImagesService();
+
 const uploader = async (file) => {
   isImageLoading.value = true;
-  const response = await apiClient.uploadFiles([file], "brands");
+  const response = await imagesService.uploadImagesWithPath([file], "brands");
   brandModalStore.logo = response[0].path;
   isImageLoading.value = false;
 };
