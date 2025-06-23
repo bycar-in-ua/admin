@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import type { Brand } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
+import { BrandPrivateService, type Brand } from "@bycar-in-ua/sdk";
+import { API_URL } from "@/constants";
 
 interface State {
   brands: Brand[];
@@ -9,6 +9,8 @@ interface State {
   isModalOpen: boolean;
   isFetched: boolean;
 }
+
+const brandsService = BrandPrivateService.create(API_URL);
 
 export const useBrandsStore = defineStore("brands", {
   state: (): State => ({
@@ -20,22 +22,23 @@ export const useBrandsStore = defineStore("brands", {
   }),
   actions: {
     async fetchBrands() {
-      if (this.isFetched) return;
-      try {
-        const brands = await apiClient.get("/brands");
-        this.brands = brands;
-      } catch (e: unknown) {
-        console.log(e);
+      if (this.isFetched) {
+        return;
       }
+
+      this.brands = await brandsService.getBrands();
+      this.isFetched = true;
     },
     async updateBrand() {
       try {
         this.isFetching = true;
         const brand = useBrandModalStore();
-        const updatedBrand = await apiClient.put(
-          `/brands/${brand.id}`,
+
+        const updatedBrand = await brandsService.updateBrand(
+          brand.id,
           brand.$state
         );
+
         this.brands = this.brands.map((brand) => {
           if (brand.id == updatedBrand.id) {
             return updatedBrand;
@@ -53,7 +56,7 @@ export const useBrandsStore = defineStore("brands", {
       try {
         this.isFetching = true;
         const brand = useBrandModalStore();
-        const newBrand = await apiClient.post("/brands", brand.$state);
+        const newBrand = await brandsService.createBrand(brand.$state);
         this.brands.push(newBrand);
         this.isFetching = false;
         this.isModalOpen = false;

@@ -1,7 +1,10 @@
 import { defineStore } from "pinia";
 import type { Transmission } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
+import { TransmissionsPrivateService } from "@bycar-in-ua/sdk";
 import { useVehicleStore } from "./vehicle.store";
+import { API_URL } from "@/constants";
+
+const transmissionsService = TransmissionsPrivateService.create(API_URL);
 
 export const useTransmissionStore = defineStore("transmission", {
   state: (): Transmission =>
@@ -23,11 +26,11 @@ export const useTransmissionStore = defineStore("transmission", {
       suspensionWorkItemFront: "",
       suspensionTypeRear: "",
       suspensionWorkItemRear: "",
-    } as Transmission),
+    }) as Transmission,
   actions: {
     async createNewTransmission() {
       const vehicleStore = useVehicleStore();
-      const newTransmission = await apiClient.post("/transmissions", {
+      const newTransmission = await transmissionsService.createTransmission({
         ...this.$state,
         vehicleId: vehicleStore.car.id,
       });
@@ -36,8 +39,8 @@ export const useTransmissionStore = defineStore("transmission", {
     async updateTransmission() {
       const vehicleStore = useVehicleStore();
 
-      const updatedTransmission = await apiClient.put(
-        `/transmissions/${this.id}`,
+      const updatedTransmission = await transmissionsService.updateTransmission(
+        this.id,
         this.$state
       );
 
@@ -46,10 +49,10 @@ export const useTransmissionStore = defineStore("transmission", {
           trans.id == updatedTransmission.id ? updatedTransmission : trans
       );
     },
-    async deleteTransmission(transmissionId) {
+    async deleteTransmission(transmissionId: number) {
       const vehicleStore = useVehicleStore();
 
-      await apiClient.delete(`/transmissions/${transmissionId}`);
+      await transmissionsService.deleteTransmission(transmissionId);
 
       vehicleStore.car.transmissions = vehicleStore.car.transmissions.filter(
         (transmission) => transmission.id !== transmissionId

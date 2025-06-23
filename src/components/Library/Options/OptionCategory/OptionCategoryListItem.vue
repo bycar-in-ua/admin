@@ -1,3 +1,74 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { NListItem, NIcon, NPopselect, useNotification } from "naive-ui";
+import { Pencil, Close, SwapVertical } from "@vicons/ionicons5";
+import OptionEditor from "./OptionEditor.vue";
+import { useOptionsStore } from "@/stores/options.store";
+import { useOptionsService } from "@/composables/useOptionsService";
+
+defineOptions({
+  name: "OptionCategoryListItem",
+});
+
+const props = defineProps({
+  option: Object,
+  category: Object,
+});
+
+const optionsStore = useOptionsStore();
+const { t } = useI18n();
+const notification = useNotification();
+
+const isEdit = ref(false);
+const isFetching = ref(false);
+
+const optionsService = useOptionsService();
+
+const hadnleSave = async (val: string) => {
+  isFetching.value = true;
+  const updatedOption = await optionsService.updateOption(props.option.id, {
+    displayName: val,
+  });
+
+  optionsStore.categories[props.category.id].options[
+    optionsStore.categories[props.category.id].options.findIndex(
+      (op) => op.id === updatedOption.id
+    )
+  ] = updatedOption;
+
+  isEdit.value = false;
+  isFetching.value = false;
+};
+
+const handleDelete = async () => {
+  isFetching.value = true;
+  await optionsStore.deleteOption(props.option.id);
+  isFetching.value = false;
+};
+
+const handleSwap = (targetCategory) => {
+  if (targetCategory === props.category.id) {
+    return;
+  }
+  try {
+    optionsStore.changeOptionCategory(props.option, targetCategory);
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+  } catch (error) {
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: String(error),
+      duration: 5000,
+    });
+  }
+};
+
+const hadleClose = () => (isEdit.value = false);
+</script>
+
 <template>
   <n-list-item>
     <OptionEditor
@@ -42,74 +113,3 @@
     </div>
   </n-list-item>
 </template>
-
-<script>
-export default {
-  name: "OptionCategoryListItem",
-};
-</script>
-
-<script setup>
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { NListItem, NIcon, NPopselect, useNotification } from "naive-ui";
-import { Pencil, Close, SwapVertical } from "@vicons/ionicons5";
-import OptionEditor from "./OptionEditor";
-import apiClient from "@/helpers/apiClient";
-import { useOptionsStore } from "@/stores/options.store";
-
-const props = defineProps({
-  option: Object,
-  category: Object,
-});
-
-const optionsStore = useOptionsStore();
-const { t } = useI18n();
-const notification = useNotification();
-
-const isEdit = ref(false);
-const isFetching = ref(false);
-
-const hadnleSave = async (val) => {
-  isFetching.value = true;
-  const updatedOption = await apiClient.put(`/options/${props.option.id}`, {
-    displayName: val,
-  });
-
-  optionsStore.categories[props.category.id].options[
-    optionsStore.categories[props.category.id].options.findIndex(
-      (op) => op.id === updatedOption.id
-    )
-  ] = updatedOption;
-
-  isEdit.value = false;
-  isFetching.value = false;
-};
-
-const handleDelete = async () => {
-  isFetching.value = true;
-  await optionsStore.deleteOption(props.option.id);
-  isFetching.value = false;
-};
-
-const handleSwap = (targetCategory) => {
-  if (targetCategory === props.category.id) {
-    return;
-  }
-  try {
-    optionsStore.changeOptionCategory(props.option, targetCategory);
-    notification.success({
-      title: t("notifications.success.title.default"),
-      duration: 3000,
-    });
-  } catch (error) {
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: error.message,
-      duration: 5000,
-    });
-  }
-};
-
-const hadleClose = () => (isEdit.value = false);
-</script>

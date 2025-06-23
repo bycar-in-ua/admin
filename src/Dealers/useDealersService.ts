@@ -1,13 +1,12 @@
-import { ofetch } from "ofetch";
-import { DealersService } from "@bycar-in-ua/sdk";
+import { DealersPrivateService } from "@bycar-in-ua/sdk";
 import { API_URL } from "@/constants";
 
-let ds: DealersService | undefined;
+let dealersService: DealersPrivateService;
 
 export function useDealersService() {
-  if (!ds) {
-    ds = new DealersService(API_URL, ofetch);
+  if (!dealersService) {
+    dealersService = DealersPrivateService.create(API_URL);
   }
 
-  return ds;
+  return dealersService;
 }

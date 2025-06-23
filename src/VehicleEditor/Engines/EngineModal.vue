@@ -1,3 +1,118 @@
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+import {
+  NModal,
+  NForm,
+  NFormItem,
+  NInput,
+  NSelect,
+  NInputNumber,
+  NCheckbox,
+  NButton,
+  NInputGroup,
+  NScrollbar,
+  NDivider,
+  useNotification,
+} from "naive-ui";
+import { getEngineLabel } from "@/helpers/engine.helpers";
+import i18n from "@/i18n";
+import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
+import { EnginesPrivateService } from "@bycar-in-ua/sdk";
+import { API_URL } from "@/constants";
+
+defineOptions({
+  name: "EngineModal",
+});
+
+interface IProps {
+  isEdit: boolean;
+}
+
+withDefaults(defineProps<IProps>(), {
+  isEdit: false,
+});
+
+const emit = defineEmits(["update:show"]);
+
+const vehicleWordings = i18n.ua.vehicle;
+
+const engineStore = useEngineStore();
+const { t } = useI18n();
+const notification = useNotification();
+
+const tradenames = ref([]);
+const isFetching = ref(false);
+
+const enginesService = EnginesPrivateService.create(API_URL);
+
+onMounted(async () => {
+  const res = await enginesService.getEnginesTradenames();
+
+  tradenames.value = res.map((item) => ({ value: item, label: item }));
+});
+
+const injectionTypes = Object.keys(vehicleWordings.engine.injectionTypes).map(
+  (type) => ({
+    value: type,
+    label: t(`vehicle.engine.injectionTypes.${type}`),
+  })
+);
+
+const fuelTypes = Object.keys(vehicleWordings.engine.fuelTypes).map((type) => ({
+  value: type,
+  label: t(`vehicle.engine.fuelTypes.${type}`),
+}));
+
+const turboTypes = Object.keys(vehicleWordings.engine.turboTypes).map(
+  (turbo) => ({
+    value: turbo,
+    label: t(`vehicle.engine.turboTypes.${turbo}`),
+  })
+);
+
+const pistonsPlacement = Object.keys(
+  vehicleWordings.engine.pistonsPlacements
+).map((placement) => ({
+  value: placement,
+  label: t(`vehicle.engine.pistonsPlacements.${placement}`),
+}));
+
+const createAction = async () => {
+  await saveHelper(engineStore.createNewEngine);
+};
+
+const updateAction = async () => {
+  await saveHelper(engineStore.updateEngine);
+};
+
+const saveHelper = async (action: () => Promise<void>) => {
+  try {
+    isFetching.value = true;
+    await action();
+    notification.success({
+      title: t("notifications.success.title.default"),
+      duration: 3000,
+    });
+    emit("update:show", false);
+  } catch (e) {
+    const error = e as Error;
+
+    notification.error({
+      title: t("notifications.error.title.default"),
+      description: error?.message,
+      duration: 5000,
+    });
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const onModalClose = () => {
+  engineStore.$reset();
+};
+</script>
+
 <template>
   <n-modal
     preset="card"
@@ -301,119 +416,3 @@
     </template>
   </n-modal>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "EngineModal",
-});
-</script>
-
-<script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import {
-  NModal,
-  NForm,
-  NFormItem,
-  NInput,
-  NSelect,
-  NInputNumber,
-  NCheckbox,
-  NButton,
-  NInputGroup,
-  NScrollbar,
-  NDivider,
-  useNotification,
-} from "naive-ui";
-import apiClient from "@/helpers/apiClient";
-import { getEngineLabel } from "@/helpers/engine.helpers";
-import i18n from "@/i18n";
-import { useEngineStore } from "@/stores/vehicleEditor/engine.store";
-
-interface IProps {
-  isEdit: boolean;
-}
-
-withDefaults(defineProps<IProps>(), {
-  isEdit: false,
-});
-
-const emit = defineEmits(["update:show"]);
-
-const vehicleWordings = i18n.ua.vehicle;
-
-const engineStore = useEngineStore();
-const { t } = useI18n();
-const notification = useNotification();
-
-const tradenames = ref([]);
-const isFetching = ref(false);
-
-onMounted(async () => {
-  const res = await apiClient.get("/engines/tradenames");
-
-  tradenames.value = res.map((item) => ({ value: item, label: item }));
-});
-
-const injectionTypes = Object.keys(vehicleWordings.engine.injectionTypes).map(
-  (type) => ({
-    value: type,
-    label: t(`vehicle.engine.injectionTypes.${type}`),
-  })
-);
-
-const fuelTypes = Object.keys(vehicleWordings.engine.fuelTypes).map((type) => ({
-  value: type,
-  label: t(`vehicle.engine.fuelTypes.${type}`),
-}));
-
-const turboTypes = Object.keys(vehicleWordings.engine.turboTypes).map(
-  (turbo) => ({
-    value: turbo,
-    label: t(`vehicle.engine.turboTypes.${turbo}`),
-  })
-);
-
-const pistonsPlacement = Object.keys(
-  vehicleWordings.engine.pistonsPlacements
-).map((placement) => ({
-  value: placement,
-  label: t(`vehicle.engine.pistonsPlacements.${placement}`),
-}));
-
-const createAction = async () => {
-  await saveHelper(engineStore.createNewEngine);
-};
-
-const updateAction = async () => {
-  await saveHelper(engineStore.updateEngine);
-};
-
-const saveHelper = async (action: () => Promise<void>) => {
-  try {
-    isFetching.value = true;
-    await action();
-    notification.success({
-      title: t("notifications.success.title.default"),
-      duration: 3000,
-    });
-    emit("update:show", false);
-  } catch (e) {
-    const error = e as Error;
-
-    notification.error({
-      title: t("notifications.error.title.default"),
-      description: error?.message,
-      duration: 5000,
-    });
-  } finally {
-    isFetching.value = false;
-  }
-};
-
-const onModalClose = () => {
-  engineStore.$reset();
-};
-</script>

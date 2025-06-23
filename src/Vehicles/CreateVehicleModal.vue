@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import apiClient from "@/helpers/apiClient";
 import { yearValidator, slugValidator } from "@/helpers/validators";
 import { InformationCircleOutline } from "@vicons/ionicons5";
 import {
@@ -19,6 +18,8 @@ import {
   useNotification,
 } from "naive-ui";
 import { useBrandsStore } from "@/stores/brands.store";
+import { useVehiclesService } from "@/composables/useVehiclesService";
+import { PostStatus } from "@bycar-in-ua/sdk";
 
 defineOptions({
   name: "CreateVehicleModal",
@@ -27,11 +28,11 @@ defineOptions({
 const rules = {
   brandId: {
     required: true,
-    message: "Поле Бренд не может быть пустым",
+    message: 'Поле "Бренд" не може бути пустим',
   },
   model: {
     required: true,
-    message: "Поле Модель не может быть пустым",
+    message: 'Поле "Модель" не може бути пустим',
   },
   yearFrom: {
     required: true,
@@ -58,6 +59,7 @@ const formModel = ref({
   yearTo: null,
   bodyName: null,
   slug: null,
+  status: PostStatus.DRAFT,
 });
 
 const createOptions = (options) =>
@@ -66,10 +68,12 @@ const createOptions = (options) =>
     value: option.id,
   }));
 
+const vehiclesService = useVehiclesService();
+
 const submitHandler = async () => {
   try {
     await formRef.value.validate();
-    const newVehicle = await apiClient.post("/vehicles", formModel.value);
+    const newVehicle = await vehiclesService.createVehicle(formModel.value);
     router.push({ name: "EditVehicle", params: { slug: newVehicle.slug } });
   } catch (e) {
     const error = e as Error;

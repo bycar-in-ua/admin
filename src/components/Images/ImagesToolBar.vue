@@ -4,9 +4,9 @@ import { useI18n } from "vue-i18n";
 import type { Image } from "@bycar-in-ua/sdk";
 import AddNewImage from "./AddNewImage.vue";
 import { NButton } from "naive-ui";
-import apiClient from "@/helpers/apiClient";
 import type { ToolbarAction } from "@/components/Images";
 import { useImagesStore } from "@/stores/images.store";
+import { useImagesService } from "@/composables/useImagesService";
 import {
   setImagesSelectableKey,
   setImagesUnselectableKey,
@@ -40,11 +40,15 @@ const clearSelection = inject(clearSelectionKey);
 
 const isFetching = ref(false);
 
+const imagesService = useImagesService();
+
 const deleteHandler = async () => {
   try {
     isFetching.value = true;
 
-    await apiClient.delete("/images", props.selectedImages);
+    await imagesService.deleteImages(
+      props.selectedImages.map((image) => image.id)
+    );
 
     imagesStore.fetchImages(imagesStore.meta.currentPage);
     setUnselectable();

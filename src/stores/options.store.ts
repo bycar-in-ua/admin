@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
-import type { OptionCategory } from "@bycar-in-ua/sdk";
-import apiClient from "@/helpers/apiClient";
+import { OptionsPrivateService, type OptionCategory } from "@bycar-in-ua/sdk";
+import { API_URL } from "@/constants";
+
+const optionsService = OptionsPrivateService.create(API_URL);
 
 interface State {
   categories: { [k: number | string]: OptionCategory };
@@ -12,9 +14,8 @@ export const useOptionsStore = defineStore("options", {
   }),
   actions: {
     async fetchOptionsByCategories() {
-      const optionCategories = await apiClient.get(
-        "/option-categories/with-options"
-      );
+      const optionCategories =
+        await optionsService.getOptionCategoriesWithOptions();
       this.categories = {};
 
       optionCategories.forEach((optCat) => {
@@ -22,30 +23,30 @@ export const useOptionsStore = defineStore("options", {
       });
     },
     async changeOptionCategory(option, targetCategoryId) {
-      await apiClient.put(`/options/${option.id}`, {
+      await optionsService.updateOption(option.id, {
         categoryId: targetCategoryId,
       });
       await this.fetchOptionsByCategories();
     },
     async createOption(categoryId, displayName) {
-      const newOption = await apiClient.post("/options", {
+      const newOption = await optionsService.createOption({
         categoryId,
         displayName,
       });
       this.categories[categoryId].options.push(newOption);
     },
     async createOptionCategory(displayName) {
-      const newOptionCategory = await apiClient.post("/option-categories", {
+      const newOptionCategory = await optionsService.createOptionCategory({
         displayName,
       });
       this.updateOptionCategory(newOptionCategory);
     },
     async deleteOptionCategory(catId) {
-      await apiClient.delete(`/option-categories/${catId}`);
+      await optionsService.deleteOptionCategory(catId);
       await this.fetchOptionsByCategories();
     },
     async deleteOption(id) {
-      await apiClient.delete(`/options/${id}`);
+      await optionsService.deleteOption(id);
       await this.fetchOptionsByCategories();
     },
     updateOptionCategory(category: OptionCategory) {
