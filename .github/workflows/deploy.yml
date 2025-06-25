@@ -2,13 +2,14 @@ name: deploy
 
 on:
   push:
-    branches: [master]
+    branches: [master, staging]
 
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'staging' }}
 
     steps:
       - uses: actions/checkout@v2
