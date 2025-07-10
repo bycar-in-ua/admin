@@ -76,6 +76,14 @@ const createPowerUnit = async () => {
 const saveHandler = async () => {
   try {
     isFetching.value = true;
+    const optionsIds = Object.values(optionsTransferModelValue.value).flat();
+
+    const options = optionsStore.options.filter((option) =>
+      optionsIds.includes(option.id)
+    );
+
+    complectationStore.complectation.options = options;
+
     await complectationStore.saveComplectation();
     notification.success({
       title: t("notifications.complectation.saving.success"),
@@ -99,11 +107,9 @@ const afterModalClose = () => {
 };
 
 function recalcOptions() {
-  optionsTransferModelValue.value =
-    complectationStore.complectation.options?.reduce(
-      prepareOptionIdsByCategoties,
-      {}
-    );
+  optionsTransferModelValue.value = (
+    complectationStore.complectation.options ?? []
+  ).reduce(prepareOptionIdsByCategoties, {});
 }
 recalcOptions();
 
@@ -176,7 +182,7 @@ const { mutate: generateComplectation, isPending: generatingComplectation } =
           <n-transfer
             v-model:value="optionsTransferModelValue[category.id]"
             virtual-scroll
-            filterable
+            source-filterable
             :options="category.options.map(prepareOption)"
             size="large"
           />
