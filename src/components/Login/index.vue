@@ -26,13 +26,13 @@ const authStore = useAuthStore();
 
 const loginForm = ref<FormInst>();
 const model = ref({
-  email: "",
+  login: "",
   password: "",
 });
 const isFetching = ref(false);
 
 const rules = {
-  email: {
+  login: {
     required: true,
     trigger: ["blur", "input"],
     message: "Это обязательное поле",
@@ -77,9 +77,9 @@ async function submitHandler() {
       :rules="rules"
       :disabled="isFetching"
     >
-      <n-form-item :label="t('email')" path="email">
+      <n-form-item :label="t('email')" path="login">
         <n-input
-          v-model:value="model.email"
+          v-model:value="model.login"
           type="text"
           :placeholder="t('enterEmail')"
         />

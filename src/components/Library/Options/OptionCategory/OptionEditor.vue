@@ -31,7 +31,7 @@ const inputModel = ref(props.value);
       ghost
       :title="t('discard')"
       :disabled="loading"
-      @click="negativeClick"
+      @click="() => negativeClick()"
     >
       <template #icon>
         <n-icon><Close /></n-icon>
