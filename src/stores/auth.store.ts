@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import {
   type ReducedUser,
-  type LoginUserPayload,
+  type LoginPayload,
   AuthService,
 } from "@bycar-in-ua/sdk";
 import { API_URL } from "@/constants";
@@ -19,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
     isFetched: false,
   }),
   actions: {
-    async loginUser(payload: LoginUserPayload) {
+    async loginUser(payload: LoginPayload) {
       const user = await authService.login(payload);
       this.user = user;
       this.isFetched = true;
