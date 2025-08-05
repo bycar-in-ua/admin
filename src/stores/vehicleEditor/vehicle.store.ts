@@ -34,6 +34,7 @@ export const useVehicleStore = defineStore("vehicle", {
         slug: "",
         logo: "",
       },
+      description: "",
     } as Vehicle,
   }),
   actions: {
@@ -112,6 +113,17 @@ export const useVehicleStore = defineStore("vehicle", {
       });
 
       this.car.images = images;
+    },
+    async generateDescription() {
+      const body = {
+        model: `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom}`,
+        complectations: this.car.complectations,
+        engines: this.car.engines,
+      };
+
+      const response = await n8nService.generateDescriptionData(body);
+
+      this.car.description = response.output;
     },
     async generateSEO() {
       const response = await n8nService.generateSEOData(
