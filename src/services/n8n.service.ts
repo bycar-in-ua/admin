@@ -4,6 +4,7 @@ import {
   Vehicle,
   getCookie,
   ACCESS_TOKEN_COOKIE_NAME,
+  Engine,
 } from "@bycar-in-ua/sdk";
 import { N8N_URL } from "@/constants";
 import { getLlmName } from "@/composables/useLlm";
@@ -15,6 +16,26 @@ const n8nClient = ofetch.create({
 class N8NService {
   get llm() {
     return getLlmName();
+  }
+
+  public generateDescriptionData({
+    model,
+    complectations,
+    engines,
+  }: {
+    model: string;
+    complectations?: Complectation[];
+    engines?: Engine[];
+  }) {
+    return n8nClient<{ output: string }>("description-generation", {
+      method: "POST",
+      body: {
+        llm: this.llm,
+        model,
+        complectations,
+        engines,
+      },
+    });
   }
 
   public generateSEOData(model: string) {
