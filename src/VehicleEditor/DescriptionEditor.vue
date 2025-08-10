@@ -4,7 +4,9 @@ import { useMemory } from "@/hooks/useMemory";
 import Editor from "@tinymce/tinymce-vue";
 import { useVehicleStore } from "@/stores/vehicleEditor/vehicle.store";
 import AIButton from "@/components/common/AIButton.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const vehicleStore = useVehicleStore();
 const memory = useMemory();
 
@@ -16,12 +18,12 @@ const generateAction = async () => {
   loading.value = true;
 
   try {
-    await vehicleStore.generateDescription();
+    await vehicleStore.generateDescription(t);
   } catch (e) {
     console.error(e);
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 };
 </script>
 

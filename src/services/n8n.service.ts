@@ -4,7 +4,6 @@ import {
   Vehicle,
   getCookie,
   ACCESS_TOKEN_COOKIE_NAME,
-  Engine,
 } from "@bycar-in-ua/sdk";
 import { N8N_URL } from "@/constants";
 import { getLlmName } from "@/composables/useLlm";
@@ -18,22 +17,12 @@ class N8NService {
     return getLlmName();
   }
 
-  public generateDescriptionData({
-    model,
-    complectations,
-    engines,
-  }: {
-    model: string;
-    complectations?: Complectation[];
-    engines?: Engine[];
-  }) {
+  public generateDescriptionData(prompt: string) {
     return n8nClient<{ output: string }>("description-generation", {
       method: "POST",
       body: {
         llm: this.llm,
-        model,
-        complectations,
-        engines,
+        prompt,
       },
     });
   }
