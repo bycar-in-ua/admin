@@ -7,6 +7,7 @@ import { getTransmissionDisplayName } from "@/helpers/transmission.helpers";
 import { useVehiclesService } from "@/composables/useVehiclesService";
 import { useComplectationsService } from "@/composables/useComplectationsService";
 import { useEditorStore } from "./editor.store";
+import { ComposerTranslation } from "vue-i18n";
 
 const vehiclesService = useVehiclesService();
 const complectationsService = useComplectationsService();
@@ -34,6 +35,7 @@ export const useVehicleStore = defineStore("vehicle", {
         slug: "",
         logo: "",
       },
+      description: "",
     } as Vehicle,
   }),
   actions: {
@@ -112,6 +114,57 @@ export const useVehicleStore = defineStore("vehicle", {
       });
 
       this.car.images = images;
+    },
+    async generateDescription(t: ComposerTranslation) {
+      const carName = `${this.car.brand.displayName} ${this.car.model} ${this.car.yearFrom} `;
+
+      const bodyType = `${t(`vehicle.bodyTypes.items.${this.car.bodyType}`)}. `;
+
+      const sizeClass = `${t("vehicle.sizeClases.title")} - ${this.car.sizeClass}`;
+      const dimensionL = `${t("vehicle.generalCharacteristics.dimensions.l")} = ${this.car.dimensionL}`;
+      const dimensionW = `${t("vehicle.generalCharacteristics.dimensions.w")} = ${this.car.dimensionW}`;
+      const dimensionH = `${t("vehicle.generalCharacteristics.dimensions.h")} = ${this.car.dimensionH}`;
+      const wheelbase = `${t("vehicle.generalCharacteristics.wheelbase")} = ${this.car.wheelbase}`;
+      const clearance = `${t("vehicle.generalCharacteristics.clearance")} = ${this.car.clearance}`;
+      const trunkVolume = `${t("vehicle.generalCharacteristics.trunkVolume")} = ${this.car.trunkVolume}`;
+      const general = `${sizeClass}. ${dimensionL}; ${dimensionW}; ${dimensionH}; ${wheelbase}; ${clearance}; ${trunkVolume}. `;
+
+      const complectations = this.car.complectations.reduce((acc, item) => {
+        const name = item.displayName;
+
+        const powerUnits = item.powerUnits.reduce((acc, powerUnit, index) => {
+          const engineData = this.car.engines.find(
+            (engine) => engine.id === powerUnit.engineId
+          );
+
+          const transmissionData = this.car.transmissions.find(
+            (transmission) => transmission.id === powerUnit.transmissionId
+          );
+
+          const engine = `Двигун: ${t(`vehicle.engine.power`)} ${engineData.power}, ${t(`vehicle.engine.torque`)} ${engineData.torque}`;
+          const fuelType = `${t(`vehicle.engine.fuelType`)} - ${t(`vehicle.engine.fuelTypes.${engineData.fuelType}`)}`;
+
+          const drive = `${t("vehicle.transmission.drive")} - ${t(`vehicle.transmission.driveType.${transmissionData.drive}`)}`;
+          const gearboxType = `${t(`vehicle.transmission.gearbox.type`)} - ${t(`vehicle.transmission.gearbox.types.${transmissionData.gearbox.type}`)}`;
+          const gearboxSubType = `${t(`vehicle.transmission.gearbox.subType`)} - ${t(`vehicle.transmission.gearbox.subTypes.${transmissionData.gearbox.subType}`)}`;
+          const numberOfGears = `${t(`vehicle.transmission.gearbox.numberOfGears`)} - ${transmissionData.gearbox.numberOfGears}`;
+          const gearbox = `${gearboxType}, ${gearboxSubType}, ${numberOfGears}`;
+
+          const transmission = `Трансмісія: ${drive}, ${gearbox}`;
+
+          return (
+            acc + `${index + 1}) ${engine}. ${fuelType}. ${transmission}; `
+          );
+        }, "");
+
+        return acc + `\n\nКомплектація ${name} має: ${powerUnits}`;
+      }, "");
+
+      const data = carName + bodyType + general + complectations;
+
+      const response = await n8nService.generateDescriptionData(data);
+
+      this.car.description = response.output;
     },
     async generateSEO() {
       const response = await n8nService.generateSEOData(

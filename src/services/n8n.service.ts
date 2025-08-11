@@ -17,6 +17,16 @@ class N8NService {
     return getLlmName();
   }
 
+  public generateDescriptionData(prompt: string) {
+    return n8nClient<{ output: string }>("description-generation", {
+      method: "POST",
+      body: {
+        llm: this.llm,
+        prompt,
+      },
+    });
+  }
+
   public generateSEOData(model: string) {
     return n8nClient<SEOResponse>("seo-generation", {
       method: "POST",
